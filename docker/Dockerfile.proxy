@@ -1,0 +1,11 @@
+# Docker file for proxy acting as central access point for D4E River
+FROM httpd
+MAINTAINER tom@intevation.de
+
+ADD httpd-proxy.conf $HTTPD_PREFIX/conf/extra/
+
+# Activate necessary modules
+RUN sed -i -e "/^#LoadModule proxy_module/s/#//;/^#LoadModule proxy_http_module/s/#//;/^#LoadModule proxy_ajp_module/s/#//;/^#LoadModule proxy_html_module/s/#//" $HTTPD_PREFIX/conf/httpd.conf
+
+# Include proxy configuration
+RUN echo "Include conf/extra/httpd-proxy.conf" >> $HTTPD_PREFIX/conf/httpd.conf

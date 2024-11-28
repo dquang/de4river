@@ -1,0 +1,5 @@
+<Context>
+    <!-- Override context parameters in web.xml of gwt-client deployment here.
+         E.g. uncomment the following to use SSO via GGinA: -->
+    <!-- <Parameter name="authentication" value="ggina" override="false"/> -->
+</Context>

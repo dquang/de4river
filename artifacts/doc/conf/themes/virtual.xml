@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themegroup name="virtual">
+    <!-- Virtual themes are following now! DO NOT USE VIRTUAL THEMES FOR
+        FACETS! Please implement concrete themes! -->
+    <theme name="Lines" type="virtual">
+        <fields>
+            <field name="showlines" type="boolean" display="Linie anzeigen"
+                default="true" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="1" />
+            <field name="linetype" type="Dash" display="Linienart"
+                default="10" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" />
+        </fields>
+    </theme>
+
+    <theme name="Points" type="virtual">
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="true" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="5" />
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 0, 0" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+    <theme name="ColorfulPoints" type="virtual">
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="true" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="5" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+    <theme name="Label" type="virtual">
+        <fields>
+            <field name="labelfontface" type="Font"
+                display="Beschriftung: Schriftart" default="arial" />
+            <field name="labelfontcolor" type="Color"
+                display="Beschriftung: Schriftfarbe" default="0, 0, 0" />
+            <field name="labelfontsize" type="int"
+                display="Beschriftung: Schriftgröße" default="10" />
+            <field name="labelfontstyle" type="Style"
+                display="Beschriftung: Schriftstil" default="standard" />
+            <field name="labelbgcolor" type="Color"
+                display="Beschriftung: Hintergrundfarbe" default="0, 0, 0" />
+            <field name="labelshowbg" type="boolean"
+                display="Beschriftung: Hintergrund füllen" default="false" />
+        </fields>
+    </theme>
+
+    <theme name="Text" type="virtual">
+        <fields>
+            <field name="font" type="Font" display="Schriftart"
+                default="arial" />
+            <field name="textcolor" type="Color" display="Schriftfarbe"
+                default="0, 0, 0" />
+            <field name="textsize" type="int" display="Schriftgröße"
+                default="10" />
+            <field name="textstyle" type="Style" display="Schriftstil"
+                default="standard" />
+            <field name="textbgcolor" type="Color" display="Texthintergrund"
+                default="255, 255, 255" />
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="false" />
+            <field name="textshowbg" type="boolean"
+                display="Hintergrund anzeigen" default="false" />
+        </fields>
+    </theme>
+
+    <theme name="Areas" type="virtual">
+        <fields>
+            <field name="showarea" type="boolean" display="Flaeche anzeigen"
+                default="true" />
+            <field name="showarealabel" type="boolean"
+                display="Flaechenbeschriftung anzeigen" default="false" />
+            <field name="areabgcolor" type="Color" display="Fuellfarbe"
+                default="0, 100, 0" />
+            <field name="areashowbg" type="boolean"
+                display="Hintergrund anzeigen" default="true" hidden="true" />
+            <field name="areashowborder" type="boolean"
+                display="Flaechebegrenzungslinie anzeigen" default="false" />
+            <field name="areabordercolor" type="Color" default="0, 0, 0"
+                display="Begrenzungslinienfarbe" />
+            <field name="areatransparency" type="int" default="50" display="Transparenz" />
+        </fields>
+    </theme>
+
+    <theme name="MinMaxPoints" type="virtual">
+        <fields>
+            <field name="showminimum" type="boolean" display="Minimum anzeigen"
+                default="false" hints="h" />
+            <field name="showmaximum" type="boolean" display="Minimum anzeigen"
+                default="false" hints="h" />
+        </fields>
+    </theme>
+
+    <theme name="Map" type="virtual">
+        <fields>
+            <field name="linecolor" type="color" display="Linienfarbe"
+                default="0, 0, 0" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="1" hints="hidden" />
+            <field name="backgroundcolor" type="Color" display="Hintergrund"
+                default="140, 200, 130" />
+        </fields>
+    </theme>
+
+    <theme name="Uesk" type="virtual">
+        <fields>
+            <field name="startcolor" type="Color"
+                display="Farbverlauf Startfarbe" default="178, 201, 215" />
+            <field name="endcolor" type="Color"
+                display="Farbverlauf Endfarbe" default="2, 27, 42" />
+            <field name="numclasses" type="int" display="Anzahl Klassen"
+                default="5" />
+        </fields>
+    </theme>
+
+    <theme name="Symbol" type="virtual">
+        <fields>
+            <field name="symbol" type="Symbol" display="Symbol"
+                default="point" />
+        </fields>
+    </theme>
+</themegroup>

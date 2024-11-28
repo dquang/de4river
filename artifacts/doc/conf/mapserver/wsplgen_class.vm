@@ -1,0 +1,44 @@
+CLASS
+    NAME "0.0 <= DIFF < 1"
+    EXPRESSION ([DIFF] < 1)
+    STYLE
+        SIZE 5
+        COLOR "#B2C9D7"
+    END
+END
+
+CLASS
+    NAME "1.0 <= DIFF < 2"
+    EXPRESSION ([DIFF] >= 1 AND [DIFF] < 2)
+    STYLE
+        SIZE 5
+        COLOR "#6F93AA"
+    END
+END
+
+CLASS
+    NAME "2.0 <= DIFF < 3"
+    EXPRESSION ([DIFF] >= 2 AND [DIFF] < 3)
+    STYLE
+        SIZE 5
+        COLOR "#426F8B"
+    END
+END
+
+CLASS
+    NAME "3.0 <= DIFF < 4"
+    EXPRESSION ([DIFF] >= 3 AND [DIFF] < 4)
+    STYLE
+        SIZE 5
+        COLOR "#214F6C"
+    END
+END
+
+CLASS
+    NAME "Sonstiges"
+    EXPRESSION ([DIFF] >= 4)
+    STYLE
+        SIZE 5
+        COLOR "#021B2A"
+    END
+END

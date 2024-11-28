@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<discharge-defaults>
+    <axis name="W"/>
+    <axis name="Transport" logarithmic="true"/>
+    <domain-axis key="chart.discharge.curve.xaxis.label" default="Q [kuhbikmeter]"
+                 include-zero="true"/>
+    <processor class="org.dive4elements.river.exports.process.DischargeProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.MiscDischargeProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.FixWQProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.FixDerivedProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.SQRelationProcessor" axis="Transport"/>
+    <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor" axis="W"/>
+</discharge-defaults>

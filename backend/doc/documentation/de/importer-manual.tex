@@ -1,0 +1,206 @@
+\documentclass[12pt]{scrartcl}
+
+%----------------------------------------------
+% Load packages
+
+\usepackage{a4}
+\usepackage{times}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+%\usepackage{german}
+%\usepackage[marvosym]{eurofont}
+%\usepackage[all, light]{draftcopy}
+%\usepackage{supertabular}
+%\usepackage{colortbl}
+%\usepackage{epsf}
+\usepackage{graphicx}
+\usepackage{lastpage}
+%\usepackage{proposal}
+\usepackage{listings}
+\usepackage[hyperindex=true, bookmarks=true, breaklinks=true,
+colorlinks=true, linkcolor=red,bookmarksopen]{hyperref}
+% German Silbentrennung
+\usepackage[ngerman]{babel}
+
+%----------------------------------------------
+% Document DATE and VERSION
+% set these values when releasing a new version
+
+\newcommand{\documentdate}{\today}
+\newcommand{\documentversion}{1.2}
+\newcommand{\documentrevision}{rev8821:a02204997546}
+\newcommand{\documentID}{importer-manual.tex}
+%----------------------------------------------
+
+%----------------------------------------------
+% Document TITLE
+\newcommand{\documenttitle}{FLYS: Datenimport von Fach- und Geodaten}
+
+\newcommand{\todo}{\textcolor{red}{ TODO }}
+
+
+%----------------------------------------------
+% Some parameters for layouting
+
+\paperwidth=21cm
+\hoffset=-0.54cm
+\textwidth=16cm
+
+\paperheight=29.7cm
+\voffset=-1.5cm
+\topmargin=0cm
+\headheight=1cm
+\textheight=24cm
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+%----------------------------------------------
+
+\begin{document}
+
+\lstset{ %
+language=sh,
+basicstyle=\ttfamily,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+numbersep=5pt,                  % how far the line-numbers are from the code
+% backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+tabsize=2,                      % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+title=\lstname,                 % show the filename of files included with \lstinputlisting; also try caption instead of title
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+% morekeywords={*,...}            % if you want to add more keywords to the set
+}
+
+%-----------------------------------
+% HEADER/FOOTER DEFINITION
+
+% for some pages latex switches back to pagestyle plain :-(
+\fancypagestyle{plain}{%
+	\fancyhf{} % clear all header and footer fields
+	\fancyhead[LO,RE]{\footnotesize \documenttitle\\ \leftmark}
+	\fancyfoot[RO,LE]{\footnotesize Intevation GmbH} % Author
+	\fancyfoot[CO,CE]{\footnotesize \thepage/\pageref{LastPage}}
+	\fancyfoot[LO,RE]{\footnotesize \documentdate
+	\\\documentID}
+	\renewcommand{\footrulewidth}{0.4pt}
+}
+
+% and now define pagestyle fancy
+\fancyhead{} % clear all fields
+\fancyhead[LO]{\footnotesize \documenttitle\\ \leftmark}
+
+\fancyfoot{}% clear all fields
+\fancyfoot[RO]{\footnotesize Intevation GmbH} % Author
+\fancyfoot[CO]{\footnotesize \thepage/\pageref{LastPage}}
+\fancyfoot[LO]{\footnotesize \documentdate
+\\\documentID}
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+%
+% END Header/Footer Definition
+%-----------------------------------
+
+%----------------------------------------------
+% MACRO DEFINITION
+%
+%   \Fig{figure}{lof text}{caption} :
+%			places 'figure' and
+%                       writes 'caption' at the bottom with leading
+%                       'Abbildung figno:'. 'lof text' is added to the list of
+%                       figures.
+%                       Example:
+%                       \Fig{\epsfxsize30mm \epsffile{x.eps}}{the x}{the x}
+%
+%   \FigNoEntry{}{} :
+%			same as above, no entry in figures list
+%
+%   \FigCaption{} :
+%			line with figure caption, setting figure
+%                       counter and figures list
+%
+%   \Tab{table}{lot text}{caption} :
+%			places 'table' and writes caption on top of the table
+%			with leading 'Tabelle tabno:'. 'lot text' is added to
+%			the list of tables.
+%****************************************************************************
+%       Figure makro for graphics continously enumerated.
+%
+
+\newcounter{FigCnt}
+\newcounter{TabCnt}
+
+\newcommand{\Fig}[3]%
+{
+        \refstepcounter{FigCnt}
+        \addcontentsline{lof}{figure}%
+                {\protect\numberline{\arabic{FigCnt}}{#2}}
+        \mbox{#1}
+
+\nopagebreak
+        {Abbildung \arabic{FigCnt}: #3}
+
+}
+
+\newcommand{\FigNoEntry}[2]%
+{
+        \refstepcounter{FigCnt}
+        \mbox{#1}
+
+\nopagebreak
+        {Abbildung \arabic{FigCnt}: #2}
+
+}
+
+\newcommand{\FigCaption}[1]%
+{
+        \refstepcounter{FigCnt}
+        \addcontentsline{lof}{figure}%
+                {\protect\numberline{\arabic{FigCnt}}{#1}}
+
+        %{Figure \thesection.\arabic{FigCnt}: #1}
+}
+
+\newcommand{\Tab}[3]%
+{
+        \refstepcounter{TabCnt}
+        \addcontentsline{lot}{figure}%
+                {\protect\numberline{\arabic{TabCnt}}{#2}}
+        {Tabelle \arabic{TabCnt}: #3}
+\nopagebreak
+        #1
+
+}
+
+\hyphenation{Intevation}
+% end macro definition
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcounter{schritt}
+\renewcommand{\theschritt}{\Roman{schritt}}
+%\makeatletter\renewcommand{\p@schritt}{Abschnitt~\thesubsubsection~}\makeatother
+
+%-----------------------------------
+% DOCUMENT SETTINGS
+\pagestyle{fancy}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+% Start actual content here
+\include{title}
+\newpage
+\tableofcontents
+\include{overview}
+\include{importer-hydr-morph}
+\include{importer-geodaesie}
+
+\end{document}

@@ -1,0 +1,89 @@
+From ChangeLog:
+
+2012-04-04	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/artifacts/services/FixingsKMChartService.java:
+	  New. Service to generate a chart of fixings for given river and km applied
+	  some filters.
+
+	  Usage:
+	     $ curl http://localhost:8181/service/fixings-km-chart \
+	       -d @fix-overview.xml > chart.png
+
+	  The input XML is nearly the same as for the overview service.
+	  Besides the river, filters and range it accepts elements
+	  <km value="..."/>                  for passing the river km,
+	  <extent width="..." height="..."/> for the extent of the output chart,
+	  <mime type="..."/>                 for type of result. Currently ignored.
+
+	  ATM only a static fixed sized PNG image is delivered.
+
+2012-02-27  Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Added functions to be used for fitting in
+	the "Fixierungsanalyse" and "Extremwertermittlung".
+
+	[...]
+
+	* src/main/java/de/intevation/flys/artifacts/math/fitting/App.java: New.
+	  Small test driver to check if the fitting is working. The points to
+	  fit are read from stdin the function to fit is determined by the
+	  system property 'function'. Example usage:
+
+	    $ mvn -e \
+	    -Dfunction=linear \
+	    -Dexec.mainClass=de.intevation.flys.artifacts.math.fitting.App exec:java <<EOF
+	    357.390696917 7546.72096163
+	    61.4291036312 1334.54835721
+	    799.962128234 16836.7698076
+	    126.52761023 2703.69789985
+	    900.448553398 18955.0578748
+	    EOF
+
+2012-02-21  Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	 * src/main/java/de/intevation/flys/artifacts/model/FixingsOverview.java:
+	   - Calculate the extent of the river by the extents of the fixings.
+	   Reason: The river Elbe has only has fixings up to km 351. The other half
+	   of the river is empty which results in a sparse looking overview.
+	   - Add the name of the river as name attribute to resulting <river> element.
+
+	 * contrib/fixoverview2html.xsl: New. Demo XSL transformation to turn
+	   the output of the overview service directly into HTML. Used in the
+	   client a variant of this script could be used for producing the content
+	   of the assistance widget. Usage:
+
+	   $ curl http://localhost:8181/service/fixings-overview \
+	     -d @fix-overview.xml |                              \
+	     xsltproc contrib/fixoverview2html.xsl -             \
+	     > fixings-overview.html
+
+2011-07-20  Sascha L. Teichmann <sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/artifacts/services/meta/App.java: New.
+	  Standalone app to debug the datacage template. To use in a maven environment:
+
+	  -Dmeta.data.template=PATH_TO_META_DATA-TEMPLATE.XML \
+	  -Dmeta.data.parameters=river:Mosel \
+	  -Dmeta.data.output=OUTPUT.XML \
+	  -Dflys.backend.user=DB_USER \
+	  -Dflys.backend.password=DB_PASSWORD \
+	  -Dflys.backend.url=DB_CONNECTION_URL \
+	  -Dexec.mainClass=de.intevation.flys.artifacts.services.meta.App
+
+2011-07-13  Sascha L. Teichmann <sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/artifacts/charts/CrossSectionApp.java:
+	  New. Standalone Swing-App to test cross sections from database without the
+	  hassles of our complete software stack. Runnable from a maven environment:
+
+	  $ mvn -e \
+	    -Dflys.backend.user=DB_USER \
+		-Dflys.backend.password=DB_PASSWD \
+		-Dflys.backend.url=DB_CONNECTION_URL \
+		-Dexec.mainClass=de.intevation.flys.artifacts.charts.CrossSectionApp \
+		exec:java
+
+	  You can set the river to be used with the system property 'river'.
+	  Defaults to 'Mosel'.
+

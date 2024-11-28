@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="new_chart">
+    <states>
+         <state id="state.chart.river" description="state.winfo.river" state="org.dive4elements.river.artifacts.states.RiverSelect">
+            <data name="river" type="String" />
+         </state>
+
+         <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+             <from state="state.chart.river"/>
+             <to state="state.chart.type"/>
+         </transition>
+
+         <state id="state.chart.type" description="state.chart.type" state="org.dive4elements.river.artifacts.ChartArtifact$ChartState">
+            <data name="chart_type" type="String" />
+         </state>
+
+         <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+             <from state="state.chart.type"/>
+             <to state="state.chart.w_differences"/>
+             <condition data="chart_type" value="chart.new.w_differences" operator="equal"/>
+         </transition>
+
+         <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+             <from state="state.chart.type"/>
+             <to state="state.chart.km"/>
+             <condition data="chart_type" value="chart.new.durationcurve" operator="equal"/>
+         </transition>
+
+         <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+             <from state="state.chart.type"/>
+             <to state="state.chart.km"/>
+             <condition data="chart_type" value="chart.new.computeddischargecurve" operator="equal"/>
+         </transition>
+
+         <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+             <from state="state.chart.type"/>
+             <to state="state.chart.crosssection"/>
+             <condition data="chart_type" value="chart.new.crosssection" operator="equal"/>
+         </transition>
+
+         <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+             <from state="state.chart.type"/>
+             <to state="state.chart.longitudinal_section"/>
+             <condition data="chart_type" value="chart.new.longitudinal_section" operator="equal"/>
+         </transition>
+
+         <state id="state.chart.km" description="state.chart.km" state="org.dive4elements.river.artifacts.states.LocationSelect">
+             <data name="ld_locations" type="Double[]"/>
+         </state>
+
+         <state id="state.chart.w_differences" description="state.chart.w_differences" state="org.dive4elements.river.artifacts.states.WDifferencesState">
+            <outputmodes>
+                <outputmode name="w_differences" description="output.w_differences" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="empty.facet" description="Empty"/>
+                        <facet name="longitudinal_section.q" description="facet.longitudinal_section.q"/>
+                        <facet name="longitudinal_section.w" description="facet.longitudinal_section.w"/>
+                        <facet name="w_differences" description="facet.w_differences"/>
+                        <facet name="other.wkms" description="facet.other.wkms"/>
+                        <facet name="other.wqkms" description="facet.other.wqkms"/>
+                        <facet name="other.wqkms.w"          description="W-Type of data" />
+                        <facet name="other.wqkms.q"          description="Q-Type of data" />
+                        <facet name="heightmarks_points" description="facet.other.wkms.heightmarks_points"/>
+                        <facet name="w_differences.manualpoints" description="Manuelle Punkte"/>
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                        <facet name="bedheight_difference.year" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.year.filtered" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.morph_width" description="A facet for morphologic width"/>
+                        <facet name="bedheight_difference.year.height1" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height1.filtered" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2.filtered" description="A facet for raw heights."/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.chart.longitudinal_section" description="state.chart.logitudinal_section" state="org.dive4elements.river.artifacts.states.DischargeLongitudinalSection">
+            <outputmodes>
+                <outputmode name="longitudinal_section" description="output.longitudinal_section" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="empty.facet" decription= "Empty"/>
+                        <facet name="w_differences" decription= "W Differences"/>
+                        <facet name="discharge_longitudinal_section.w"/>
+                        <facet name="discharge_longitudinal_section.q"/>
+                        <facet name="discharge_longitudinal_section.c"/>
+                        <facet name="other.wqkms"/>
+                        <facet name="other.wqkms.q"/>
+                        <facet name="other.wqkms.w"/>
+                        <facet name="other.wkms"/>
+                        <facet name="heightmarks_points"/>
+                        <facet name="longitudinal_section.area"        description="an area"/>
+                        <facet name="longitudinal_section.annotations"/>
+                        <facet name="longitudinal_section.w"/>
+                        <facet name="longitudinal_section.q"/>
+                        <facet name="longitudinal_section.manualpoints"/>
+                        <facet name="bedheight_difference.year" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.year.filtered" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.morph_width" description="A facet for morphologic width"/>
+                        <facet name="bedheight_difference.year.height1" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height1.filtered" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2.filtered" description="A facet for raw heights."/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.chart.crosssection" description="state.chart.crosssection" state="org.dive4elements.river.artifacts.states.WaterlevelState">
+            <outputmodes>
+                <outputmode name="cross_section" description="output.cross_section" mime-type="image/png" type="chart">
+                  <facets>
+                    <facet name="empty.facet" description="Empty"/>
+                    <facet name="cross_section_water_line" description="facet.cross_section_water_line"/>
+                    <facet name="cross_section"            description="facet.cross_section"/>
+                    <facet name="area"                     description="an area"/>
+                    <facet name="cross_section.area"         description="an area"/>
+                    <facet name="cross_section.manualpoints" description="points"/>
+                    <facet name="cross_section.manualline" description="line"/>
+                    <facet name="hyk"                      description="hyks"/>
+                  </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.chart.km"/>
+            <to state="state.chart.computeddischargecurve"/>
+            <condition data="chart_type" value="chart.new.computeddischargecurve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.chart.km"/>
+            <to state="state.chart.durationcurve"/>
+            <condition data="chart_type" value="chart.new.durationcurve" operator="equal"/>
+        </transition>
+
+        <state id="state.chart.computeddischargecurve" description="state.chart.computeddischargecurve" state="org.dive4elements.river.artifacts.states.ComputedDischargeCurveState">
+            <outputmodes>
+                <outputmode name="computed_discharge_curve" description="output.computed_discharge_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="empty.facet" description="Empty"/>
+                        <facet name="computed_discharge_curve.manualpoints"/>
+                        <facet name="computed_discharge_curve.q" description="facet.computed_discharge_curve.q"/>
+                        <facet name="mainvalues.q"/>
+                        <facet name="mainvalues.w"/>
+                        <facet name="other.wqkms" description="facet.other.wqkms"/>
+                        <facet name="other.wq" description="Point-like data like fixations"/>
+                        <facet name="other.wq" description="Point-like data like fixations"/>
+                        <facet name="other.wkms.interpol" description="Height over km, like flood protections."/>
+                        <facet name="discharge_curve.curve" description="facet.discharge_curve.curve" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.chart.durationcurve" description="state.chart.durationcurve" state="org.dive4elements.river.artifacts.states.DurationCurveState">
+            <outputmodes>
+                <outputmode name="duration_curve" description="output.duration_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="empty.facet" description="Empty"/>
+                        <facet name="duration_curve.manualpoints"/>
+                        <facet name="duration_curve.w" description="facet.duration_curve.w"/>
+                        <facet name="duration_curve.q" description="facet.duration_curve.q"/>
+                        <facet name="mainvalues.q" description="Q Main Values"/>
+                        <facet name="mainvalues.w" description="W Main Values"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+    </states>
+</artifact>

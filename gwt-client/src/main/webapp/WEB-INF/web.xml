@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<!-- ######################## Warning ###################### -->
+<!-- This file is used as a template in contrib/make_flys_relase.sh -->
+<!-- If you change a string here make sure that it is not used in -->
+<!-- The release script! -->
+<!-- ######################## Warning ###################### -->
+
+
+<web-app>
+
+    <context-param>
+        <param-name>server-url</param-name>
+        <param-value>http://artifacts:8181</param-value>
+    </context-param>
+
+    <context-param>
+        <!-- URL to be redirected after successfull authentication -->
+        <param-name>redirect-url</param-name>
+        <param-value>FLYS.html</param-value>
+    </context-param>
+
+    <context-param>
+        <!-- URL to be redirected to when a user is not authenticated.
+             If this starts with http it is treated as an absolute url.
+             Otherwise it is interpreted as a relative page. -->
+        <param-name>unauth-redirect-url</param-name>
+        <param-value>/login.jsp</param-value>
+    </context-param>
+
+    <context-param>
+        <!-- Set this to disable the login page. Accessing the login
+             page will trigger a redirect to the unauth-redirect-url if
+             the unauth redirect is not the login page. -->
+        <param-name>disable-login</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+    <context-param>
+         <!-- Set this to 'was' or 'ggina' to use the GGinA authenticator
+              or to 'plain' to use a local flys_user_file. -->
+        <param-name>authentication</param-name>
+        <param-value>plain</param-value>
+    </context-param>
+
+    <context-param>
+        <!-- Path to public key for validation of SAML tickets -->
+        <param-name>saml-trusted-public-key</param-name>
+        <param-value>/opt/d4e/river/gwt-client/config/saml-signer-cert.pem</param-value>
+    </context-param>
+
+    <context-param>
+        <!-- Tolerance in milliseconds for validation based on NotBefore and
+             NotOnOrAfter of the SAML ticket -->
+        <param-name>saml-time-tolerance</param-name>
+        <param-value>1000</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>features-file</param-name>
+        <param-value>/opt/d4e/river/gwt-client/config/features.xml</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>wms-services-file</param-name>
+        <param-value>/opt/d4e/river/gwt-client/config/wms-services.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.dive4elements.river.client.server.BaseServletContextListener</listener-class>
+    </listener>
+
+
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>user</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.UserServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>user</servlet-name>
+    <url-pattern>/flys/user</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>server-info</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ServerInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>server-info</servlet-name>
+    <url-pattern>/flys/server-info</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>artifact</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ArtifactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>artifact</servlet-name>
+    <url-pattern>/flys/artifact</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>getartifact</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.GetArtifactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>getartifact</servlet-name>
+    <url-pattern>/flys/getartifact</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>cross-section-km</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.CrossSectionKMServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>cross-section-km</servlet-name>
+    <url-pattern>/flys/cross-section-km</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>create-collection</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.CreateCollectionServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>create-collection</servlet-name>
+    <url-pattern>/flys/create-collection</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>rivers</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.RiverServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>rivers</servlet-name>
+    <url-pattern>/flys/rivers</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>riverinfo</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.RiverInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>riverinfo</servlet-name>
+    <url-pattern>/flys/riverinfo</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>forward</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.StepForwardServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>forward</servlet-name>
+    <url-pattern>/flys/forward</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>feed</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.FeedServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>feed</servlet-name>
+    <url-pattern>/flys/feed</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>fixings-overview</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.FixingsOverviewServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>fixings-overview</servlet-name>
+    <url-pattern>/flys/fixings-overview</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>advance</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.AdvanceServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>advance</servlet-name>
+    <url-pattern>/flys/advance</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>add-artifact</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.AddArtifactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>add-artifact</servlet-name>
+    <url-pattern>/flys/add-artifact</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>load-artifact</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.LoadArtifactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>load-artifact</servlet-name>
+    <url-pattern>/flys/load-artifact</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>describe-collection</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.DescribeCollectionServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>describe-collection</servlet-name>
+    <url-pattern>/flys/describe-collection</url-pattern>
+  </servlet-mapping>
+
+    <servlet>
+    <servlet-name>user-collections</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.UserCollectionsServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>user-collections</servlet-name>
+    <url-pattern>/flys/user-collections</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>distanceinfo</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.DistanceInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>distanceinfo</servlet-name>
+    <url-pattern>/flys/distanceinfo</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>dischargeinfo</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.DischargeInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>dischargeinfo</servlet-name>
+    <url-pattern>/flys/dischargeinfo</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DischargeInfoXML</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.DischargeInfoXML</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DischargeInfoXML</servlet-name>
+    <url-pattern>/flys/dischargeinfoxml</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>meta-data</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.MetaDataServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>meta-data</servlet-name>
+    <url-pattern>/flys/meta-data</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>mainvalues</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.WQInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>mainvalues</servlet-name>
+    <url-pattern>/flys/mainvalues</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>gaugeinfo</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.GaugeInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>gaugeinfo</servlet-name>
+    <url-pattern>/flys/gaugeinfo</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>csv</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.CSVExportServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>csv</servlet-name>
+    <url-pattern>/flys/csv</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ChartOutputService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ChartOutputServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ChartOutputService</servlet-name>
+    <url-pattern>/flys/chart</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+  	<servlet-name>DischargeTablesOverviewService</servlet-name>
+  	<servlet-class>org.dive4elements.river.client.server.DischargeTablesServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>DischargeTablesOverviewService</servlet-name>
+  	<url-pattern>/flys/dischargetablesoverview</url-pattern>
+  </servlet-mapping>
+
+  <!-- MapFish Print -->
+  <servlet>
+    <servlet-name>MapOutputService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.MapOutputServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>MapOutputService</servlet-name>
+    <url-pattern>/flys/map</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>mapfish.print</servlet-name>
+    <servlet-class>org.mapfish.print.servlet.MapPrinterServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/opt/d4e/river/gwt-client/config/mapfish/config.yaml</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>mapfish.print</servlet-name>
+    <url-pattern>/flys/mapfish-print/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- Servlet to bridge between MapFish Print and FLYS3 -->
+  <servlet>
+    <servlet-name>MapPrintService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.MapPrintServiceImpl</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/opt/d4e/river/gwt-client/config/mapfish/config.yaml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>print-url</param-name>
+      <param-value>http://localhost:8080/d4e-river/flys/mapfish-print</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>MapPrintService</servlet-name>
+    <url-pattern>/flys/map-print</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>FixingsKMChartService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.FixingsKMChartServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>FixingsKMChartService</servlet-name>
+    <url-pattern>/flys/fixings-km-chart</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DistanceInfoXML</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.DistanceInfoXML</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DistanceInfoXML</servlet-name>
+    <url-pattern>/flys/distanceinfoxml</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ExportService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ExportServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ExportService</servlet-name>
+    <url-pattern>/flys/export</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CollectionAttributeService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.CollectionAttributeServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>CollectionAttributeService</servlet-name>
+    <url-pattern>/flys/collection-attribute</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CollectionItemAttributeService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.CollectionItemAttributeServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>CollectionItemAttributeService</servlet-name>
+    <url-pattern>/flys/collection-item-attribute</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ChartInfoService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ChartInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ChartInfoService</servlet-name>
+    <url-pattern>/flys/chart-info</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ReportService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ReportServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ReportService</servlet-name>
+    <url-pattern>/flys/report</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SetCollectionNameService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.SetCollectionNameServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SetCollectionNameService</servlet-name>
+    <url-pattern>/flys/set-collectionname</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SetCollectionTTLService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.SetCollectionTTLServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SetCollectionTTLService</servlet-name>
+    <url-pattern>/flys/set-collectionttl</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DeleteCollectionService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.DeleteCollectionServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DeleteCollectionService</servlet-name>
+    <url-pattern>/flys/delete-collection</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>MapInfoService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.MapInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>MapInfoService</servlet-name>
+    <url-pattern>/flys/map-info</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>getfeatureinfo</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.GFIServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>getfeatureinfo</servlet-name>
+    <url-pattern>/flys/getfeatureinfo</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>getcapabilities</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.GCServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>getcapabilities</servlet-name>
+    <url-pattern>/flys/getcapabilities</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DescribeArtifactService</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.DescribeArtifactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DescribeArtifactService</servlet-name>
+    <url-pattern>/flys/describe</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>remove-artifact</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.RemoveArtifactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>remove-artifact</servlet-name>
+    <url-pattern>/flys/remove-artifact</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>GetWMSUrls</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.MapUrlServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GetWMSUrls</servlet-name>
+    <url-pattern>/flys/map-urls</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>FileUpload</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.FileUploadServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>FileUpload</servlet-name>
+    <url-pattern>/flys/fileupload</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>themelisting</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ThemeListingServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>themelisting</servlet-name>
+    <url-pattern>/flys/themelisting</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SQKMChart</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.SQKMChartServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SQKMChart</servlet-name>
+    <url-pattern>/flys/sq-km-chart</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>BedKMChart</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.BedKMChartServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>BedKMChart</servlet-name>
+    <url-pattern>/flys/bed-km-chart</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>BedloadKMChart</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.BedloadKMChartServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>BedloadKMChart</servlet-name>
+    <url-pattern>/flys/bedload-km-chart</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SedimentLoadInfo</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.SedimentLoadInfoServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SedimentLoadInfo</servlet-name>
+    <url-pattern>/flys/sedimentloadinfo</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>login</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.LoginServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>login</servlet-name>
+    <url-pattern>/flys/login</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>saml</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.SamlServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>saml</servlet-name>
+    <url-pattern>/flys/saml</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>modules</servlet-name>
+    <servlet-class>org.dive4elements.river.client.server.ModuleServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>modules</servlet-name>
+    <url-pattern>/flys/modules</url-pattern>
+  </servlet-mapping>
+
+  <filter>
+    <filter-name>GGInAFilter</filter-name>
+    <filter-class>org.dive4elements.river.client.server.filter.GGInAFilter</filter-class>
+    <init-param>
+        <param-name>deactivate</param-name>
+        <param-value>false</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>GGInAFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>NoCacheFilter</filter-name>
+    <filter-class>org.dive4elements.river.client.server.filter.NoCacheFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>NoCacheFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>FLYS.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

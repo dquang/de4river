@@ -1,0 +1,68 @@
+version: "3.5"
+services:
+  db:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.db
+    image: "d4e/river_db"
+  artifacts:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.artifacts
+    image: "d4e/river_artifacts"
+    depends_on:
+      - db
+    volumes:
+      - ../artifacts/doc/conf:/opt/d4e/bin/conf
+      - artifacts-data:/opt/d4e/bin/artifacts-data
+      - dgm-data:/opt/d4e-river/dgm
+    # Uncomment to enable remote debugging from anywhere (caution: security risk!)
+    # environment:
+    #   - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8787
+    # ports:
+    #   - 8787:8787
+  mapserv:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.mapserv
+    image: "d4e/river_mapserv"
+    depends_on:
+      - db
+      - artifacts
+    volumes:
+      - ./mapserver/cgi-bin:/var/www/cgi-bin
+      - ../artifacts/doc/conf/mapserver:/opt/d4e/bin/conf/mapserver
+      - artifacts-data:/opt/d4e/bin/artifacts-data
+  client:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.gwt-client
+    image: "d4e/river_client"
+    depends_on:
+      - artifacts
+      - mapserv
+    volumes:
+      - ../gwt-client/config:/opt/d4e/river/gwt-client/config
+  wiki:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.wiki
+    image: "d4e/river_wiki"
+    volumes:
+      - wiki-data:/opt/wiki/moin-1.9.9/wiki/data
+      - ./wikiconfig_local.py:/opt/wiki/moin-1.9.9/wikiconfig_local.py
+  proxy:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.proxy
+    image: "d4e/river_proxy"
+    depends_on:
+      - client
+      - mapserv
+      - wiki
+    ports:
+      - 80
+volumes:
+  artifacts-data:
+  dgm-data:
+  wiki-data:

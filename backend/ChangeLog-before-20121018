@@ -1,0 +1,3823 @@
+2012-10-15  Sascha L. Teichmann <sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java:
+	  Added new flag 'flys.backend.skip.historical.discharge.tables'
+	  to ignore the historical discharge tables during gauge import.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Ignore the historical discharge tables if flag is set.
+
+	* contrib/run_hydr_morph.sh: Adjusted shell script.
+	* doc/documentation/de/importer-hydr-morph.tex: Adjusted docu.
+
+2012-09-30  Sascha L. Teichmann <sascha.teichmann@intevation.de>
+
+	* .hgignore: First hgignore
+
+2012-09-28  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql,
+	  doc/schema/oracle-spatial.sql: Changed the type of date columns to
+	  VARCHAR. This is a quick fix to solve the concatination problem in
+	  Oracle and PostgreSQL. Both aren't able to concatinate null values.
+	  So, null values are not valid for those columns. Users can now decide
+	  to fill these columns with correct values or an empty string.
+
+	* src/main/java/de/intevation/flys/utils/DgmSqlConverter.java: Set
+	  year_from and year_to values to an empty string if no correct value is
+	  specified.
+
+2012-09-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	For issue862/1, fix parsing of year field of bed height csvs,
+	which sometimes contain non-year character.
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightParser.java:
+	  Extend RE to parse year field of Bed Height data csv.
+
+2012-09-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/RiverAxis.java:
+	  Added new method to query a special kind of river axes.
+
+2012-09-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Backend-part for fix of issue863.
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightEpochParser.java:
+	  Handle missing data points.
+
+2012-09-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightEpoch.java:
+	  Doc.
+
+2012-09-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightSingleParser.java:
+	  Removed debug output.
+
+2012-09-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightSingleParser.java:
+	  Handle csv lines with just the km set ("gaps").
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightEpochParser.java:
+	  Added TODO, as more changes towards fix for issue863 are necessary.
+
+2012-09-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightSingleValue.java:
+	  Cosmetics, docs.
+
+2012-09-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Towards fix for issue863 (data gaps in bed height single values).
+
+	* doc/schema/postgresql-minfo.sql,
+	  doc/schema/oracle-minfo.sql:
+	  Drop "NOT NULL" constraints on some single bed height value columns.
+
+2012-09-27	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/BedHeightSingle.java:
+	  Replaced labeled continue by a simple break.
+
+	* src/main/java/de/intevation/flys/utils/DgmSqlConverter.java,
+	  src/main/java/de/intevation/flys/importer/ImportElevationModel.java:
+	  Removed trailing whitespace.
+
+2012-09-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql:
+
+	* doc/schema/import-dems.sql: Added more information to fullfil the schema
+	  for dems.
+
+	* src/main/java/de/intevation/flys/utils/DgmSqlConverter.java: New converter
+	  for CSV files with DGM information; results in a SQL file with INSERT
+	  statements.
+
+	* pom.xml: Added dependency to OpenCSV for reading CSV files.
+
+2012-09-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/importer.py: Fixed method name for ERROR log
+	  messages.
+
+	* doc/schema/postgresql-spatial.sql: Set geometry dim to '3' instead of
+	  '4'.
+
+2012-09-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightEpoch.java,
+	  src/main/java/de/intevation/flys/importer/ImportElevationModel.java:
+	  Some minor bugfixes for MINFO import.
+
+2012-09-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: Adapted schema; added missing
+	  relations.
+
+	* doc/schema/postgresql-drop-spatial.sql: SQL statements to drop an
+	  existing FLYS postgresql schema.
+
+2012-09-21	Björn Ricks <bjoern.ricks@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java,
+	  src/main/java/de/intevation/flys/model/Gauge.java:
+	  Remove fetchInfoURL methods. The info url will be generated in the
+	  client.
+
+2012-09-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql, doc/schema/oracle.sql:
+	  Addes column 'official_number' to rivers table.
+	  This should contain the 'Bundeswasserstrassen Identnummer'.
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Added new column to Hibernate model.
+
+2012-09-21	Björn Ricks <bjoern.ricks@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java,
+	  src/main/java/de/intevation/flys/model/Gauge.java:
+	  Rename getInfoURL methods to fetchInfoURL until the values are fetched
+	  from the db to statisfy hibernate.
+
+2012-09-21	Björn Ricks <bjoern.ricks@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java,
+	  src/main/java/de/intevation/flys/model/Gauge.java:
+	  Add new methods to return a HTTP URL for additional information about the
+	  river or gauge.
+
+2012-09-19  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportSedimentDensity.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelDifference.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightSingle.java,
+	  src/main/java/de/intevation/flys/importer/ImportSedimentYield.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightEpoch.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevel.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityMeasurement.java,
+	  src/main/java/de/intevation/flys/importer/ImportMorphWidth.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityModel.java,
+	  src/main/java/de/intevation/flys/importer/ImportSQRelation.java: Store
+	  values into database only if its peer has been successfully stored,
+	  otherwise skip values.
+
+2012-09-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	 * src/main/java/de/intevation/flys/importer/ImportSedimentDensity.java,
+	   src/main/java/de/intevation/flys/importer/parsers/SedimentDensityParser.java:
+	   Removed trailing whitespace.
+
+2012-09-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/BedHeightType.java: Accept
+	  "Querprofil" as valid BedHeightType.
+
+	* src/main/java/de/intevation/flys/importer/parsers/SedimentYieldParser.java:
+	  Added missing GrainFraction.TOTAL type to parser.
+
+2012-09-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportSedimentDensity.java,
+	  src/main/java/de/intevation/flys/importer/parsers/BedHeightParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/SedimentDensityParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/WaterlevelDifferencesParser.java:
+	  Some litte logging improvements and be more tolerant with exceptions.
+
+2012-09-17  Ingo Weinzierl <ingo@intevation.de>
+
+	Taggd RELEASE 2.9.1
+
+2012-09-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/BedHeightEpoch.java:
+	  Corrected broken loop to find epochs for river and km range.
+
+	* src/main/java/de/intevation/flys/model/BedHeightSingle.java:
+	  Corrected broken loop to find singles for river and km range.
+
+2012-09-12	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightParser.java:
+	  Made code more robust.
+
+2012-09-12	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java:
+	  Add system property 'flys.backend.importer.skip.default'
+	  which enables the switching of the skipping default.
+	  Very useful if you want only some sub systems by
+	  setting this to 'true' and the sub systems to 'false'.
+
+2012-09-12	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Indices on cross sections
+	  were created too early (before the referenced tables
+	  were created).
+
+2012-09-12	Björn Ricks <bjoern.ricks@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Add new method determineMinMaxQ to fetch the mimimum and maximum q values
+	  from the database.
+
+2012-09-10	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* postgresql-minfo.sql: Added missing tables.
+	* oracle-minfo.sql: Fixed small typos.
+
+2012-09-10	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* pom.xml: Java 1.6 -> 1.6
+
+	* src/main/java/de/intevation/flys/utils/StringUtil.java:
+	  Replaced german comment (with an ill encoded Umlaut).
+
+2012-09-10	Christian Lins	<christian.lins@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  Remove obsolet method (#851).
+
+2012-09-10	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  We need min/max Q, too.
+
+2012-09-10	Björn Ricks <bjoern.ricks@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/MinMaxWQ.java,
+	  src/main/java/de/intevation/flys/model/Gauge.java:
+	  Add method fetchMinMaxWQ to Gauge. This mehtod returns a new MinMaxWQ
+	  instance that contains the fetched values for the gauge overview info.
+
+2012-09-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  Moved some code over from flys-artifacts.
+
+2012-09-07  Ingo Weinzierl <ingo@intevation.de>
+
+	Tagged module as '2.9'.
+
+2012-09-07	Björn Ricks <bjoern.ricks@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  Rename getDurationCurveData to fetchDurationCurveData to satisfy
+	  hibernate.
+
+2012-09-06	Björn Ricks <bjoern.ricks@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  Move static getDurationCurveData method from flys-artifacts
+	  MainValuesFactory class to a instance method in Gauge class.
+
+2012-08-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Attempt fix for issue821 (cross sections just till +/-500m).
+
+	* src/main/java/de/intevation/flys/model/CrossSectionLine.java:
+	  Set max value for cross sections to 2500 instead of 500.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/run_geo.sh: New run script for the python based geo importer.
+
+	* contrib/run_hydr_morph.sh: New run script for the java based importer
+	  for hydrological and morphological data.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/overview.tex: Fixed typo.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-geodaesie.tex,
+	  doc/documentation/de/importer-hydr-morph.tex: Corrected name of run
+	  scripts.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-geodaesie.tex,
+	  doc/documentation/de/importer-hydr-morph.tex,
+	  doc/documentation/de/importer-manual.tex: Bugfixes and new geo error
+	  description.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/importer.py: Fixed broken method call.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/overview.tex: Hint to root permissions.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/importer.py: Set 'path' attribute for each feature.
+
+	* contrib/shpimporter/axis.py: Also accept shapes with 'achse' in its name.
+
+	* doc/schema/oracle-spatial.sql: Added 'path' attribute to each db
+	  relation.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-geodaesie.tex: Bugfixes and added hint.
+
+	* doc/documentation/de/importer-manual.tex: Set document revision and
+	  date.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-hydr-morph.tex: Added manual line breaks.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-hydr-morph.tex: Fixed bug during PDF
+	  creation.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-hydr-morph.tex: Bugfixes.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/overview.tex: Improved description of database
+	  schema creation. Describe command to unpack importer tarball.
+
+2012-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-geodaesie.tex: Added further error message
+	  if no connection to Oracle database could be established.
+
+2012-08-29  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-geodaesie.tex: Documented install steps
+	  for Oracle Instantclient and python and gdal.
+
+2012-08-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-hydr-morph.tex: Describe Log4J
+	  configuration; some smaller bugfixes.
+
+2012-08-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/overview.tex: Added comment to directory structure
+	  of a river.
+
+	* doc/documentation/de/importer-hydr-morph.tex: Describe import of
+	  morphological files.
+
+2012-08-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/title.tex,
+	  doc/documentation/de/overview.tex,
+	  doc/documentation/de/importer-hydr-morph.tex,
+	  doc/documentation/de/importer-manual.tex: Smaller fixed and structural
+	  changes.
+
+2012-08-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/documentation/de/importer-hydr-morph.tex: Added documentation from
+	  README.
+
+2012-08-27	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/README.txt: Documented which hydrological files are taken into account.
+
+2012-08-26	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/README.txt: Documented the classification of the annotations.
+
+2012-08-26	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/README.txt: Documented the db credentials.
+
+2012-08-24	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/README.txt: Completed the error messages (Puh!)
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightSingle.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelDifference.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightEpoch.java,
+	  src/main/java/de/intevation/flys/importer/parsers/BedHeightParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/BedHeightSingleParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/AnnotationsParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/MorphologicalWidthParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/SedimentYieldParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/AnnotationClassifier.java,
+	  src/main/java/de/intevation/flys/importer/parsers/WstParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportSQRelation.java:
+	  Made error messages identifiable.
+
+2012-08-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/shapeimporter,
+	  doc/shapeimporter/documentation.txt: Removed. The documentation is now
+	  written in latex.
+
+	* doc/documentation,
+	  doc/documentation/de: New. The place where the german documentation is
+	  located.
+
+	* doc/documentation/de/title.tex,
+	  doc/documentation/de/importer-geodaesie.tex,
+	  doc/documentation/de/figures/bfg_logo.png,
+	  doc/documentation/de/figures/intevation-logo.pdf,
+	  doc/documentation/de/overview.tex,
+	  doc/documentation/de/importer-hydr-morph.tex,
+	  doc/documentation/de/importer-manual.tex: German documentation of the
+	  importer and shape importer.
+
+	* doc/documentation/de/Makefile: Makefile to generate the documentation.
+
+	* doc/documentation/de/README: Instructions to generate the documentation.
+
+2012-08-23	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/README.txt: Added warning messages. TODO: More warnings.
+
+	* src/main/java/de/intevation/flys/importer/parsers/PRFParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/StaFileParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/PegelGltParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/AtFileParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Made warnings identifiable.
+
+2012-08-23	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/README.txt: Added error messages.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java,
+	  src/main/java/de/intevation/flys/importer/parsers/PRFParser.java
+	  src/main/java/de/intevation/flys/importer/parsers/HYKParser.java
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Made errors identifiable.
+
+2012-08-23	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/README.txt: Documentation for the importer (german).
+	  TODO: db crendentials, warning & errors, annotation types.
+
+2012-08-22  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/run.sh: Moved 'SKIP_XXX' variables to the top of
+	  the script.
+
+2012-08-22  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/axis.py: Use log methods of shpimporter and
+	  removed print() calls.
+
+	* contrib/shpimporter/importer.py: Evaluate command line option 'dry_run'.
+	  Do not commit database transaction if it is activated.
+
+	* contrib/shpimporter/shpimporter.py: Added new command line option
+	  'dry_run' to supress database transactions.
+
+2012-08-22  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/shpimporter.py: Use OptionParse to read command line
+	  options. Now, it is no longer necessary to adjust user specific settings
+	  in python files. Users should adapt run.sh script for specific settings.
+
+	* contrib/shpimporter/catchments.py,
+	  contrib/shpimporter/boundaries.py,
+	  contrib/shpimporter/hws.py,
+	  contrib/shpimporter/importer.py,
+	  contrib/shpimporter/uesg.py,
+	  contrib/shpimporter/axis.py,
+	  contrib/shpimporter/km.py,
+	  contrib/shpimporter/floodplains.py,
+	  contrib/shpimporter/lines.py,
+	  contrib/shpimporter/gauges.py,
+	  contrib/shpimporter/buildings.py,
+	  contrib/shpimporter/fixpoints.py,
+	  contrib/shpimporter/crosssectiontracks.py: Added new method getName().
+
+	* contrib/shpimporter/utils.py: Use shpimporter functions to print debug
+	  messages.
+
+	* contrib/shpimporter/run.sh: New shell script to run the shape importer
+	  with a default configuration.
+
+2012-08-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FastAnnotations.java:
+	  Added toString() to Annotation.
+
+2012-07-27  Ingo Weinzierl <ingo@intevation.de>
+
+	Tagged module as '2.8.1'.
+
+2012-07-18	Felix Wolfsteller	<felix.wolfstellre@intevation.de>
+
+	* doc/schema/postgresql.sql, doc/schema/oracle.sql:
+	  Adjusted the official_lines views to include wst column pos.
+
+2012-07-16  Ingo Weinzierl <ingo@intevation.de>
+
+	* Tagged module as '2.8'.
+
+2012-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java,
+	  src/main/java/de/intevation/flys/backend/SpatialInfo.java:
+	  Removed same package imports.
+
+2012-07-12	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/hibernate/MapResultTransformer.java:
+	  Added static INSTANCE because its stateless.
+
+2012-07-12	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/hibernate/MapResultTransformer.java:
+	  Strategy to directly transform native SQL results into Maps.
+
+2012-07-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Fix for flys/issue359
+
+	* src/main/java/de/intevation/flys/importer/parsers/PRFParser.java:
+	  Removed extension from PRF descriptions.
+
+2012-07-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql, doc/schema/oracle.sql:
+	  Added indices for fasten access to cross section points.
+
+2012-07-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Partial fix for flys/issue697
+
+	* doc/schema/oracle.sql: Increased the decimal places of Ws, Qs and Kms to 5.
+
+2012-07-03  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Set correct connection provider class (its package has changed in the
+	  last commit).
+
+2012-07-03  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/DBCPConnectionProvider.java:
+	  Fixed broken package declaration.
+
+2012-06-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql, doc/schema/oracle.sql:
+	  Added views to access the 'Amtlichen Linien'.
+
+2012-06-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/**/*.java: Removed trailing whitespace.
+
+2012-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	 Make access to SedDB configurable over conf.xml and provide
+	 access to sessions.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Moved FLYS specific stuff out into the concept of credential classes
+	  which provides the user, password, dialect, driver, url and the
+	  Hibernate classes to bind.
+
+	* src/main/java/de/intevation/flys/backend/Credentials.java: New.
+	  Abstact class to provide the data needed for the SessionFactoryProvider.
+
+	* src/main/java/de/intevation/flys/backend/FLYSCredentials.java: New.
+	  Extends Credentials to serve the FLYS specific stuff.
+
+	* src/main/java/de/intevation/flys/backend/SedDBCredentials.java: New.
+	  Extends Credentials to serve the SedDB specific stuff. The parameters
+	  are drawn from conf.xml in the form:
+
+	    <artifact-database>
+	      ...
+	      <seddb-database>
+	        <user>USER</user>
+	        <password>PASSWORD</password>
+	        <driver>DRIVER</driver>
+	        <url>URL</url>
+	        <dialect>DIALECT</dialect>
+	      </seddb-database>
+	      ...
+	    </artifact-database>
+
+	    If absent defaults are:
+	    - user:     seddb
+	    - password: seddb
+	    - driver:   org.postgresql.Driver
+	    - url:      jdbc:postgresql://localhost:5432/seddb
+	    - dialect:  org.hibernate.dialect.PostgreSQLDialect
+
+	   Defaults can be overwritten with system properties:
+	   - user:      flys.seddb.user
+	   - password:  flys.seddb.password
+	   - driver:    flys.seddb.driver
+	   - url:       flys.seddb.url
+	   - dialect:   flys.seddb.dialect
+
+	* src/main/java/de/intevation/flys/backend/SedDBSessionHolder.java: New.
+	  Use this if you want to establish a session to the SedDB!
+	  Works like the SessionHolder.
+
+	* src/main/java/de/intevation/flys/backend/SessionHolder.java:
+	  Add Override annotation. This holder gives you a session 
+	  to the FLYS database.
+
+	* src/main/java/de/intevation/flys/App.java: Adjusted.
+
+2012-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/seddb/model/*.java: Hibernate access to
+	  SedDB generated by Eclipse (ugly formatted, but compiles).
+
+2012-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/AnnotationsParser.java:
+	  Re-establish cross platform compatibilty again.
+
+2012-06-14  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/CrossSectionTrack.java: Added the
+	  missing 'name' property and added a function that returns all
+	  CrossSectionTracks of a specific river with a specific name.
+
+2012-06-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added missing river_id column to
+	  sq_relation table and reordered the drop statements.
+
+	* src/main/java/de/intevation/flys/model/SQRelationValue.java,
+	  src/main/java/de/intevation/flys/model/SQRelation.java: Added missing
+	  constructors and fixed some minor bugs that occured during import test.
+
+	* src/main/java/de/intevation/flys/importer/ImportSQRelationValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportSQRelation.java:
+	  Implemented code to store sq relations and values into db.
+
+	* src/main/java/de/intevation/flys/importer/parsers/SQRelationParser.java:
+	  Override parse() to retrieve the filename.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Implemented
+	  code to store sq relations into db.
+
+2012-06-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportSQRelationValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportSQRelation.java:
+	  New classes used during the import process of MINFO sq relations.
+
+	* src/main/java/de/intevation/flys/importer/parsers/SQRelationParser.java:
+	  New line parser that reads MINFO specifc sq relation files.
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added system
+	  property to skip parsing sq relations.
+
+	    "-Dflys.backend.importer.skip.sq.relation"
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Parse MINFO
+	  sq relations.
+
+2012-06-12  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Cleared some
+	  irritating debug statements.
+
+2012-06-12  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/annotation-types.xml: Added regex to match "Geschiebemesstellen" as
+	  "Messstelle" type.
+
+	* src/main/java/de/intevation/flys/importer/parsers/AnnotationsParser.java:
+	  Parse KM files in "../Morphologie/Streckendaten/". On Windows Systems,
+	  this won't work!
+
+2012-06-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FastAnnotations.java:
+	  Added Override annotation to new NameFilter.
+
+2012-06-11  Raimund Renkert  <raimund.renkert@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FastAnnotations.java:
+	  Added filter for annotation names.
+
+2012-06-08	Felix Wolfsteller	<felix.wolfstellre@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FastAnnotations.java:
+	  Fix comment.
+
+2012-06-08	Felix Wolfsteller	<felix.wolfstellre@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/SQRelationValue.java:
+	  Fix hibernaty annotation symptom (make it run again).
+
+2012-06-07  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Schema additions for MINFO s/q
+	  relation.
+
+	* src/main/java/de/intevation/flys/model/SQRelationValue.java,
+	  src/main/java/de/intevation/flys/model/SQRelation.java: New model
+	  classes for MINFO s/q relation.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model classes.
+
+2012-06-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/GaugeLocation.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Removed superfluous imports.
+
+2012-05-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* Tagged module as '2.7'.
+
+2012-05-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/BedHeightEpoch.java,
+	  src/main/java/de/intevation/flys/model/BedHeightSingle.java: Added lower
+	  and upper km to function that returns all singles and epochs for a given
+	  river.
+
+2012-05-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/BedHeightSingleValue.java: Fixed
+	  a typo.
+
+2012-05-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/BedHeightSingleValue.java,
+	   src/main/java/de/intevation/flys/model/BedHeightEpochValue.java: Added
+	   functions to retrieve single and epoch values based on its owner and km
+	   range.
+
+2012-05-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/BedHeightEpoch.java,
+	  src/main/java/de/intevation/flys/model/BedHeightSingle.java: Added
+	  functions to get singles and epochs by river and by id.
+
+2012-05-15  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FlowVelocityModel.java,
+	  src/main/java/de/intevation/flys/model/FlowVelocityModelValue.java,
+	  src/main/java/de/intevation/flys/model/DischargeZone.java: Added static
+	  functions to retrieve data from database.
+
+2012-05-15  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/DischargeZone.java: Added a
+	  function getDischargeZones() that returns all DischargeZones for a given
+	  river.
+
+2012-05-10  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/gauges.py: Search for field 'MPNAAM' and use its
+	  value as name for the geometry.
+
+	* src/main/java/de/intevation/flys/model/GaugeLocation.java: New model
+	  class for storing locations of gauges.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered GaugeLocation class.
+
+2012-05-10  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/HydrBoundary.java,
+	  src/main/java/de/intevation/flys/model/HydrBoundaryPoly.java: New.
+	  Hydrological boundaries.
+
+	* src/main/java/de/intevation/flys/model/Line.java: Modified signature of
+	  Line.getLines(). It now also takes the name of a line to retrieve more
+	  specific lines.
+
+	* src/main/java/de/intevation/flys/model/Building.java: Modified signature
+	  of Building.getBuildings(). It now also takes the name of a building to
+	  retrieve more specific lines.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered HydrBoundary and HydrBoundaryPoly classes.
+
+2012-05-10  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/crosssectiontracks.py: Search for 'STATION' field in
+	  shapefile to extract the current km.
+
+2012-05-08  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Hws.java: The getHws() function
+	  got a further parameter 'name' to retrieve specific hws only.
+
+
+2012-05-08  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Catchment.java: The
+	  getCatchments() function got a further parameter 'name' to retrieve
+	  specific catchments only.
+
+2012-05-08  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-spatial_idx.sql: Set the geometry type of 'catchments'
+	  to 'multipolygon'.
+
+	* src/main/java/de/intevation/flys/model/Catchment.java: The geometry
+	  attribute in such instances is now from type 'Geometry'.
+
+2012-05-08  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/import-dems.sql: New. Insert statements to insert dems into
+	  database.
+
+2012-05-04  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-drop-spatial.sql,
+	  doc/schema/oracle-spatial.sql: New relation 'gauge_location' and some
+	  bugfixes in the drop schema.
+
+	* contrib/shpimporter/catchments.py,
+	  contrib/shpimporter/hws.py,
+	  contrib/shpimporter/gauges.py: New importers.
+
+	* contrib/shpimporter/importer.py: Added a debug statement to improve the
+	  visibility of the log output.
+
+	* contrib/shpimporter/shpimporter.py: Make use of the new importers.
+
+
+2012-05-03  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-drop-spatial.sql,
+	  doc/schema/oracle-spatial.sql: Added new relations for hydrological
+	  boundaries and appended a 'name' field to relations that had no such
+	  field yet.
+
+	* contrib/shpimporter/floodplains.py,
+	  contrib/shpimporter/boundaries.py: New importers for floodplain and
+	  hydrological boundaries.
+
+	* contrib/shpimporter/lines.py,
+	  contrib/shpimporter/buildings.py,
+	  contrib/shpimporter/uesg.py,
+	  contrib/shpimporter/fixpoints.py,
+	  contrib/shpimporter/axis.py,
+	  contrib/shpimporter/crosssectiontracks.py,
+	  contrib/shpimporter/km.py: Set the 'name' attribute for new features.
+
+	* contrib/shpimporter/importer.py: Some bugfixes and improvements:
+	  geometries are transformed into a destination coordinate system now.
+
+	* contrib/shpimporter/shpimporter.py: Use all importers and defined the
+	  destination srs.
+
+2012-05-02	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FastCrossSectionLine.java,
+	  src/main/java/de/intevation/flys/model/CrossSectionPoint.java,
+	  src/main/java/de/intevation/flys/model/CrossSectionLine.java,
+	  src/main/java/de/intevation/flys/importer/ImportCrossSectionLine.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Store meassure points of profiles as Doubles not as BigDecimal.
+	  This should save a lot of memory during the import.
+
+2012-04-27	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/FlowVelocityMeasurementParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelDifferenceValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelDifferenceColumn.java:
+	  Removed superfluous imports.
+
+2012-04-27	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql-minfo.sql: Adjusted PostgreSQL port
+	  to match the Oracle schema.
+
+2012-04-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/annotation-types.xml: Adapted annotation typed based on BfG wishes.
+
+2012-04-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-drop.sql: New SQL file to drop WINFO specific db
+	  schema.
+
+2012-04-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle.sql: Made SQL instructions upper case.
+
+2012-04-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-drop-spatial.sql: New statements to drop the whole
+	  spatial schema.
+
+2012-04-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/lines.py,
+	  contrib/shpimporter/buildings.py,
+	  contrib/shpimporter/importer.py,
+	  contrib/shpimporter/fixpoints.py,
+	  contrib/shpimporter/axis.py,
+	  contrib/shpimporter/crosssectiontracks.py,
+	  contrib/shpimporter/km.py: New classes for importing specific
+	  shapefiles. Each of this imports defines its target db tablename and a
+	  directory path to the shapefiles it should import.
+
+	* contrib/shpimporter/uesg.py: Some modifications necessary to streamline
+	  the import process of shapefiles.
+
+	* contrib/shpimporter/shpimporter.py: Use all available imports for the
+	  import process.
+
+2012-04-26  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-spatial.sql: Repaired broken schema.
+
+2012-04-26  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added a config
+	  option to skip parsing MINFO waterlevel differences:
+
+	    -Dflys.backend.importer.skip.waterlevel.differences=True
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Parse and
+	  store MINFO specific waterlevel differences.
+
+2012-04-26  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/WaterlevelDifferencesParser.java:
+	  New parser for MINFO specific waterlevel differences.
+
+	* src/main/java/de/intevation/flys/importer/ImportWaterlevelDifferenceValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelDifference.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelDifferenceColumn.java:
+	  New importer classes used during the import process of MINFO specific
+	  waterlevel differences.
+
+2012-04-26  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added a missing constraint to
+	  'waterlevel_difference' relation. Remove that constraint in
+	  oracle-drop-minfo.sql.
+
+2012-04-25  Felix Wolfsteller <felix@intevation.de>
+
+	  * src/main/java/de/intevation/flys/model/WaterlevelDifferenceValue.java:
+	    (setValue, setValues): Change setter name to allow hibernate to recognize
+	    it.
+
+2012-04-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/WaterlevelDifferenceColumn.java,
+	  src/main/java/de/intevation/flys/model/WaterlevelDifference.java,
+	  src/main/java/de/intevation/flys/model/WaterlevelDifferenceValue.java:
+	  New model classes for MINFO specific waterlevel differences.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model classes.
+
+2012-04-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Improved the schema to store MINFO
+	  specific waterlevel differences.
+
+2012-04-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/WaterlevelValue.java: Renamed a
+	  property ('qRange' -> 'qrange') because there have been problem during the
+	  import.
+
+	* src/main/java/de/intevation/flys/importer/parsers/WaterlevelParser.java:
+	  Filled the stub with code.
+
+	* src/main/java/de/intevation/flys/importer/ImportWaterlevelValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevel.java: Some
+	  adaptions and missing methods which are required during the import.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Use the
+	  correct directory to search for waterlevel files.
+
+2012-04-24  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql: Small type adaptions in the waterlevel_values
+	  relation.
+
+	* src/main/java/de/intevation/flys/importer/parsers/WaterlevelParser.java:
+	  First stub of a parser for MINFO specific waterlevel values.
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added a new config
+	  option to skip parsing MINFO specifc waterlevel_values:
+
+	    -Dflys.backend.importer.skip.waterlevels=True
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Added code
+	  path to start parsing and storing MINFO specific waterlevel values.
+
+2012-04-20  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportWaterlevelValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevelQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWaterlevel.java: New
+	  importer classes used for MINFO specific waterlevel import.
+
+2012-04-20  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/WaterlevelQRange.java,
+	  src/main/java/de/intevation/flys/model/WaterlevelValue.java,
+	  src/main/java/de/intevation/flys/model/Waterlevel.java: New model
+	  classes for MINFO specific waterlevel data.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model classes.
+
+2012-04-20  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added relations for waterlevels
+	  specific to MINFO. Note: those waterlevel values are not stored in the
+	  WINFO specific relations!
+
+2012-04-19  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  src/main/java/de/intevation/flys/importer/ImportSedimentYield.java,
+	  src/main/java/de/intevation/flys/model/SedimentYield.java: Added a
+	  column 'description' to the sediment_yield relation.
+
+	* src/main/java/de/intevation/flys/importer/parsers/SedimentYieldParser.java:
+	  New parser for sediment yield data.
+
+	* src/main/java/de/intevation/flys/model/GrainFraction.java: Added constants
+	  that represent the names of the grain fraction types.
+
+	* src/main/java/de/intevation/flys/importer/ImportGrainFraction.java: New
+	  constructor that takes a name only.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Improved the
+	  process of parsing sediment yield files.
+
+2012-04-19  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added new config
+	  option to skip parsing sediment yield data:
+
+	     -Dflys.backend.importer.skip.sediment.yield=true
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Prepared the
+	  importer to parse sediment yield data.
+
+	* src/main/java/de/intevation/flys/importer/ImportSedimentYield.java:
+	  storeDependencies() now throws SQLExceptions and
+	  ConstraintViolationExceptions.
+
+2012-04-19  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportGrainFraction.java,
+	  src/main/java/de/intevation/flys/importer/ImportSedimentYieldValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportSedimentYield.java: New
+	  importer classes for importing sediment yield data.
+
+2012-04-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/SedimentYield.java,
+	  src/main/java/de/intevation/flys/model/SedimentYieldValue.java,
+	  src/main/java/de/intevation/flys/model/GrainFraction.java: New model
+	  classes for sediment yield data.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model classes.
+
+2012-04-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added missing river_id column to
+	  sediment_yield relation.
+
+2012-04-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Floodmaps.java,
+	  src/main/java/de/intevation/flys/importer/parsers/SedimentDensityParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportDischargeZone.java:
+	  Removed superflous imports.
+
+2012-04-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added relations for storing sediment
+	  yield values.
+
+2012-04-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: The discharge_zone relation has no
+	  longer a reference to a named main value but stores a lower and upper
+	  discharge as string.
+
+	* src/main/java/de/intevation/flys/model/DischargeZone.java,
+	  src/main/java/de/intevation/flys/importer/ImportDischargeZone.java:
+	  Adapted the code to the changes in the db schema.
+
+	* src/main/java/de/intevation/flys/importer/parsers/FlowVelocityModelParser.java:
+	  This parser now reads the meta information properly.
+
+	* src/main/java/de/intevation/flys/importer/ImportFlowVelocityModelValue.java:
+	  Repaired broken HQL statement.
+
+	* src/main/java/de/intevation/flys/importer/ImportFlowVelocityModel.java:
+	  Log the number of flow velocity model values that have been written into
+	  database.
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/FlowVelocityMeasurementParser.java:
+	  New parser for flow velocity measurements.
+
+	* src/main/java/de/intevation/flys/importer/ImportFlowVelocityMeasurementValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityMeasurement.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityModelValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityModel.java:
+	  Fixed broken HQL statements.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Store flow
+	  velocity measurements into database after parsing them.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model classes for flow velocity measurements.
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportFlowVelocityMeasurementValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityMeasurement.java:
+	  New temp classes used during the import process of flow velocity
+	  measurements.
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FlowVelocityMeasurementValue.java,
+	  src/main/java/de/intevation/flys/model/FlowVelocityMeasurement.java: New
+	  model classes for storing flow velocity measurements.
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added new relations for MINFO specific
+	  flow velocity measurements.
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/FlowVelocityModelParser.java:
+	  New. Parser for model files of MINFO specific flow velocity data.
+
+	* doc/schema/oracle-minfo.sql: Added a missing q column to
+	  flow_velocity_model_values relation.
+
+	* src/main/java/de/intevation/flys/importer/ImportFlowVelocityModelValue.java,
+	  src/main/java/de/intevation/flys/model/FlowVelocityModelValue.java:
+	  Added missing q column.
+
+	* src/main/java/de/intevation/flys/importer/ImportFlowVelocityModel.java:
+	  Added setter methods for meta data and an addValue() for adding new
+	  ImportFlowVelocityModelValues.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Use
+	  FlowVelocityModelParser for parsing model data of flow velocity files.
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeZone.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityModelValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportFlowVelocityModel.java:
+	  Temp classes used during the import process of flow velocity data.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Implemented
+	  the method that stores flow velocity model data.
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Prepared for
+	  parsing flow  velocity files.
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added a config
+	  option to skip parsing flow velocity files:
+
+	    -Dflys.backend.importer.skip.flow.velocity=true
+
+2012-04-17  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FlowVelocityModel.java,
+	  src/main/java/de/intevation/flys/model/FlowVelocityModelValue.java,
+	  src/main/java/de/intevation/flys/model/DischargeZone.java: New model
+	  classes for MINFO specific database relations.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the new model classes.
+
+2012-04-16  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added new relations for MINFO specific
+	  flow velocity values.
+
+2012-02-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/oracle-minfo.sql: Fixed column unit_id in table depths
+	  to match type of column id in table units.
+
+	* doc/schema/postgresql-minfo.sql: oracle-minfo.sql for a better DBMS.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/MorphologicalWidth.java: Added
+	  annotation for values.
+
+	* src/main/java/de/intevation/flys/importer/ImportMorphWidthValue.java:
+	  Removed debug output in getPeer() and storeDependencies().
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/MorphologicalWidthParser.java:
+	  New parser for morphological widths files.
+
+	* src/main/java/de/intevation/flys/importer/ImportMorphWidth.java: Throw
+	  constraint violation exceptions.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Parse and
+	  store morphological widths.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added a config
+	  option to skip parsing morphological widths:
+
+	    -Dflys.backend.importer.skip.morphological.width=true
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql: Added a description field to morphological
+	  width values.
+
+	* src/main/java/de/intevation/flys/model/MorphologicalWidthValue.java:
+	  Added new instance variable for descriptions.
+
+	* src/main/java/de/intevation/flys/importer/ImportMorphWidthValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportMorphWidth.java: New
+	  temp classes used to store morphological width values during the import.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Added new relations for MINFO specific
+	  morphological width.
+
+	* src/main/java/de/intevation/flys/model/MorphologicalWidth.java,
+	  src/main/java/de/intevation/flys/model/MorphologicalWidthValue.java: New
+	  model classes for morphological width.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model classes.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql: Added a description field to table
+	  sediment_density.
+
+	* src/main/java/de/intevation/flys/model/SedimentDensityValue.java,
+	  src/main/java/de/intevation/flys/model/SedimentDensity.java: Some
+	  modifications based on the changes of the schema adaption in last commit.
+
+	* src/main/java/de/intevation/flys/importer/parsers/SedimentDensityParser.java:
+	  Override parse() of parent class to get the filename.
+
+	* src/main/java/de/intevation/flys/importer/ImportSedimentDensity.java,
+	  src/main/java/de/intevation/flys/importer/ImportDepth.java,
+	  src/main/java/de/intevation/flys/importer/ImportSedimentDensityValue.java:
+	  Implemented the methods storeDependencies() and getPeer() to save new
+	  instances into database.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Save all
+	  ImportSedimentDensity objects to database.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the new model classes.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Modified the db schema specific to
+	  MINFO; replaced some columns.
+
+	* src/main/java/de/intevation/flys/importer/parsers/SedimentDensityParser.java:
+	  Implemented the method stubs: parse meta data and data values.
+
+	* src/main/java/de/intevation/flys/importer/ImportSedimentDensityValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportSedimentDensity.java:
+	  Added and replaced some instance variables because the db schema has
+	  changed.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/LineParser.java: New.
+	  An abstract parser that might be used to read a file and handle each
+	  line contained in the file seperatly.
+
+	* src/main/java/de/intevation/flys/importer/parsers/SedimentDensityParser.java:
+	  New. Subclasses LineParser. It is able to parse MINFO specific sediment
+	  density files. NOTE: currently just a stub.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Prepared to
+	  read MINFO specific sediment density files.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added a new
+	  config option to skip parsing MINFO sediment density values:
+
+	    -Dflys.backend.importer.skip.sediment.density=true
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportSedimentDensity.java,
+	  src/main/java/de/intevation/flys/importer/ImportSedimentDensityValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportDepth.java: New importer
+	  classes used during MINFO sediment density import.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Improved the MINFO schema to store
+	  sediment density values specific to a river and depth.
+
+	* src/main/java/de/intevation/flys/model/SedimentDensityValue.java,
+	  src/main/java/de/intevation/flys/model/SedimentDensity.java,
+	  src/main/java/de/intevation/flys/model/Depth.java: New model classes
+	  used to store sediment density values specific to a river and depth.
+
+2012-04-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightParser.java:
+	  New. An abstract super class for BedHeightSingleParser and
+	  BedHeightEpochParser. It implements methods for parsing meta data.
+	  Concrete subclasses need to implements the method for parsing data rows
+	  only.
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeight.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightValue.java: New.
+	  Interfaces that define some major methods which enables the BedHeightParser
+	  to parse both - single and epoch bed heights.
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightSingleParser.java:
+	  Moved the code for parsing meta data to BedHeightParser which is now the
+	  parent class.
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightEpochParser.java:
+	  New. A further subclass of BedHeightParser for parsing MINFO bed heights
+	  for epochs.
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightSingleValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightEpochValue.java:
+	  Made them subclasses of ImportBedHeightValue.
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightSingle.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightEpoch.java: Made
+	  them subclasses of ImportBedHeight.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Some
+	  adjustments to store ImportBedHeight and ImportBedHeightValue instances
+	  instead of concrete subclasses.
+
+2012-04-12  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql: Added a link to the river to bed_height_epoch
+	  table.
+
+	* src/main/java/de/intevation/flys/model/BedHeightEpochValue.java,
+	  src/main/java/de/intevation/flys/model/BedHeightEpoch.java: New model
+	  classes for MINFO bed height epochs.
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Splitted up the
+	  config option to skip parsing bed heights. Now, we are able to skip single
+	  and epoch bed heights using the following options:
+
+	    -Dflys.backend.importer.skip.bed.height.single=true  (skip singles)
+	    -Dflys.backend.importer.skip.bed.height.epoch=true   (skip epochs)
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightEpoch.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightEpochValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java: Implemented
+	  the whole stuff to parse those data.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the new model classes.
+
+2012-04-12  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Schema adaptions specific to MINFO bed
+	  heights.
+
+	* src/main/java/de/intevation/flys/model/BedHeightSingleValue.java,
+	  src/main/java/de/intevation/flys/model/BedHeightType.java,
+	  src/main/java/de/intevation/flys/model/ElevationModel.java,
+	  src/main/java/de/intevation/flys/model/LocationSystem.java,
+	  src/main/java/de/intevation/flys/model/BedHeightSingle.java: New model
+	  classes for MINFO bed heights.
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightSingleParser.java:
+	  Some logging adjustments and a little bugfix: add BedHeightSingle objects
+	  after they were parsed; otherwise they are not saved to database.
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightSingleValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightSingle.java,
+	  src/main/java/de/intevation/flys/importer/ImportElevationModel.java,
+	  src/main/java/de/intevation/flys/importer/ImportLocationSystem.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightType.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java: Implemented
+	  storeDependencies() and getPeer().
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered model classes.
+
+2012-04-11  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightSingleParser.java:
+	  Finished work on parsing meta information and data specific to single bed
+	  heights.
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightSingleValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightSingle.java,
+	  src/main/java/de/intevation/flys/importer/ImportElevationModel.java,
+	  src/main/java/de/intevation/flys/importer/ImportLocationSystem.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightType.java: Some
+	  new and modified temp storages used during MINFO import.
+
+2012-04-11  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: Some schema adaptions specific to bed
+	  heights in MINFO.
+
+2012-04-11  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added new command
+	  line option to skip parsing bed heights (german "Sohlhoehen").
+	  Set "-Dflys.backend.importer.skip.bed.height=true" to skip parsing this
+	  file type.
+
+	* src/main/java/de/intevation/flys/importer/parsers/BedHeightEpochParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/BedHeightSingleParser.java:
+	  Initial checkin of parsers for bed heights (single and epoch).
+
+	* src/main/java/de/intevation/flys/importer/ImportBedHeightSingle.java,
+	  src/main/java/de/intevation/flys/importer/ImportBedHeightEpoch.java: Temp
+	  storage for bed heights data used during the import.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java: Added an INFO
+	  statement that signals the start of parsing rivers.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Collect and
+	  trigger parsing of bed heights files (placed in 'Morphologie/Sohlhoehen').
+
+2012-04-11  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-minfo.sql,
+	  doc/schema/oracle-drop-minfo.sql: MINFO specific DB schema and sql statements
+	  to drop MINFO specific stuff.
+
+2012-03-29  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java: Added a config
+	  option "flys.backend.importer.infogew.file" to set the path of an
+	  INFO.gew file.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java: Read the path
+	  to the INFO.gew from the new config option and try to parse it.
+
+2012-03-19  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-spatial.sql: Set the type of 'lower' and 'upper' column
+	  of relation 'dem' to NUMBER(19,5).
+
+2012-03-19  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Floodmaps.java: Set geometry type
+	  to 'Geometry', because Oracle can save POLYGONS and MULTIPOLYGONS in the
+	  same relation; Hibernate seems unable to load both types.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered missing Floodmaps.
+
+2012-03-16  Ingo Weinzierl <ingo@intevation.de>
+
+	* Tagged module as 'pre2.7-2012-03-16'.
+
+2012-03-16  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-spatial.sql: Repaired broken oracle db schema for
+	  relation 'floodmaps'.
+
+2012-03-08  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Floodmaps.java: New model class for
+	  'floodmaps'.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the Floodmaps model class.
+
+2012-03-07  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/shpimporter/shpimporter.py,
+	  contrib/shpimporter/utils.py,
+	  contrib/shpimporter/uesg.py: A python based tool for importing
+	  shapefiles into a database. This tool is based on python because it
+	  makes use of GDAL OGR to read shapefiles and write features into
+	  database.
+
+2012-03-07  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: Adapted the PostgreSQL schema for
+	  floodmaps.
+
+2012-03-06  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql,
+	  doc/schema/oracle-spatial.sql: Added new relations for existing
+	  floodmaps (currently tested for PostgreSQL only!).
+
+2012-03-06  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Wst.java: Adapted method call of
+	  Log4J logger 'warning()' -> 'warn()'.
+
+2012-03-02  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Fix or workaround flys/issue632 .
+
+	* src/main/java/de/intevation/flys/model/Wst.java: Avoid NPE when
+	  trying to get min/max q values.
+
+2012-02-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/DischargeTable.java:
+	  The list of DischargeTableValue is now sorted by Q.
+
+2012-02-09  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java: Added a method
+	  getMasterDischargeTable() to retrieve the discharge table with kind 0.
+
+2012-02-03  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java
+	  (getGaugeDatumsKMs,queryGaugeDatumsKMs): renamed to avoid hibernate
+	  running into trouble finding db-mapping for type Map for
+	  what looks like a 'getter' of GaugeDatumsKMs.
+
+2012-02-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java(getGaugeDatumsKMs):
+	  New method to build a map of gauge stattion km to 
+	  the datums (PNP) of the gauge.  Useful look if a km 
+	  is a gauge station.
+
+2012-01-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FastAnnotations.java:
+	  New. Fetches all informations of annotations in one go for
+	  a river. Useful to speed up annotation handling.
+
+2012-01-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java: Added a function that
+	  returns a Gauge based on its official number.
+
+2012-01-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/FastCrossSectionLine.java:
+	  New. Cacheable representation of the cross section line.
+
+	* src/main/java/de/intevation/flys/model/CrossSectionLine.java:
+	  Add a new isValid() method.
+
+	* src/main/java/de/intevation/flys/model/CrossSection.java:
+	  Added method getFastLines() to fetch the lines (FastCrossSectionLines)
+	  directly with a single SQL statement and without expensive
+	  intermediate representations.
+
+2012-01-16	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/CrossSection.java(getLines):
+	  Added method to fetch the lines of a cross section in a given interval.
+	  Useful to have chunked access to the lines.
+
+2012-01-16	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/CrossSectionLine.java
+	  (fetchCrossSectionLinesPoints): Simplified and prevent reallocations.
+
+2012-01-10	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/StaFileParser.java:
+	  Introduced boolean system property 'flys.backend.sta.parse.gauge.numbers'
+	  default: false. If set the official number is parsed out of
+	  the first line of the STA files. This leads to problems with the
+	  data of the Elbe river.
+
+	* src/main/java/de/intevation/flys/backend/SpatialInfo.java: Removed
+	  superfluous import.
+
+2012-01-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: Fixed table hws.
+
+2012-01-05  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/RiverAxis.java: The method
+	  getRiverAxis() now returns a list of RiverAxis objects. There is a
+	  modeling problem (see comment in the header of the class) which should
+	  be fixed!
+
+	* src/main/java/de/intevation/flys/backend/SpatialInfo.java: Adapted the
+	  code based on the modified signature in RiverAxis.
+
+2012-01-03  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Wst.java: Added a method
+	  determineMinMaxQFree() that determines the min/max Qs at a given
+	  kilometer.
+
+2012-01-02	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Remove 'NOT NULL' constraint from
+	  gauges.range_id because there are gauges which don't have
+	  a 'Gueltigkeitsbereich'
+	
+	  To adjust existing PostgreSQL databases use:
+	
+	      ALTER TABLE gauges ALTER COLUMN range_id DROP NOT NULL;
+
+	* src/main/java/de/intevation/flys/model/River.java: Handle
+	  null references to 'Gueltigkeitsbereiche'.
+
+2011-12-28  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Wst.java: Added a method
+	  determineMinMaxQ(double double) to be able to determine the Q range of a
+	  WST without having a Range object.
+
+2011-12-19	Sascha L. Teichmann	<sascha.teichmann@intevation.de>:
+
+	* src/main/java/de/intevation/flys/importer/parsers/StaFileParser.java:
+	  Parse the official 'Pegelnummer' out of the STA files, too.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Adjusted import model.
+
+	* src/main/java/de/intevation/flys/model/Gauge.java: Make the
+	  official gauge number accessible via Hibernate.
+
+	* doc/schema/postgresql.sql, doc/schema/oracle.sql: Added
+	  an official_number to the gauges table.
+
+2011-11-30	Bjoern Schilberg <bjoern.schilberg@intevation.de>:
+
+	* doc/schema/oracle-spatial.sql: Adjust extent of germany to EPSG:31467
+	  (GK3) coordinates.
+
+2011-11-30	Bjoern Schilberg <bjoern.schilberg@intevation.de>:
+
+	* doc/schema/oracle-spatial.sql: Adjust extent to the extent of germany
+	and srs to 31467 in USER_SDO_GEOM_METADATA.
+
+2011-11-29	Bjoern Schilberg <bjoern.schilberg@intevation.de>:
+
+	* doc/schema/oracle_create_user.sql: Fixed notation of the table in the
+	  alter statement.
+
+2011-11-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>:
+
+	Fixed flys/issue415
+
+	* doc/schema/oracle.sql: Increased precision of a and b in ranges.
+
+2011-11-10  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Building.java,
+	  src/main/java/de/intevation/flys/model/Fixpoint.java: Added functions
+	  that return a list of Buildings/Fixpoints for a given river.
+
+2011-11-10  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/oracle-spatial.sql,
+	  doc/schema/postgresql-spatial.sql: Adapted the "kind" field of "lines"
+	  relation (Int -> Varchar).
+
+	* doc/schema/oracle-spatial_idx.sql: Added missing spatial index for
+	  "lines" relation.
+
+	* src/main/java/de/intevation/flys/model/Line.java: Added a function that
+	  returns all lines of a given river.
+
+2011-11-09  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Catchment.java: New. A model for
+	  the 'catchment' relation.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the Catchment model.
+
+2011-11-09  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: Synced "hws" relation with oracle
+	  schema.
+
+	* src/main/java/de/intevation/flys/model/Hws.java: New. A model for the
+	  "hws" relation.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the Hws model.
+
+2011-11-09  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Added methods that return information about the database connection used
+	  by a concrete SessionFactoryImpl.
+
+2011-11-09  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Floodplain.java: Changed the
+	  geometry type from MultiPolygon to Polygon.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Added a function that returns the db driver of a given
+	  SessionFactoryImpl instance.
+
+2011-11-01  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/RiverAxisKm.java: New. Model class
+	  for 'river_axes_km' relation.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Added mapping for RiverAxisKm.
+
+2011-10-25  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/oracle_create_user.sql:
+	  Added explizit TABLESPACE definition for the user.
+
+2011-10-25  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/oracle_create_user.sql: 
+	  Adjusted oracle_create_user.sql script. Added USER SQL snippet to change
+	  tablespace to users.
+
+2011-10-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>:
+
+	* src/main/java/de/intevation/flys/utils/DateGuesser.java:
+	  New. Date guesser from desktop FLYS.
+
+	* src/main/java/de/intevation/flys/importer/parsers/WstParser.java:
+	  Try to parse the name of a WST column as a date and store
+	  the date into the database
+	  
+	* src/main/java/de/intevation/flys/importer/ImportWstColumn.java:
+	  Added code to store the date of the column in the database.
+
+2011-10-24  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: 
+	  Adjusted geometry type for floodplain and hws in AddGeometryColumn.
+
+2011-10-19  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/oracle.sql:
+	  Added missing views (wst_value_table,wst_w_values,wst_q_values).
+
+2011-10-18  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/oracle.sql:
+	  Removed all CREATE OR REPLACE TRIGGER statements.
+
+2011-10-17  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/oracle.sql:
+	  Adjusted NUMBER format for units, positions and cross_section_points tables.
+
+2011-10-10  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/oracle.sql:
+	  Fix errors.
+
+2011-10-10  Bjoern Schilberg <bjoern.schilberg@intevation.de>
+
+	* doc/schema/oracle.sql:
+	  Adjust oracle schema [I382].
+
+2011-10-10  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportUnit.java:
+	  Removed obsolete imports.
+
+2011-10-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>:
+
+	* ChangeLog: Added database update statements.
+
+	To update existing databases:
+
+	    BEGIN;
+	      CREATE SEQUENCE UNITS_ID_SEQ;
+	      CREATE TABLE units (
+	        id   int PRIMARY KEY NOT NULL,
+	        name VARCHAR(32)     NOT NULL UNIQUE
+	      );
+	    ALTER TABLE rivers ADD COLUMN wst_unit_id int REFERENCES units(id);
+	    INSERT INTO units (id, name) VALUES (nextval('UNITS_ID_SEQ'), 'NN + m');
+	    INSERT INTO units (id, name) VALUES (nextval('UNITS_ID_SEQ'), 'NHN + m');
+	    UPDATE rivers SET wst_unit_id = (SELECT id FROM units WHERE name = 'NHN + m') WHERE name = 'Elbe';
+	    UPDATE rivers SET wst_unit_id = (SELECT id FROM units WHERE name = 'NN + m') WHERE name <> 'Elbe';
+	    ALTER TABLE rivers ALTER COLUMN wst_unit_id SET NOT NULL;
+	    COMMIT;
+
+2011-10-05  Ingo Weinzierl <ingo@intevation.de>
+
+	* contrib/dump-schema.sh: New. A small shell script that dumps the
+	  database schema of a given database to SQL.
+
+	* pom.xml: Added dependency for hibernate-spatial-oracle stuff.
+
+2011-10-04  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql.sql: Removed unit column from wsts; added a
+	  wst_unit_id column to rivers. We decided to support a single elevation
+	  model for the whole river.
+
+	* src/main/java/de/intevation/flys/model/River.java: Added a WstUnit
+	  column.
+
+	* src/main/java/de/intevation/flys/model/Wst.java: Removed the Unit
+	  column.
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java: Provide a
+	  getUnit() method that allows querying the elevation unit for this wst.
+
+	* src/main/java/de/intevation/flys/importer/ImportUnit.java: Removed
+	  storeDependencies().
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java: Save the
+	  Unit of the wst file or a default one into database before all other
+	  dependencies as well as the river itself is saved to database.
+
+2011-10-04  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql.sql: Added a "units" table.
+
+	* src/main/java/de/intevation/flys/model/Unit.java: New. Model class that
+	  represents a unit.
+
+	* src/main/java/de/intevation/flys/importer/ImportUnit.java: New. Model
+	  class that is used to import units.
+
+	* src/main/java/de/intevation/flys/model/Wst.java: A Wst stores a Unit
+	  which references "units" table now.
+
+	* src/main/java/de/intevation/flys/importer/parsers/WstParser.java: Set
+	  units which have already been parsed on Wsts.
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java: Added setter
+	  method for Units and call storeDependencies() for ImportUnits.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model class Unit.
+
+2011-10-04  Ingo Weinzierl <ingo@intevation.de>
+
+	flys/issue333 (W-INFO / Berechnung Wasserspiegellage, Zuordnung Bezugspegel)
+
+	* src/main/java/de/intevation/flys/model/River.java: Modified
+	  determination of gauge based on a km range. River.determineGauge(double,
+	  double) will now return the gauge which matches the start km.
+
+2011-09-28  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/StringUtil.java:
+	  (wWrap): New method (extracted from WaterlevelSelectState).
+
+2011-09-28  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/StringUtil.java:
+	  (unbracket): New method (extracted from WaterlevelSelectState).
+
+2011-09-27	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/CrossSectionLine.java:
+	  Moved some logic from cross section demo app to this model.
+	
+2011-09-26  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/CrossSectionTrack.java:
+	  Added new function that the nearest CrossSectionTrack of a river to a
+	  given kilometer.
+
+2011-09-23  Bjoern Schilberg <bjoern@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: 
+	  Added missing river_axes_km schema.
+	* doc/schema/oracle-spatial.sql:
+	  Added missing dem and lines schema.
+
+2011-09-22  Bjoern Schilberg <bjoern@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql, doc/schema/oracle-spatial.sql:
+	  Harmonized oracle and postgresql spatial schema.
+
+2011-09-22  Bjoern Schilberg <bjoern@intevation.de>
+
+	* doc/schema/oracle-spatial.sql: Harmonized Extent for Saar and Mosel. Some cleanups.
+
+2011-09-22  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Added the possibility to enable JMX (/MBean) support for hibernate. By
+	  default, this support is NOT enabled. To enable JMX support for
+	  hibernate, set the system property "flys.backend.enablejmx=true".
+
+2011-09-20  Bjoern Schilberg <bjoern@intevation.de>
+
+	* doc/schema/oracle_create_user.sql: Added right to create views.
+
+2011-09-20  Bjoern Schilberg <bjoern@intevation.de>
+
+	* doc/schema/oracle-spatial.sql: Generalized oracle spatial schema.
+
+2011-09-19  Ingo Weinzierl <ingo@intevation.de>
+
+	Tagged RELEASE 2.5
+
+	* Changes: Prepared changes for release.
+
+2011-09-16  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/DGM.java: Added function to query
+	  a DGM by Id.
+
+2011-09-15  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  pom.xml: Removed oracle dependency.
+
+2011-09-15  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle.sql: Added inital oracle schema.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial_idx.sql: Added inital oracle-spatial_idx.sql
+	   script.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Deactivated spatial indexes.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle_create_user.sql: Added inital oracle_create_user.sql
+	   script.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Added schema floodplain.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Added schema hws.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Added schema cross_section_tracks.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Added schema river_axes.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Added schema fixpoints.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Added schema buildings.
+
+2011-09-14  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Fixed table river_axes_km.
+
+2011-09-13  Bjoern Schilberg <bjoern@intevation.de>
+
+	*  doc/schema/oracle-spatial.sql: Added initial oracle schemas.
+
+2011-09-12  Bjoern Schilberg <bjoern@intevation.de>
+	
+	* doc/schema/postgresql-spatial.sql: Added initial schemas for
+	  Hydrologie/Einzugsgebiete, Hydrologie/HW-Schutzanlagen, Hydrologie/Hydr.
+	  Grenzen/Linien, BfG/hauptoeff_*.shp, BfG/MNQ-*.shp,
+	  BfG/modellgrenze*.shp,  BfG/uferlinie.shp, BfG/vorland_*.shp,
+	  Hydrologie/Streckendaten, Hydrologie/UeSG/Berechnung,
+	  Hydrologie/UeSG/Messung
+
+2011-09-02  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: Removed SERIALs from schema.
+	Auto-Increment is realized through SERIALs now.
+
+	* src/main/java/de/intevation/flys/model/DGM.java: The table for dem has
+	been renamed to 'dem' (before 'dgm').
+
+2011-09-01  Hans Plum <hans@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql:
+	Hint for unifying table names: dgm -> dem
+
+2011-09-01  Hans Plum <hans@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql:
+	Added mappings to existing data in file system (based on 
+	river Saar); added TODOs for missing tables/mappings
+
+2011-08-31  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: New relation for floodplains (german
+	  "Talaue").
+
+	* src/main/java/de/intevation/flys/model/Floodplain.java: New. Model class
+	  that represents a floodplain.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the Floodplain mapping.
+
+2011-08-31  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: Added a relation for DGMs. Note, that
+	  no data of the DGM is stored in this relation, but only the file path to
+	  the DGM file.
+
+	* src/main/java/de/intevation/flys/model/DGM.java: New. This class provides
+	  information for a DGM (km range and file path).
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the DGM.
+
+2011-08-30  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/CrossSectionTrack.java: New
+	  static function to retrieve all CrossSectionTracks of a specific river.
+
+2011-08-25  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/FileTools.java: Moved to
+	  artifacts-common module.
+
+	* src/main/java/de/intevation/flys/importer/parsers/PegelGltParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/PRFParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/HYKParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/AnnotationsParser.java,
+	  src/main/java/de/intevation/flys/importer/parsers/InfoGewParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java,
+	  src/main/java/de/intevation/flys/importer/ImportGauge.java: Adjusted
+	  imports of FileTools.
+
+2011-08-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java (getMainValues)
+	  (setMainValues):
+	  New method and mapping to get/set MainValues of a Gauge. Essentially
+	  developed by Sascha L. Teichmann.
+
+2011-08-22  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Reverted the default db dialect to PostgreSQL - this has been changed to
+	  PostGIS by accident.
+	  Configure the dialect "org.hibernatespatial.postgis.PostgisDialect" to
+	  use the PostGIS stuff.
+
+2011-08-22  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/RiverAxis.java: Added a function
+	  that returns the RiverAxis for a given River.
+
+	* src/main/java/de/intevation/flys/backend/SpatialInfo.java: Use the new
+	  function of RiverAxis to retrieve the RiverAxis.
+
+2011-08-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* doc/schema/postgresql-spatial.sql: The PostGIS database schema for
+	  FLYS spatial data.
+
+	* src/main/java/de/intevation/flys/model/CrossSectionTrack.java,
+	  src/main/java/de/intevation/flys/model/RiverAxis.java,
+	  src/main/java/de/intevation/flys/model/Line.java,
+	  src/main/java/de/intevation/flys/model/Building.java,
+	  src/main/java/de/intevation/flys/model/Fixpoint.java: Model classes that
+	  represent FLYS spatial data.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered model classes.
+
+	* pom.xml: Added dependencies to HibernateSpatial and PostGIS.
+
+	* src/main/java/de/intevation/flys/backend/SpatialInfo.java,
+	  contrib/spatial-info.sh: A small demo application that prints out some
+	  information about spatial data of specific rivers. Modify the system
+	  property -Dflys.backend.spatial.river to get information of a river of
+	  your choice.
+
+2011-07-31	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Re-enabled Hibernate schema dumps.
+
+	* src/main/java/de/intevation/flys/App.java: Removed old code
+	  and use new SessionFactoryProvider infrastructure.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Added methods to create db configurations without opening them.
+	  Useful for introspection only purposes.
+
+2011-07-31	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* pom.xml: Bumped Apache DBCP up to 1.4 to use the same version
+	  as artifact database.
+
+2011-07-28	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  Make use of the LRU cache from artifacts common.
+
+2011-07-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added missing foreign key contraint on hyks table.
+	  To update existing databases:
+
+	  ALTER TABLE hyks ADD CONSTRAINT hyks_river_id_fkey FOREIGN KEY (river_id) REFERENCES rivers(id);
+
+2011-07-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/HYKParser.java:
+	  Check if zone coordinates in HYKs are swapped and warn the user.
+
+2011-07-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/HYK.java
+	  src/main/java/de/intevation/flys/importer/parsers/HYKParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYKFormation.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYKEntry.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYK.java:
+	  Various small fixes and some extra logging.
+
+2011-07-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Config.java: New.
+	  Central singleton to configure the Importer.
+	  Uses system properties by now:
+
+	  flys.backend.importer.dry.run: boolean
+	      default false. true: don't write to database.
+
+	  flys.backend.importer.annotation.types: String
+	      default unset. Filename of annotation type classifications.
+
+	  flys.backend.importer.skip.gauges: boolean
+	      default: false. true: don't parse/store *.glt, *.sta files
+
+	  flys.backend.importer.skip.annotations: boolean
+	      default: false. true: don't parse/store *.km files
+
+	  flys.backend.importer.skip.prfs: boolean
+	      default: false. true: don't parse/store *.prf files
+
+	  flys.backend.importer.skip.hyks: boolean
+	      default: false. true: don't parse/store *.hyk files
+
+	  flys.backend.importer.skip.wst: boolean
+	      default: false. true: don't parse/store river wst files
+
+	  flys.backend.importer.skip.extra.wsts: boolean
+	      default: false. true: don't parse/store extra *.zus, *.wst files
+
+	  flys.backend.importer.skip.fixations: boolean
+	      default: false. true: don't parse/store fixation *.wst files
+
+	  flys.backend.importer.skip.official.lines: boolean
+	      default: false. true: don't parse/store 'amtliche Linien' *.wst files
+
+	  flys.backend.importer.skip.flood.water: boolean
+	      default: false. true: don't parse/store 'HW-Marken' *.wst files
+
+	  flys.backend.importer.skip.flood.protection: boolean
+	      default: false. true: don't parse/store 'HW-Schutzanlagen' *.wst files
+
+2011-07-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/HYKEntry.java: Fixed OrderBy
+	  clause.
+
+2011-07-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportHYKFormation.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYKFlowZone.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYKEntry.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYK.java:
+	  Store HYK data structures to database. Needs testing.
+
+2011-07-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Parse the HYKs from the importer. TODO: Store them in database.
+
+2011-07-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/HYKParser.java:
+	  Create data structures while parsing.
+
+	* src/main/java/de/intevation/flys/importer/ImportHYKFormation.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYK.java: Added
+	  getters/setters to ease model wiring.
+
+2011-07-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportHYKFormation.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYKFlowZone.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYKEntry.java,
+	  src/main/java/de/intevation/flys/importer/ImportHYK.java: New.
+	  Importer models for HYKs.
+
+2011-07-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Each entry in a HYK can have
+	  an optional 'Peilungsjahr' (measure) not only the whole HYK.
+	  To update existing databases:
+	  BEGIN;
+	    ALTER TABLE hyks DROP COLUMN measure;
+	    ALTER TABLE hyk_entries ADD COLUMN measure TIMESTAMP;
+	  COMMIT;
+
+	  * src/main/java/de/intevation/flys/model/HYKEntry.java,
+	    src/main/java/de/intevation/flys/model/HYK.java:
+	    Adjusted Hibernate models.
+
+2011-07-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/HYKParser.java:
+	  Added callback mechanism and recursive file search like in the PRF parser.
+	  All BfG-HYK files seem to parse correctly now. TODO: Build the data structures.
+
+	* src/main/java/de/intevation/flys/importer/parsers/PRFParser.java:
+	  Added x.canRead() before accepting files for parsing.
+
+2011-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/HYKParser.java:
+	  Initial version of the HYK parser. Not ready, yet.
+
+	* src/main/java/de/intevation/flys/importer/ImportHYKFlowZoneType.java:
+	  Importer model for HYK flow zone types.
+
+2011-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Argh! Added distance_{vl|hf|vr} to
+	  wrong table.
+	  To update existing databases:
+	  BEGIN;
+	    ALTER TABLE hyk_entries DROP COLUMN distance_vl;
+	    ALTER TABLE hyk_entries DROP COLUMN distance_hf;
+	    ALTER TABLE hyk_entries DROP COLUMN distance_vr;
+	    ALTER TABLE hyk_formations ADD COLUMN distance_vl NUMERIC NOT NULL;
+	    ALTER TABLE hyk_formations ADD COLUMN distance_hf NUMERIC NOT NULL;
+	    ALTER TABLE hyk_formations ADD COLUMN distance_vr NUMERIC NOT NULL;
+	  COMMIT;
+
+	* src/main/java/de/intevation/flys/model/HYKFormation.java,
+	  src/main/java/de/intevation/flys/model/HYKEntry.java:
+	  Adjusted Hibernate models.
+
+2011-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/FileTools.java: Added method
+	  walkTree() to traverse a directory tree. To be reused in HYK parser.
+
+	* src/main/java/de/intevation/flys/importer/parsers/PRFParser.java:
+	  Uses the FileTools.walkTree() method now to find all PRF file.
+
+2011-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added missing columns.
+	  To update existing databases:
+	  BEGIN;
+	    ALTER TABLE hyks ADD COLUMN measure TIMESTAMP;
+	    ALTER TABLE hyk_entries ADD COLUMN distance_vl NUMERIC NOT NULL;
+	    ALTER TABLE hyk_entries ADD COLUMN distance_hf NUMERIC NOT NULL;
+	    ALTER TABLE hyk_entries ADD COLUMN distance_vr NUMERIC NOT NULL;
+	  COMMIT;
+
+	* src/main/java/de/intevation/flys/model/HYKEntry.java,
+	  src/main/java/de/intevation/flys/model/HYK.java:
+	  Adjusted Hibernate models.
+
+2011-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/parsers/*.java:
+	  New package. Moved the file parsers (*.gew, *.sta, *.at, *.glt, *.prf, *.km, *.wst)
+	  into this package.
+
+	* src/main/java/de/intevation/flys/importer/*.java: Adjusted the imports.
+
+2011-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/HYKFormation.java,
+	  src/main/java/de/intevation/flys/model/HYKEntry.java,
+	  src/main/java/de/intevation/flys/model/HYKFlowZone.java,
+	  src/main/java/de/intevation/flys/model/HYKFlowZoneType.java,
+	  src/main/java/de/intevation/flys/model/HYK.java: New. The hibernate models
+	  for the HYK structures.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new models.
+
+	* src/main/java/de/intevation/flys/model/CrossSection.java: Added
+	  'order by' annotation for fetching the cross section lines.
+
+2011-07-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added structures for HYKs "Hydraulische Kenngroessen"
+	  To update existing databases:
+
+	  BEGIN;
+	    CREATE SEQUENCE HYKS_ID_SEQ;
+	    CREATE TABLE hyks (
+	        id          int PRIMARY KEY NOT NULL,
+	        river_id    int             NOT NULL,
+	        description VARCHAR(256)    NOT NULL
+	    );
+	    
+	    CREATE SEQUENCE HYK_ENTRIES_ID_SEQ;
+	    CREATE TABLE hyk_entries (
+	        id     int PRIMARY KEY NOT NULL,
+	        hyk_id int             NOT NULL REFERENCES hyks(id),
+	        km     NUMERIC         NOT NULL,
+	        UNIQUE (hyk_id, km)
+	    );
+	    
+	    CREATE SEQUENCE HYK_FORMATIONS_ID_SEQ;
+	    CREATE TABLE hyk_formations (
+	        id            int PRIMARY KEY NOT NULL,
+	        formation_num int             NOT NULL DEFAULT 0,
+	        hyk_entry_id  int             NOT NULL REFERENCES hyk_entries(id),
+	        top           NUMERIC         NOT NULL,
+	        bottom        NUMERIC         NOT NULL,
+	        UNIQUE (hyk_entry_id, formation_num)
+	    );
+	    
+	    CREATE SEQUENCE HYK_FLOW_ZONE_TYPES_ID_SEQ;
+	    CREATE TABLE hyk_flow_zone_types (
+	        id          int PRIMARY KEY NOT NULL,
+	        name        VARCHAR(50)     NOT NULL UNIQUE,
+	        description VARCHAR(256)
+	    );
+	    
+	    CREATE SEQUENCE HYK_FLOW_ZONES_ID_SEQ;
+	    CREATE TABLE hyk_flow_zones (
+	        id           int PRIMARY KEY NOT NULL,
+	        formation_id int             NOT NULL REFERENCES hyk_formations(id),
+	        type_id      int             NOT NULL REFERENCES hyk_flow_zone_types(id),
+	        a            NUMERIC         NOT NULL,
+	        b            NUMERIC         NOT NULL,
+	        CHECK (a <= b)
+	    );
+	  COMMIT;
+
+2011-07-13	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* pom.xml: Bumped Hibernate up to 3.6.5.
+
+2011-07-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/FileTools.java: Argh!
+	  Forget to call the file hashing so only the file lengths were
+	  compared.
+
+2011-07-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/FileTools.java:
+	  Added a class HashedFile to compare files by there length
+	  and a message digest. Digest can be set with system property
+	  "flys.backend.file.cmp.digest" and defaults to MD5. Useful to
+	  detect file duplicates.
+
+	* src/main/java/de/intevation/flys/importer/PRFParser.java: Added
+	  method prfAccept(File) to callback to check if a found PRF file
+	  should be parsed. Useful to prevent parsing file duplicates.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Use the HashedFile and the PRFParser.Callback to prevent
+	  parsing of PRF duplicates.
+
+2011-07-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Misspelled sequence.
+	  To update existing databases:
+
+	    DROP SEQUENCE CROSS_SECTION_LINES_SEQ;
+		CREATE SEQUENCE CROSS_SECTION_LINES_ID_SEQ;
+
+	* src/main/java/de/intevation/flys/importer/ImportCrossSection.java:
+	  Added some logging because importing is slow.
+
+	* src/main/java/de/intevation/flys/importer/ImportCrossSectionLine.java:
+	  Prevent NPE if a cross section line from db has no points.
+
+2011-07-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Parse all PRFs in all subfolders of a river and store them
+	as cross sections into the database. Needs testing!
+
+	* src/main/java/de/intevation/flys/importer/ImportCrossSection.java,
+	  src/main/java/de/intevation/flys/importer/ImportCrossSectionLine.java:
+	  New. Importer models for cross sections.
+
+	* src/main/java/de/intevation/flys/importer/XY.java:
+	  New. Made top level class from inner PRFParser.XY.
+
+	* src/main/java/de/intevation/flys/importer/PRFParser.java:
+	  Moved out XY class. Renamed callback.
+
+	* src/main/java/de/intevation/flys/model/CrossSection.java,
+	  src/main/java/de/intevation/flys/model/CrossSectionLine.java,
+	  src/main/java/de/intevation/flys/model/CrossSectionPoint.java,
+	  src/main/java/de/intevation/flys/importer/ImportTimeInterval.java:
+	  Added convinience constructors.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Parse and store cross sections into database.
+
+2011-07-07	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Introduced a new table cross_section_line
+	  holding the km of a set of points.
+
+	* src/main/java/de/intevation/flys/model/CrossSectionLine.java:
+	  New. Model for a single line of a "Querprofil".
+
+	* src/main/java/de/intevation/flys/model/CrossSection.java: Removed
+	  'km' and 'points' they are part of the line now.
+
+	* src/main/java/de/intevation/flys/model/CrossSectionPoint.java:
+	  They reference to the containing line now.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered new model.
+
+	  To update existing databases:
+	  BEGIN;
+	      DROP SEQUENCE CROSS_SECTIONS_ID_SEQ;
+	      DROP SEQUENCE CROSS_SECTION_POINTS_ID_SEQ;
+	      DROP TABLE cross_section_points;
+	      DROP TABLE cross_sections;
+	      CREATE SEQUENCE CROSS_SECTIONS_ID_SEQ;
+	      CREATE TABLE cross_sections (
+	          id               int PRIMARY KEY NOT NULL,
+	          river_id         int             NOT NULL REFERENCES rivers(id),
+	          time_interval_id int                      REFERENCES time_intervals(id),
+	          description      VARCHAR(256)
+	      );
+	      CREATE SEQUENCE CROSS_SECTION_LINES_SEQ;
+	      CREATE TABLE cross_section_lines (
+	          id               int PRIMARY KEY NOT NULL,
+	          km               NUMERIC         NOT NULL,
+	          cross_section_id int             NOT NULL REFERENCES cross_sections(id),
+	          UNIQUE (km, cross_section_id)
+	      );
+	      CREATE SEQUENCE CROSS_SECTION_POINTS_ID_SEQ;
+	      CREATE TABLE cross_section_points (
+	          id                    int PRIMARY KEY NOT NULL,
+	          cross_section_line_id int             NOT NULL REFERENCES cross_section_lines(id),
+	          col_pos               int             NOT NULL,
+	          x                     NUMERIC         NOT NULL,
+	          y                     NUMERIC         NOT NULL,
+	          UNIQUE (cross_section_line_id, col_pos)
+	      );
+	  COMMIT;
+
+2011-07-07	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Dropped constraint that enforces the
+	  uniqueness of km and river. This is violated because there are
+	  more than one sounding in different year at the same km of a river.
+	  Added column 'description' to the cross section table to make it
+	  human readable.
+
+	  To update existing databases:
+
+		ALTER TABLE cross_sections DROP CONSTRAINT cross_sections_km_key;
+		ALTER TABLE cross_sections ADD COLUMN description VARCHAR(256);
+
+	* src/main/java/de/intevation/flys/model/CrossSection.java:
+	  Added the description column to the Hibernate model.
+	
+2011-07-07	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Dropped constraint that enforces the
+	  uniqueness of x in a "Querprofil-Spur". There are vertical lines
+	  in the soundings so this constraint is violated.
+
+	  To update existing databases:
+	
+		ALTER TABLE cross_section_points DROP CONSTRAINT cross_section_points_cross_section_id_key2;
+
+2011-07-07	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/PRFParser.java:
+	  Added a callback to be called from parsePRFs() if
+	  a PRF was parsed successfully. Useful to scan whole
+	  sub directories for PRF files.
+
+2011-07-07	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/PRFParser.java:
+	  Extract the year of sounding from file names. If not found
+	  from the name of th containing directory. Description is made
+	  of file name and parent directory file name.
+
+2011-07-07	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/PRFParser.java:
+	  Extracted the data. All BfG PRFs are parsed correctly, now.
+
+2011-07-07	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/PRFParser.java:
+	  Extract km from lines. TODO: extract data.
+
+2011-07-06	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/PRFParser.java: New.
+	  Parser for PRF files. TODO extra data and station from data lines.
+
+2011-07-06	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Point3d.java: Deleted.
+	  Not needed (braindead).
+
+	* src/main/java/de/intevation/flys/model/CrossSectionPoint.java:
+	  Directly store the x/y values now.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Removed registration of Point3d.
+
+	To update existing databases:
+
+	BEGIN;
+	  ALTER TABLE cross_section_points DROP COLUMN point3d_id;
+	  DROP SEQUENCE POINTS3D_ID_SEQ;
+	  DROP TABLE points3d;
+	  ALTER TABLE cross_section_points ADD COLUMN x NUMERIC NOT NULL;
+	  ALTER TABLE cross_section_points ADD COLUMN y NUMERIC NOT NULL;
+	  ALTER TABLE cross_section_points ADD CONSTRAINT
+		cross_section_points_cross_section_id_key2 UNIQUE (cross_section_id, x);
+	COMMIT;
+
+2011-07-06	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/CrossSection.java,
+	  src/main/java/de/intevation/flys/model/CrossSectionPoint.java:
+	  New. Hibernate models for cross-sections and their forming points.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered the new models.
+
+2011-07-06	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Point3d.java: New. point3d model
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Registered point3d model.
+
+2011-07-06	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Add relations for cross sections.
+	  To update existing databases:
+	     BEGIN;
+	     	
+	     CREATE SEQUENCE CROSS_SECTIONS_ID_SEQ;
+	     CREATE TABLE cross_sections (
+	         id               int PRIMARY KEY NOT NULL,
+	         km               NUMERIC         NOT NULL,
+	         river_id         int             NOT NULL REFERENCES rivers(id),
+	         time_interval_id int             REFERENCES time_intervals(id),
+	         UNIQUE (km, river_id)
+	     );
+	     
+	     CREATE SEQUENCE POINTS3D_ID_SEQ;
+	     CREATE TABLE points3d (
+	         id int     PRIMARY KEY NOT NULL,
+	         x  NUMERIC NOT NULL,
+	         y  NUMERIC NOT NULL,
+	         z  NUMERIC NOT NULL
+	     );
+	     
+	     CREATE SEQUENCE CROSS_SECTION_POINTS_ID_SEQ;
+	     CREATE TABLE cross_section_points (
+	         id               int PRIMARY KEY NOT NULL,
+	         cross_section_id int NOT NULL REFERENCES cross_sections(id),
+	         point3d_id       int NOT NULL REFERENCES points3d(id),
+	         col_pos          int NOT NULL,
+	         UNIQUE (cross_section_id, point3d_id, col_pos),
+	         UNIQUE (cross_section_id, col_pos)
+	     );
+	     
+	     COMMIT;
+
+2011-06-28  Ingo Weinzierl <ingo@intevation.de>
+
+	Tagged RELEASE 2.4
+
+2011-06-27  Ingo Weinzierl <ingo@intevation.de>
+
+	* Changes: Prepared changes for the upcoming release.
+
+2011-06-26	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/AnnotationsParser.java,
+	  src/main/java/de/intevation/flys/importer/AnnotationClassifier.java,
+	  src/main/java/de/intevation/flys/importer/AtFileParser.java,
+	  src/main/java/de/intevation/flys/importer/ValueKey.java,
+	  src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Removed trailing whitespace.
+
+2011-06-26	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/AnnotationClassifier.java:
+	  Removed superfluous imports.
+
+2011-06-26	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Added a method maxOverlap to determine the gauge which has
+	  the max common length to a given interval. This is for
+	  numerical stability in slightly overlapping gauge ranges.
+
+2011-06-26	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java: When
+	looking up a gauge by km containment use precision of 1e-6.
+
+2011-06-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Added method to find gauge by its name.
+
+2011-06-19	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/annotation-types.xml: Fixed some rules.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java,
+	  src/main/java/de/intevation/flys/importer/InfoGewParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Call the right constructors now.
+
+	* src/main/java/de/intevation/flys/importer/ImportAnnotationType.java:
+	  Added getter/setter for name property.
+
+	* src/main/java/de/intevation/flys/importer/AnnotationsParser.java:
+	  Print duplicated at WARN level not as DEBUG.
+
+	* src/main/java/de/intevation/flys/importer/AnnotationClassifier.java:
+	  Fixed XPath expression to build the internal lookup structures
+	  correctly.
+
+2011-06-19	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Added classification of annotation types. Needs testing!
+
+	* doc/annotation-types.xml: New. Rules to classify the different
+	  types of annotations. The classification works like this:
+
+	  There are unique types like 'Bruecke', 'Pegel' and so on.
+	  They are defined in the /annotation/type section and
+	  identified by their name. One of the types can be set 
+	  as the default type if no rule applies.
+
+	  In the /annotation/pattern section are two types of pattern.
+
+	  1 - file pattern: If a KM file is opened its filename is
+	      matched against the regular expressions of these
+		  patterns. If a match is found the corresponding type
+		  is used as the default type in the open file.
+		  If no match is found the global default type is used
+		  as the default type.
+
+	  2 - line patterns: For each line of an open KM file these
+	      patterns are applied to find a match. If a match is
+		  found the corresponding type is used as the type of
+		  the annotation. If no match is found the default
+		  file default is assumed to be the right type. For
+		  the file default see 1.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  To activate the annotation type classification set
+	  the system property
+
+	      'flys.backend.importer.annotation.types'
+
+	  to the path of a XML looking like the annotation-types.xml
+	  file. If the system property is not set no classification
+	  is done.
+
+	* src/main/java/de/intevation/flys/importer/AnnotationClassifier.java:
+	  New. Implements the classification.
+	  
+	* src/main/java/de/intevation/flys/importer/AnnotationsParser.java,
+	  src/main/java/de/intevation/flys/importer/InfoGewParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Looped through the annotation type classification.
+
+2011-06-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Added method to find gauge by a position lying in its range.
+
+2011-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	First part of flys/issue18
+
+	* doc/schema/postgresql.sql: Add new table 'annotation_types'.
+	  To update existing databases:
+	    BEGIN;
+	      CREATE SEQUENCE ANNOTATION_TYPES_ID_SEQ;
+	      CREATE TABLE annotation_types (
+	          id    int PRIMARY KEY NOT NULL,
+	          name  VARCHAR(256)    NOT NULL UNIQUE
+	      );
+		  ALTER TABLE annotations ADD COLUMN type_id int REFERENCES annotation_types(id);
+	    COMMIT;
+
+	* doc/schema/postgresql-cleanup.sql: Removed. Hopeless out-dated.
+
+	* src/main/java/de/intevation/flys/model/AnnotationType.java:
+	  New. Hibernate model to access the type.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Register the new backend type.
+
+	* src/main/java/de/intevation/flys/model/Annotation.java:
+	  References the annotation type.
+
+	* src/main/java/de/intevation/flys/importer/ImportAnnotationType.java:
+	  New. Model to help import the annotation type.
+
+	* src/main/java/de/intevation/flys/importer/ImportAnnotation.java:
+	  Uses the import type.
+
+	* src/main/java/de/intevation/flys/importer/AnnotationsParser.java:
+	  Set the annotation type to 'null'. TODO: Do the classification!
+
+2011-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/AtFileParser.java:
+	  Fix for flys/issue110. start index was shifted by one.
+
+2011-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportAnnotation.java:
+	  Forgot to store reference to edge.
+
+2011-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	 * src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	   Register backend model.
+
+	 * src/main/java/de/intevation/flys/importer/ImportEdge.java: New. Model
+	   for importing the edges.
+
+	 * src/main/java/de/intevation/flys/importer/AnnotationsParser.java:
+	   Parses the edges of an annotation, too.
+
+2011-06-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added table edges to model 'Kanten' of an annotation.
+	  To update existing databases:
+	    BEGIN;
+	      CREATE SEQUENCE EDGES_ID_SEQ;
+	      CREATE TABLE edges (
+	        id     int PRIMARY KEY NOT NULL,
+	        top    NUMERIC,
+	        bottom NUMERIC);
+	      ALTER TABLE annotations ADD COLUMN edge_id int REFERENCES edges(id);
+	    COMMIT;
+
+	* src/main/java/de/intevation/flys/model/Edge.java: New. A 'Kanten'-Model.
+	* src/main/java/de/intevation/flys/model/Annotation.java: References the
+	  edges.
+	
+2011-06-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Added method to find gauge only by station position.
+
+2011-05-24	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Make search for gauges independent of from/to order.
+
+2011-05-24	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added a new view to select qs of a WST.
+	  To update existing databases:
+
+	    CREATE VIEW wst_q_values AS
+	        SELECT wc.position AS column_pos,
+	               wqr.q       AS q, 
+	               r.a         AS a, 
+	               r.b         AS b,
+	               wc.wst_id   AS wst_id
+	        FROM wst_column_q_ranges wcqr
+	        JOIN wst_q_ranges wqr ON wcqr.wst_q_range_id = wqr.id
+	        JOIN ranges r         ON wqr.range_id        = r.id
+	        JOIN wst_columns wc   ON wcqr.wst_column_id  = wc.id
+	        ORDER BY wc.position, wcqr.wst_column_id, r.a;	  
+
+2011-05-24	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added a new view to select ws of a WST.
+	  To update existing databases:
+
+	    CREATE VIEW wst_w_values AS
+	        SELECT wcv."position" AS km, 
+	               wcv.w          AS w,  
+	               wc."position"  AS column_pos, 
+	               w.id           AS wst_id
+	            FROM wst_column_values wcv
+	            JOIN wst_columns wc ON wcv.wst_column_id = wc.id
+	            JOIN wsts w         ON wc.wst_id = w.id
+	        ORDER BY wcv."position", wc."position";
+
+2011-05-23	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	 flys/issue76
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Close gaps between q ranges.
+
+2011-05-20  Ingo Weinzierl <ingo@intevation.de>
+
+	Tagged RELEASE 2.3.1
+
+2011-05-13  Ingo Weinzierl <ingo@intevation.de>
+
+	Tagged RELEASE 2.3
+
+2011-05-13  Ingo Weinzierl <ingo@intevation.de>
+
+	* Changes: Changes for release 2.3 - see Changes file to get to know about
+	  the version numbers of this software.
+
+2011-05-10	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added a column which tells
+	  if a river counts its km up or downwards.
+	  To update existing databases:
+
+	    ALTER TABLE rivers ADD COLUMN km_up BOOLEAN NOT NULL DEFAULT true;
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Adjust Hibernate mapping of new column.
+
+2011-05-10	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/AtFileParser.java:
+	  Fixed flys/issue11 and flys51.
+
+2011-05-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ValueKey.java:
+	  Add some unsharp comparison (eps = 1e-6) to avoid 
+	  numerical problems.
+
+	* src/main/java/de/intevation/flys/importer/IdValueKey.java:
+	  Removed. Not need any longer.
+
+	* src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  Use unsharp lookup.
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Flush more often. Hopefully this reduces hibernate sync
+	  problems?!
+
+2011-05-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  Fixed silly bug. Set flush mode back to auto because
+	  manual flushing causes some undetermined problems.
+
+2011-05-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  Do not load _all_ values from discharge tables and
+	  wst columns. This is extremly slow and will lead
+	  to OOM if more rivers are imported. Now only the
+	  last 20 columns und discharge tables are cached.
+
+	* src/main/java/de/intevation/flys/importer/ValueKey.java:
+	  New. Key for caching discharge table values and wst
+	  column values.
+
+	* src/main/java/de/intevation/flys/importer/IdValueKey.java:
+	  Fixed bug in equals().
+
+	* src/main/java/de/intevation/flys/importer/ImportWstColumn.java:
+	  Removed too eloquent debug output.
+
+2011-05-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/IdValueKey.java:
+	  Use BigDecimals as representation for the numeric components
+	  which prevents running into unique constraint problems
+	  caused by imprecision.
+
+	* src/main/java/de/intevation/flys/importer/ImportRange.java,
+	  src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  Ranges are now cached globally, too.
+
+	* src/main/java/de/intevation/flys/importer/ImportWstColumn.java:
+	  Improved logging.
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeTableValue.java:
+	  Removed superfluous imports.
+
+2011-05-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/StaFileParser.java:
+	  Only accept main value types 'Q', 'W', 'D' and 'T' by default.
+	  '-' is not handled any more because it causes too much constraint
+	  problems. You can overwrite the imported type with the
+	  system property flys.backend.main.value.types" (default "QWTD")
+	  
+	* src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  Set session flush mode to manual. Hopefully this improves the
+	  performance a bit.
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportGauge.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumn.java,
+	  src/main/java/de/intevation/flys/importer/ImportRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportDischargeTable.java:
+	  Improved logging.
+
+2011-05-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstColumnValueKey.java: Deleted
+	* src/main/java/de/intevation/flys/importer/IdValueKey.java: Reinserted
+	  here in a more generalized form.
+
+	* src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  Cache the discharge table value, too.
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeTableValue.java:
+	  Use the global cache.
+
+2011-05-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImporterSession.java:
+	  New. Centralized caching in the thread local context. Importing
+	  the Elbe leads to OOM because the column values of the
+	  WST files where loaded separately for every file.
+
+	* src/main/java/de/intevation/flys/importer/ImportPosition.java,
+	  src/main/java/de/intevation/flys/importer/Importer.java,
+	  src/main/java/de/intevation/flys/importer/ImportAnnotation.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportMainValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportMainValueType.java,
+	  src/main/java/de/intevation/flys/importer/ImportNamedMainValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java,
+	  src/main/java/de/intevation/flys/importer/ImportGauge.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumnValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumnQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumn.java,
+	  src/main/java/de/intevation/flys/importer/ImportRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportDischargeTableValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportDischargeTable.java,
+	  src/main/java/de/intevation/flys/importer/ImportAttribute.java,
+	  src/main/java/de/intevation/flys/importer/ImportTimeInterval.java:
+	  Adjusted to use the new global context.
+
+2011-05-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Dropped constraint which
+	  forces discharge tables to have a unique time interval
+	  for a given gauge and kind.
+
+	  There are AT files (historical Mosel/Perl/Perl/1967-1981.at
+	  and Mosel/Perl/1967-1981-1.at) which violate this
+	  constraint. Its a technical question to the customer
+	  how to handle these cases.
+
+	  To adjust existing databases:
+
+	    ALTER TABLE discharge_tables DROP CONSTRAINT discharge_tables_gauge_id_key;
+
+2011-05-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  There are wst files where column names are not unique.
+	  Make them unique by appending (1), (2) and so on.
+
+2011-05-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Import the "HW-Schutzanlagen", too.
+
+2011-05-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Make import of historical discharge tables work.
+
+	* doc/schema/postgresql.sql: Added forgotten column 'description'.
+
+	  !!! You have to drop your database !!!
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeTable.java:
+	  src/main/java/de/intevation/flys/model/DischargeTable.java:
+	  Add the forgotten description property.
+
+	* src/main/java/de/intevation/flys/importer/AtFileParser.java:
+	  Fixed problems with date recognition.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Prefix the description of the historical discharge tables 
+	  with "Histor.Abflusstafeln".
+
+	* src/main/java/de/intevation/flys/importer/ImportTimeInterval.java:
+	  Fixed silly programming error.
+
+2011-05-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/AtFileParser.java:
+	  Inject 'kind' attribute.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Traverse the "Histor.Abflusstafeln" for the historical
+	  discharge tables. too. TODO: Store them in the database.
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeTable.java:
+	  Added convinience constructor to set the kind of the
+	  discharge table.
+	  
+2011-05-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Prefix "Zusätzliche Längsschnitte" with "Zus.Längsschnitte"
+	  in description.
+
+2011-05-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Import 'Hochwasser-Marken', too.
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Removed superfluous import.
+
+2011-05-05	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Ignore lines that contain km positions which were found
+	  before in the same file.
+
+2011-05-05  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java: Added a method that
+	  returns all gauges of the river intersected by a given start and end
+	  point.
+
+2011-05-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportTimeInterval.java:
+	  Forgot to fetch peer from result set.
+
+2011-05-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportTimeInterval.java:
+	  New. Importer model help fetching the database peer.
+
+	* src/main/java/de/intevation/flys/model/TimeInterval.java:
+	  Add convinience constructor with start and stop time.
+
+	* src/main/java/de/intevation/flys/importer/AtFileParser.java:
+	  Attach a time interval to a discharge table if we find one.
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeTable.java:
+	  Store the reference to the importer model of the 
+	  time interval of the discharge table.
+
+2011-05-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/AtFileParser.java:
+	  Try to extract time ranges from at files.
+
+2011-05-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Parse and store "amtliche Linien" wst files.
+
+2011-05-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Parse and store fixation wst files as well.
+
+2011-05-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Parse the "zusaetzliche Laengsschnitte", too.
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java:
+	  Add getter/setter for column 'kind'.
+
+2011-05-02	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Fixed flys/issue19: Do not take km column in wst file as a water level.
+
+2011-05-02  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java: Introduced a 'scale'
+	  that is used to adjust the range of min/max W values.
+
+2011-05-01	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Removed superfluous import.
+
+2011-04-20  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstColumnValueKey.java:
+	  New. This class is used as distinct key of a WstColumnValue - e.g. as
+	  key in a map.
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java: A
+	  WstColumnValue cache is build up while initialization. This cache
+	  contains all WstColumnValues that exist in the database.
+
+	* src/main/java/de/intevation/flys/importer/ImportWstColumn.java: New
+	  constructor that takes the WstColumnValues cache. It is used to
+	  initialize new ImportWstColumnValue objects.
+
+	* src/main/java/de/intevation/flys/importer/ImportWstColumnValue.java:
+	  Speedup: A ImportWstColumnValue has a WstColumnValues cache that
+	  contains all WstColumnValues existing in the database. This makes it
+	  unnecessary to call an sql statement for each WstColumnValue to
+	  determine its existence in the database.
+
+2011-04-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql, doc/schema/postgresql-cleanup.sql:
+	  Added a view 'wst_value_table' which aggregates the data
+	  to build w/q value tables.
+
+	  To update existing databases:
+
+	  BEGIN;
+	    CREATE VIEW wst_value_table AS
+	        SELECT wcv.position AS position,
+	               w,
+	               (SELECT q
+	                FROM   wst_column_q_ranges wcqr
+	                       JOIN wst_q_ranges wqr
+	                         ON wcqr.wst_q_range_id = wqr.id
+	                       JOIN ranges r
+	                         ON r.id = wqr.range_id
+	                WHERE  wcqr.wst_column_id = wc.id
+	                       AND wcv.position BETWEEN r.a AND r.b) AS q,
+	               wc.position                                   AS column_pos,
+	               w.id                                          AS wst_id
+	        FROM   wst_column_values wcv
+	               JOIN wst_columns wc
+	                 ON wcv.wst_column_id = wc.id
+	               JOIN wsts w
+	                 ON wc.wst_id = w.id
+	        ORDER  BY wcv.position ASC,
+	              wc.position DESC;
+	  COMMIT;
+
+2011-04-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Wst.java:
+	  Add forgotten one to many relation Wst -> WstColumn.
+
+2011-04-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Import of q ranges of wst files was totally broken. :-/
+	  You have to reimport all your data.
+
+2011-04-18	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeTable.java:
+	  Forgot kind parameter in peer fetching query.
+	  
+2011-04-18  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java::
+	  Added a new method to determine the gauge based on a given start and end
+	  point of the river.
+
+2011-04-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added 'position' column to wst_columns
+	  to allow order them by there column position in the original
+	  wst file.
+	
+	  Update existing database with:
+
+	    BEGIN;
+	      ALTER TABLE wst_columns ADD COLUMN position int;
+	      UPDATE wst_columns w SET 
+	        position = id - (SELECT min(id) FROM wst_columns WHERE wst_id = w.wst_id);
+	      ALTER TABLE wst_columns ADD CONSTRAINT wst_columns_wst_id_position_key
+	        UNIQUE (wst_id, position);
+	    COMMIT;
+
+	* src/main/java/de/intevation/flys/model/Wst.java,
+	  src/main/java/de/intevation/flys/model/WstColumn.java:
+	  Adjusted models.
+
+	* src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumn.java:
+	  Adjusted importer.
+
+2011-04-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Forget ',' in schema.
+
+2011-04-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Wst.java (determineMinMaxQ): 
+	  Fixed index problem when an empty list is returned.
+
+2011-04-15  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Wst.java: A Wst is now able to
+	  return its min and max Q values.
+
+	* src/main/java/de/intevation/flys/model/Gauge.java: A Gauge is now able
+	  to return its min and max W values.
+
+2011-04-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Added new column 'kind' in
+	  discharge tables and wst to distinguish between different
+	  kinds like 'Haupt-WST', 'zusaetzliche Laengsschnitte',
+	  'amtliche Daten' and so on.
+
+	  Update existing databases with:
+	    BEGIN;
+	      ALTER TABLE discharge_tables ADD COLUMN kind int NOT NULL DEFAULT 0;
+	      ALTER TABLE wsts             ADD COLUMN kind int NOT NULL DEFAULT 0;
+	    COMMIT;
+
+	* src/main/java/de/intevation/flys/model/DischargeTable.java
+	  src/main/java/de/intevation/flys/model/Wst.java,
+	  src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportDischargeTable.java:
+	  Adjusted the models.
+
+2011-04-15  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionHolder.java: Moved to
+	  this module from flys-artifacts. This is necessary to get access to the
+	  current session in this module as well.
+
+2011-04-14  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/River.java: Added a method that
+	  returns the min and max distance of a river.
+
+2011-04-03	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/**/*.java: Removed trailing whitespace.
+
+2011-03-30  Ingo Weinzierl <ingo@intevation.de>
+
+	Tagged RELEASE 0.1
+
+2011-03-28	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Range.java:
+	  Forgot to save the last change before commit.
+
+2011-03-28	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Range.java:
+	  Added methods to find out if two ranges intersects.
+
+2011-03-24	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  Added an one to many relation to the discharge tables of a gauge.
+
+2011-03-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Finished import of WSTs.
+
+	TODO 1: Speed it up! It takes on a high end machine over 7(!)
+	        minutes only for the data of the Saar.
+	TODO 2: Double precision floating point representations produced
+	        by the the parsers leed to unique constraint violations
+			in the backend on a second run. So the import is currently
+			only working on freshly initialized data bases.
+			More consequent working with BigDecimal and some
+			rounding may be of help here.
+
+	* src/main/java/de/intevation/flys/model/WstColumnValue.java:
+	  Added convinience constructors.
+
+	* src/main/java/de/intevation/flys/importer/ImportWstColumnValue.java:
+	  Added getPeer() method.
+
+	* src/main/java/de/intevation/flys/importer/ImportWstColumn.java:
+	  Add a list of the ImportWstColumnValues produced by the WST parser.
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java: Add
+	  the (km, w) values to the ImportWstColumns.
+
+2011-03-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Build models for wsts, wst columns and q ranges and
+	  store them in the backend. TODO: store the w values.
+
+	* src/main/java/de/intevation/flys/model/WstQRange.java
+	  src/main/java/de/intevation/flys/model/Wst.java,
+	  src/main/java/de/intevation/flys/model/Range.java,
+	  src/main/java/de/intevation/flys/model/WstColumnQRange.java,
+	  src/main/java/de/intevation/flys/model/WstColumn.java:
+	  Added convinience constructors.
+
+	* src/main/java/de/intevation/flys/importer/ImportWstQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumnQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumn.java,
+	  src/main/java/de/intevation/flys/importer/ImportRange.java:
+	  Added getPeer() methods.
+
+2011-03-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  The unit extraction in the WST parser of desktop FLYS
+	  is broken! Add a hack here to repair this for our
+	  importer. Desktop FLYS needs a fix, too!
+
+2011-03-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java:
+	  Ported some stuff ver from WSTSource.java of desktop flys to
+	  parse WST files. TODO: create instances of the import models.
+
+	* src/main/java/de/intevation/flys/utils/StringUtil.java:
+	  Copied from desktop flys. Used for some string operations
+	  in WST parser.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  Added system property 'flys.backend.importer.dry.run'.
+	  Set to true only the parsing is done and no writing
+	  to the backend. Default: false.
+
+	*  src/main/java/de/intevation/flys/App.java,
+	   src/main/java/de/intevation/flys/model/MainValueType.java:
+	   Removed needless imports.
+
+2011-03-22  Ingo Weinzierl <ingo@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/DischargeTableValue.java,
+	  src/main/java/de/intevation/flys/model/DischargeTable.java: Added new
+	  constructors.
+
+	* src/main/java/de/intevation/flys/importer/AtFileParser.java: New. This
+	  parser is used to '*.at' files.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java: Added code to
+	  import discharge tables.
+
+	* src/main/java/de/intevation/flys/importer/ImportDischargeTableValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportDischargeTable.java: New.
+	  Helper models for import discharge tables.
+
+2011-03-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/WstParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Added stub for WST parser.
+
+2011-03-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportWstQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWst.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumnValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumnQRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportWstColumn.java:
+	  Added importer helper model stubs for WST imports.
+	
+2011-03-21	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Second part of parsing/storing main values. Should be finished now.
+
+	* src/main/java/de/intevation/flys/importer/ImportNamedMainValue.java,
+	  src/main/java/de/intevation/flys/importer/ImportMainValue.java:
+	  New. Helper models for import main values,
+
+	* src/main/java/de/intevation/flys/model/MainValue.java,
+	  src/main/java/de/intevation/flys/model/NamedMainValue.java:
+	  Added convinience constructors.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Write main values to backend, too.
+
+	* src/main/java/de/intevation/flys/importer/StaFileParser.java:
+	  Build importer models for main values.
+
+	* src/main/java/de/intevation/flys/importer/ImportMainValueType.java:
+	  Data was called 'value'. Now it is 'name' to fit the
+	  schema.
+
+2011-03-21	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Fixed wrong unique constraint.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Added some logging when storing gauges.
+
+2011-03-21	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  Add forgotten column river_id.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Small HQL fix.
+
+2011-03-21	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Gauge.java:
+	  Added convinience contructor.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Fixed getPeer() method.
+
+	* src/main/java/de/intevation/flys/importer/StaFileParser.java:
+	  Fixed parsing of STA files.
+
+2011-03-21	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java,
+	  src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Propagate river into storing of gauges.
+
+2011-03-21	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  Added code to store rivers not only annotations.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Added stub code to write gauges.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	First part of parsing main values.
+
+	* src/main/java/de/intevation/flys/App.java: Commented out
+	  creation of dummy rivers.
+
+	* src/main/java/de/intevation/flys/model/NamedMainValues.java:
+	  Moved to NamedMainValue.
+
+	* src/main/java/de/intevation/flys/model/NamedMainValue.java:
+	  New. Formerly NamedMainValues.
+
+	* src/main/java/de/intevation/flys/model/MainValue.java:
+	  New. Forgotten part of the model.
+
+	* src/main/java/de/intevation/flys/model/MainValueType.java:
+	  Data is String not BigDecimal
+
+	* src/main/java/de/intevation/flys/model/Range.java: Removed
+	  contructor with double arguments. Using BigDecimal now.
+
+	* src/main/java/de/intevation/flys/importer/PegelGltParser.java:
+	  Propagate BigDecimal usage.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  Removed needless import. Added TODO
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Parse the dependencies of the gauges, too.
+
+	* src/main/java/de/intevation/flys/importer/StaFileParser.java:
+	  New. Parser for STA files.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Call STA file parser.
+
+	* src/main/java/de/intevation/flys/importer/AnnotationsParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportRange.java:
+	  Uses BigDecimal now.
+
+	* src/main/java/de/intevation/flys/importer/ImportAttribute.java:
+	  Fixed wrong type cast in equals.
+
+	* src/main/java/de/intevation/flys/importer/ImportMainValueType.java:
+	  New. Helper model for importing main value types.
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Register forgotten MainValue model.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	Store annotations in backend.
+
+	* src/main/java/de/intevation/flys/model/Annotation.java:
+	  New convinience constructor.
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Added toString() method.
+
+	* src/main/java/de/intevation/flys/model/Range.java:
+	  Fixed nasty mistake in @OneToOne annotatation.
+	  New convinience constructors.
+
+	* src/main/java/de/intevation/flys/importer/ImportPosition.java
+	  src/main/java/de/intevation/flys/importer/ImportAnnotation.java,
+	  src/main/java/de/intevation/flys/importer/ImportRange.java
+	  src/main/java/de/intevation/flys/importer/ImportAttribute.java:
+	  Make storing to backend work. It's a bit too slow. :-/
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Fetch peer from backend. Added method to store annotations.
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  Stored annotations into backend. More eloquent SQL exception
+	  handling.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/Attribute.java,
+	  src/main/java/de/intevation/flys/model/Position.java:
+	  Added convinience constructors.
+
+	* src/main/java/de/intevation/flys/importer/ImportPosition.java,
+	  src/main/java/de/intevation/flys/importer/ImportAttribute.java:
+	  Bound them to there backend peers.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/AnnotationsParser.java:
+	  New. Added parser to read *.KM files.
+
+	* src/main/java/de/intevation/flys/importer/ImportPosition.java,
+	  src/main/java/de/intevation/flys/importer/PegelGltParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportRiver.java,
+	  src/main/java/de/intevation/flys/importer/ImportAnnotation.java,
+	  src/main/java/de/intevation/flys/importer/ImportRange.java,
+	  src/main/java/de/intevation/flys/importer/InfoGewParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportAttribute.java:
+	  Adjusted to load the annotations from *.KM files.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/ImportPosition.java,
+	  src/main/java/de/intevation/flys/importer/ImportRange.java,
+	  src/main/java/de/intevation/flys/importer/ImportAttribute.java,
+	  src/main/java/de/intevation/flys/importer/ImportAnnotation.java:
+	  New helper models for import.
+
+	* src/main/java/de/intevation/flys/importer/PegelGltParser.java,
+	  src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  Use new models.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/PegelGltParser.java:
+	  New. Parser for PEGEL.GLT files.
+
+	* src/main/java/de/intevation/flys/importer/ImportGauge.java:
+	  New. Import model for gauges.
+
+	* src/main/java/de/intevation/flys/utils/DBCPConnectionProvider.java:
+	  Removed needless imports.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Added method to parse the gauges.
+
+	* src/main/java/de/intevation/flys/importer/InfoGewParser.java:
+	  Trigger pegel glt file parsing.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  Used thread local pattern to make sharing of session easier.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  Fixed error in HQL statement.
+
+2011-03-17	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/DBCPConnectionProvider.java:
+	  Commented out a debug block because it leaks the db password.
+
+2011-03-16	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/importer/InfoGewParser.java:
+	  Expose imported rivers.
+
+	* src/main/java/de/intevation/flys/importer/InfoGewParser.java:
+	  Store imported rivers into database. Needs testing!
+
+2011-03-16	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Default connection parameters are now overwritable with
+	  system properties (defaults in brackets):
+	  - user name:     flys.backend.user     (flys)
+	  - user password: flys.backend.password (flys)
+	  - db dialect:    flys.backend.dialect  (org.hibernate.dialect.PostgreSQLDialect)
+	  - db driver:     flys.backend.driver   (org.postgresql.Driver)
+	  - db url:        flys.backend.url      (jdbc:postgresql://localhost:5432/flys)
+
+2011-03-16	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  Expose createSessionFactory() as public to be usable without
+	  a artifact database running.
+
+2011-03-16	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/utils/FileTools.java: 
+	  Tools for handling with filenames. Currently there is
+	  a repair(File) method with repairs letter case errors
+	  which is useful when reading windows filenames on a
+	  un*x platform.
+
+	* src/main/java/de/intevation/flys/importer/Importer.java:
+	  Standalone app to read data from the file system and
+	  store it in a database. Currently it does not store 
+	  anything. It only loads info gew files.
+
+	* src/main/java/de/intevation/flys/importer/InfoGewParser.java:
+	  Info gew parser.
+
+	* src/main/java/de/intevation/flys/importer/ImportRiver.java:
+	  Helper model of a river used produced by parsing the
+	  info gew files.
+
+2011-03-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/backend/SessionFactoryProvider.java:
+	  New. SessionFactoryProvider.getSessionFactory() provides a
+	  SessionFactory to use the Hibernate O/R mapper for the FLYS backend.
+
+2011-03-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* pom.xml: Added dependency to artifacts-commons to
+	  be able to use the global configuration of the artifact database.
+
+2011-03-15	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/App.java: Wire all POJOs
+	  to corresponding factory.
+
+	* src/main/java/de/intevation/flys/model/*.java: Generate
+	  all foreign key constraints. TODO: name them correctly
+	  because the machine generated names are ugly and do
+	  not fit the PostgreSQL names.
+
+	* doc/schema/postgresql.sql: Small quantifier fix in descriptions
+	  of wst columns.
+
+2011-03-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql: Fixed wrong spelled 
+	  column references in foreign keys introduces with
+	  last change.
+
+2011-03-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* src/main/java/de/intevation/flys/model/*.java: Added
+	  column annotations for simple fields. TODO: foreign keys.
+
+2011-03-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql, doc/schema/postgresql-cleanup.sql:
+	  Fixed inconsistent table names.
+
+	* src/main/java/de/intevation/flys/model/*.java: Added
+	  entity and id annotations.
+
+2011-03-14	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql.sql, doc/schema/postgresql-cleanup.sql:
+	  Added missing sequences.
+
+	* doc/schema/sqlite.sql: Deleted. Not longer supported.
+
+2011-03-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql-cleanup.sql: Forgot to add.
+
+	* src/main/java/de/intevation/flys/App.java: Use
+	  Apache Commons DBCP as Hibernate connection provide.
+
+	* src/main/java/de/intevation/flys/model/River.java:
+	  Added a constructor with string argument. Set the
+	  sequence increment to 1 (eat up 100 at a time before).
+
+	* pom.xml: Added PostgreSQL 8.4 driver as runtime dependency.
+
+2011-03-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/postgresql-cleanup.sql: New. Tear down schema
+	  for a postgres database.
+
+	* doc/schema/postgresql.sql: Added squence for 
+	  auto generating ids in river table. Cleaned up schema.
+
+	* src/main/java/de/intevation/flys/App.java: Simple
+	  test app to interact with hibernate. Needs to be removed
+	  because its only a toy.
+
+	* src/main/java/de/intevation/flys/utils/DBCPConnectionProvider.java:
+	  New. Binds Apache Commons to Hibernate.
+
+	* pom.xml: Added dependencies to log4j, commons dbcp,
+	  JPA of hibernate.
+
+	* src/main/java/de/intevation/flys/model/River.java: Added
+	  JPA annotations.
+
+	* src/main/java/de/intevation/flys/model/*.java: Replaced
+	  Long with Integer because column ids are only four bytes wide.
+
+2011-03-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/sqlite.sql, doc/schema/postgresql.sql: Fixed
+	  smaller issues in ddl.
+
+	* src/main/java/de/intevation/flys/model/*.java: Added POJOs
+	  of to be mapped. TODO: Map them!
+
+	* pom.xml: Added plugin config for hibernate.
+
+2011-03-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* pom.xml: Added dependency (and corresponding repository) to
+	  Hibernate Core 3.6.1 Final
+
+2011-03-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* pom.xml, src/**: Created a new empty maven project:
+	  $ mvn archetype:create         \
+	    -DgroupId=de.intevation.flys \
+		-DartifactId=flys-backend
+
+2011-03-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* README: New. Some setup instructions.
+
+	* doc/schema/postgresql.sql: New. Schema converted to PostgreSQL
+
+	* doc/schema/sqlite.sql: Fixed defect foreign key constraints.
+
+2011-03-09	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* doc/schema/sqlite.sql: Factorized time intervals out into
+	  a separated table.
+
+2011-01-22	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* contrib/import-kms.py, contrib/import-gew.py: Initial scripts
+	to import data into SQLite database. They still need some work.
+
+2011-02-10	Sascha L. Teichmann	<sascha.teichmann@intevation.de>:
+
+	* doc/schema/sqlite.sql: Added initial schema for
+	FLYS database.

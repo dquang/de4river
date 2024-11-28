@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="flysreport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="762" leftMargin="60" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="river" class="java.lang.String"/>
+	<field name="reference" class="java.lang.String"/>
+	<field name="km1" class="java.lang.String"/>
+	<field name="W1" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="Q1" class="java.lang.String"/>
+	<field name="calculation" class="java.lang.String"/>
+	<field name="km2" class="java.lang.String"/>
+	<field name="location2" class="java.lang.String"/>
+	<field name="location1" class="java.lang.String"/>
+	<field name="location" class="java.lang.String"/>
+	<field name="W2" class="java.lang.String"/>
+	<field name="Q2" class="java.lang.String"/>
+	<field name="Wcm1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="166" height="30"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Calculation result]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="166" y="0" width="349" height="31"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{river}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="31" width="515" height="26"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{calculation}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="70" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[River:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="70" width="392" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{river}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="90" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Date of Creation:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="90" width="392" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="46" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="38" width="762" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="79" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[River-km]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="0" width="81" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[W [m + NHN]]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="587" y="0" width="45" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[equiv.    Q [m³/s]]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="632" y="0" width="130" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Location]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="0" width="47" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[equiv.     Q [m³/s]]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="507" y="0" width="80" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[W [m + NHN]]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="0" width="75" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[River-km]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="0" width="136" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Location]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="0" width="89" height="38"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[W (cm at Gauge)]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="79" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{km1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="249" y="0" width="47" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Q1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="79" y="0" width="81" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{W1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="432" y="0" width="75" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{km2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="632" y="0" width="130" height="14" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{location2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="507" y="0" width="80" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{W2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="587" y="0" width="45" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Q2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="296" y="0" width="136" height="14" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{location1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="0" width="89" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Wcm1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="705" y="9" width="57" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="650" y="9" width="55" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

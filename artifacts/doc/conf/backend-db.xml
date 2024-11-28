@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<backend-database>
+    <!-- This is the default backend db configuration. -->
+    <user>d4e</user>
+    <password>d4e</password>
+    <dialect>org.hibernate.dialect.PostgreSQLDialect</dialect>
+    <driver>org.postgresql.Driver</driver>
+    <url>jdbc:postgresql://db:5432/</url>
+    <validation-query>select 1 from rivers</validation-query>
+    <max-wait>30000</max-wait>
+</backend-database>

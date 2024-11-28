@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="porosity">
+    <load-facets>
+        <facet name="porosity" class="org.dive4elements.river.artifacts.model.minfo.PorosityFacet"/>
+    </load-facets>
+    <states>
+        <state id="state.porosity.datacage"
+               description="state.porosity.datacage"
+               state="org.dive4elements.river.artifacts.states.DefaultState">
+        </state>
+    </states>
+</artifact>

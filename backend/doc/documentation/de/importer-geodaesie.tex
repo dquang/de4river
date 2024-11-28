@@ -1,0 +1,419 @@
+\section{Geodatenimport}
+
+Der Geodaten Importer ist ein in der Programmiersprache Python
+geschriebenes Kommandozeilen Werkzeug zum Import von Shapefiles in
+eine Datenbank.
+Zum Lesen der Shapefiles und zum Schreiben der Geodaten
+in die Datenbank wird die GDAL-Bibliothek verwendet.
+Um Daten in eine Oracle Datenbank zu importieren ist es nötig, dass
+GDAL und GDAL-Python-Bindings mit Oracle-Unterstützung installiert
+sind. Bei der Verwendung von PostgreSQL entfällt dieser Schritt.
+Weitere Details hierzu befinden sich im
+Kapitel \ref{Systemanforderungen} und \ref{Installationsanleitung}.
+
+Der Importer kann mit einem Shellscript von der Kommandozeile gestartet werden
+(siehe Kapitel \ref{Starten des Geodaten Importers}). Nach dem Start wird anhand der
+Konfiguration festgestellt, welche Klassen von Shapefiles aus dem Dateisystem
+importiert werden sollen. Für jede Klasse gibt es einen speziellen
+Parser, der die speziellen Attribute eines Shapefiles liest und in die entsprechende
+Relation der Datenbank schreibt. Die Parser sind speziell auf das
+Dateisystem der BfG ausgerichtet. So wird beispielsweise erwartet, dass die Shapefiles der
+Gewässerachse im Ordner $Geodaesie/Flussachse+km$ liegen. Weitere Informationen zu
+den einzelnen Parsern sind Kapitel \ref{Beschreibung der Parser} zu
+entnehmen.
+
+Damit die Geodaten eines Shapes später eindeutig in der Datenbank identifiziert
+werden können, wird für jede Geometrie der Pfad des Shapes im Dateisystem
+im Datenbankfeld 'path' gespeichert. Anwendungen, die auf der Datenbank
+aufbauen, können die Geodaten eines Shapefiles später anhand dieses Merkmals
+gruppieren und anzeigen.
+
+Bitte beachten Sie, dass der Geodaten Importer aufgrund der eingesetzten
+Technologien derzeit nicht in der Lage ist, lesend auf die Oracle-Datenbank
+zuzugreifen. Entsprechend kann beim Import nicht festgestellt werden, ob sich
+die Daten eines Shapefiles bereits in der Datenbank befinden, oder nicht.
+Ein erneuter Import der Geodaten würde also dazu führen, dass Geometrien doppelt in der
+Datenbank abgelegt werden.
+
+\subsection{Koordination-Transformation}
+Für die Transformation der Daten verwendet GDAL wiederum die PROJ4-Bibliothek.
+Die Daten werden vor dem Schreiben in die Datenbank alle
+in die Gauß-Krüger-Projektion Zone 3 (EPSG-Code 31467) transformiert.
+Ist für die zu importierenden Daten keine Projektion ersichtlich
+(fehlende \textit{*.prj}-Datei), so findet keine Transformation statt.
+Dies führt nur zu Problemen mit dem Fachdienst FLYS, falls die Daten nicht
+bereits in der genannten Projektion vorlagen.
+
+Im Falle der Digitalen Geländemodelle (DGM) findet keine Transformation statt,
+da zu diesen lediglich Metadaten in der Datenbank gespeichert werden
+(siehe Kapitel \ref{dgm_parser}),
+während die Daten selbst von der Anwendung Dive4Elements River
+aus dem Dateisystem geholt werden.
+Für Berechnungen mit den DGM werden die Geometrien aus der Datenbank
+in Dive4Elements River in die Projektion des jeweiligen DGM transformiert.
+Daher ist es besonders wichtig, dass die Angaben des EPSG-Codes
+in der Spalte SRID in DGMs.csv korrekt sind (siehe Kapitel \ref{dgm_parser})
+
+\subsection{Logfile}
+Der Erfolg oder Misserfolg eines Shape-Imports wird
+im Logfile vermerkt. Folgende Einträge können dem Logfile
+entnommen werden:
+
+\textbf{INFO: Inserted \# features}
+\\Gibt die Anzahl der erfolgreich importierten Features an.
+
+\textbf{INFO: Failed to create \# features}
+\\Gibt die Anzahl der Features an, die nicht importiert werden konnten.
+
+\textbf{INFO: Found 3 unsupported features of type: '...'}
+\\Gibt die Anzahl der Features an, die aufgrund ihres Datentyps nicht importiert
+werden konnten. Wenn etwa Punkte erwartet wurden aber sich im Shapefile
+Polygone befanden.
+
+\textbf{INFO: Did not import values from fields: '...' ...}
+\\Der Importer schreibt neben der geographischen Information weitere
+Attribut-Daten in die Datenbank.
+Attribut-Spalten die nicht importiert wurden (z.B. auf Grund
+von Tippfehlern oder unterschiedlicher Schreibweise),
+werden wie angegeben im Logfile aufgeführt.
+
+\textbf{ERROR: No source SRS given! No transformation possible!}
+\\Das Shapefile enthält keine Information, in welcher Projektion die Geometrien
+vorliegen. Es findet keine Transformation in die Zielprojektion statt. Bitte
+beachten Sie, dass FLYS diese Geometrien später ggf.\ nicht korrekt darstellen
+kann.
+
+\textbf{ERROR: Unable to insert feature: DETAIL}
+\\Beim Lesen eines Features ist ein Fehler aufgetreten.
+Das Feature konnte nicht in die Datenbank geschrieben werden.
+
+\textbf{ERROR: Exception while committing transaction}
+\\Beim Abschluss des Schreib-Vorgangs in die Datenbank ist ein unerwarteter
+Fehler aufgetreten. Die Features des Shapes sind nicht importiert worden.
+
+\textbf{ERROR 1: ORA-01017: invalid username/password; logon denied}
+\\Es konnte keine Verbindung zur Oracle Datenbank hergestellt werden. Prüfen Sie
+die Verbindungseinstellungen.
+
+Weitere Fehler, die von der Oracle-Datenbank kommen, können ebenfalls im
+Logfile angezeigt werden.
+
+
+\subsection{Beschreibung der Parser}
+\label{Beschreibung der Parser}
+
+Wie im letzten Kapitel beschrieben, sind die Parser speziell an das Dateisystem
+der BfG angepasst. Im Folgenden werden zu jedem Parser folgende Informationen
+angegeben:
+
+\textbf{Pfad}
+\\Der Pfad, in dem die Shapefiles im Dateisystem abgelegt sein müssen (ausgehend
+vom Gewässer Verzeichnis).
+
+\textbf{Geometrie}
+\\Der Geometrie Typ, der für diese Klasse von Shapefiles erwartet wird.
+
+\textbf{Attribute}
+\\Eine Liste der Attribute, die vom Parser aus dem Shape gelesen werden.
+In Klammern als alternativ bezeichnete Attribut-Namen werden in
+das gleiche Datenbankfeld geschrieben, wie das vorgenannte Feld.
+Die alternativen Namen werden vom Importer zusätzlich unterstützt,
+um Dateien aus dem heterogenen Bestand der BfG unverändert
+importieren zu können.
+
+Zudem werden Datenbank-Attribute beschrieben, die nicht direkt aus
+Attribut-Spalten des Shapefiles gelesen werden.
+
+\subsubsection{Achsen}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Geodaesie/Flussachse+km \\
+Geometrie   &   LINESTRING, MULTILINESTRING \\
+\end{tabular*}
+
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt.
+Zusätzlich wird das Attribut 'kind\_id' gesetzt, welches
+für die aktuelle Achse (\textit{achse.shp}) 1 ist
+und für sonstige Achsen (weitere Linien-Shapes) 2.
+
+Hinweis:
+Da die Layer-Konfiguration (Mapfiles) für die Flussachsen beim Start des
+Artefakt-Servers generiert werden, muss der Artefakt-Server neugestartet
+werden um die Flussachse in der Anwendung darstellen zu können.
+
+\subsubsection{Hydr. Grenzen}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Hydrologie/Hydr.Grenzen \\
+Geometrie   &   LINESTRING, MULTILINESTRING, POLYGON, MULTIPOLYGON \\
+Attribute   &   SECTIE, STROVOER \\
+\end{tabular*}
+
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt.
+Das Attribut 'kind' wird 1 gesetzt für Daten aus dem
+Unterverzeichnis \textit{Linien/BfG},
+2 für Daten aus \textit{Linien/Land},
+3 für Daten aus \textit{Sonstige}
+und für alle übrigen 0.
+Ausgenommen sind Dateien, in deren Namen 'Talaue'
+(Groß-Klein-Schreibung irrelevant) vorkommt.
+
+Linien und Polygone werden in der Datenbank in unterschiedlichen
+Tabellen gespeichert.
+
+\subsubsection{Bauwerke}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Geodaesie/Bauwerke \\
+Geometrie   &   LINESTRING \\
+Attribute   &   Name (alternativ: KWNAAM),
+  km (alternativ: station, wsv-km),
+  z (alternativ: Höhe, Hoehe, m+NHN)\\
+\end{tabular*}
+
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt.
+Das Attribut 'kind\_id' ist 0 für Sonstige,
+1 für Brücken, 2 für Wehre, 3 für Pegel.
+Es wird aus dem Dateinamen hergeleitet
+(\textit{bruecken.shp, wehre.shp, pegel.shp},
+teilweise auch alternative Schreibweisen unterstützt)
+oder je Feature gesetzt, wenn in einer Attributspalte
+die Werte 'bruecke' und 'wehr'
+(teilweise auch alternative Schreibweisen unterstützt) vorkommen.
+Ausgenommen sind Dateien, in deren Namen 'Buhnen'
+(Groß-Klein-Schreibung irrelevant) vorkommt.
+
+\subsubsection{Querprofilspuren}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Geodaesie/Querprofile \\
+Geometrie   &   LINESTRING \\
+Attribute   &   KILOMETER (alternativ: KM, STATION), ELEVATION \\
+\end{tabular*}
+
+Das Attribut 'kind\_id' wird 1 gesetzt für die Datei \textit{qps.shp} (aktuelle Querprofilspuren)
+und 0 für alle weiteren.
+
+\subsubsection{Festpunkte}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Geodaesie/Festpunkte \\
+Geometrie   &   POINT \\
+Attribute   &   KM (alternativ: ELBE\_KM), X, Y, HPGP (alternativ: ART) \\
+\end{tabular*}
+
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt.
+
+\subsubsection{Hochwassermarken}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Hydrologie/HW-Marken/hw-marken.shp \\
+Geometrie   &   POINT \\
+Attribute   &   Ort (alternativ: Pegel),
+  km (alternativ: station, wsv-km, FlussKm),
+  z (alternativ: z mit anschließender Zahl, m+NHN)\\
+\end{tabular*}
+
+Groß-Klein-Schreibung im Dateinamen ist irrelevant.
+Für das Attribut 'year' wird im Dateinamen nach einer Jahreszahl
+nach folgendem Muster gesucht: \textit{\_YYYY\_} oder \textit{-YYYY-}.
+Gelingt dies nicht, erscheint im Logfile die Warnung
+'Could not extract year from filename: ...'.
+
+\subsubsection{Talaue}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Hydrologie/Hydr.Grenzen \\
+Geometrie   &   POLYGON, MULTIPOLYGON \\
+\end{tabular*}
+
+Es werden nur Dateien betrachtet, in deren Namen das Wort 'Talaue'
+(Groß-Klein-Schreibung irrelevant) vorkommt.
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt.
+Das Attribut 'kind\_id' wird 1 gesetzt für die Datei \textit{talaue.shp} (aktuelle Talaue)
+und 0 für alle weiteren.
+
+\subsubsection{Hochwasserschutzanlagen}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Hydrologie/HW-Schutzanlagen \\
+Geometrie   &   LINESTRING, MULTILINESTRING, POINT \\
+Attribute   &   Name, Art, Quelle, Anmerkung, Stand, Verband,
+                km (alternativ: Deich\_km), Bereich,
+                Hoehe\_ist, Hoehe\_soll, WSP\_Bfg100, Bundesland
+                (Teilweise auch alternative Schreibweisen unterstützt)\\
+\end{tabular*}
+
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt,
+wenn kein Attribut 'Name' im Shapefile vorhanden ist.
+Das Feld 'kind\_id' wird per Default auf 2 (für Damm) gesetzt.
+Wird ein Attribut 'ART' im Shapefile gefunden,
+so wird 'kind\_id' entsprechend dieses Feldes gesetzt
+(1 für die Werte 'Durchlass', 'Rohr1', 'Rohr 1', 'Rohr 2',
+2 für die Werte 'Damm', 'Deich', 'Hochufer', 'Hauptdeich', 'Sommerdeich',
+3 für den Wert 'Graben').
+Es wird versucht das Bundesland aus dem Dateinamen zu ermitteln,
+wenn das Shapefile kein Attribut 'Bundesland' enthält.
+
+Linien und Punkte werden in der Datenbank in unterschiedlichen
+Tabellen gespeichert.
+
+\subsubsection{Buhnen}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Geodaesie/Bauwerke/Buhnen.shp \\
+Geometrie   &   POINT \\
+Attribute   &   station (alternativ: km, wsv-km),
+                z (alternativ: Hoehe, Höhe, m+NHN) \\
+\end{tabular*}
+
+Das Attribut 'kind\_id' wird für
+Buhnenkopf (\textit{bkl, bkr, bk}) 0,
+für Buhnenfuß (\textit{bfl, bfr, bf}) 1 und
+für Buhnenwurzel (\textit{bwl, bwr, bw}) 2 gesetzt,
+
+\subsubsection{Stationierung}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Geodaesie/Flussachse+km/km.shp \\
+Geometrie   &   POINT \\
+Attribute   &   km (alternativ: KM), landkm \\
+\end{tabular*}
+
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt.
+
+\subsubsection{Überschwemmungsfläche}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   Hydrologie/UeSG \\
+Geometrie   &   POLYGON, MULTIPOLYGON \\
+Attribut    &   diff, count, area, perimeter, GEWAESSER \\
+\end{tabular*}
+
+Das Attribut 'name' wird auf den Namen des Shapefiles gesetzt.
+Das Attribut 'kind' wird nach folgendem Schema gesetzt:
+
+\hspace{5mm}
+\begin{tabular}[t]{ll}
+Unterverzeichnis & Wert \\
+\textit{Berechnungen/Aktuell/BfG} & 111 \\
+\textit{Berechnungen/Aktuell/Bundesländer} & 112 \\
+\textit{Berechnungen/Potentiell/BfG} & 121 \\
+\textit{Berechnungen/Potentiell/Bundesländer} & 122 \\
+\textit{Messungen} & 200 \\
+\end{tabular}
+
+Das Attribut 'source' wird auf den Namen des Verzeichnisses gesetzt,
+indem sich das jeweilige Shapefile befindet.
+
+\subsubsection{Metadaten zu Digitalen Gelände-Modellen}
+\label{dgm_parser}
+\hspace{5mm}
+\begin{tabular*}{155mm}[t]{l@{\extracolsep\fill}p{125mm}}
+Pfad        &   ../DGMs.csv \\
+Attribut    &   Projektion, Höhenstatus, Format, Bruchkanten,
+                Auflösung, SRID, Pfad\_Bestand,
+                km\_von, km\_bis, Jahr\_von, Jahr\_bis \\
+\end{tabular*}
+
+Aus der Spalte 'Gewässer' in DGMs.csv wird entnommen,
+für welches Gewässer das angegebene DGM verwendet wird.
+Die Spalte muss daher den exakt gleichen Namen enthalten
+wie in der *.gew-Datei des Gewässers angegeben
+(siehe auch Kapitel \ref{start-hydr}).
+Die eigentlichen Geo-Daten der DGM werden nicht in die Datenbank importiert.
+Diese werden von der Anwendung Dive4Elements River aus dem Dateisystem geholt.
+
+\subsection{Konfiguration}
+\label{Konfiguration}
+Der Geodaten Importer kann über das Skript \textit{./run\_geo.sh}
+konfiguriert werden. Öffnen Sie die Datei mit einem Texteditor Ihrer Wahl
+und passen Sie ggf.\ folgende Variablen an:
+
+\textbf{HOST}
+\\Der Host der Datenbank.
+
+\textbf{BACKEND\_NAME}
+\\Der Name der Datenbank Instanz.
+Beispielsweise \textit{XE} bei einer Oracle XE Instanz.
+
+\textbf{USER}
+\\Der Nutzer, der zum Verbinden zur Datenbank verwendet wird.
+
+\textbf{PASS}
+\\Das Passwort für USER zum Verbinden zur Datenbank.
+
+In den weiteren Zeilen werden weitere Optionen definiert, die bei Bedarf angepasst
+werden können. Falls nicht anders angegeben, können die Optionen mit den Werten
+`0` und `1` belegt werden.
+
+\textbf{VERBOSE}
+\\Dieser Wert gibt die Granularität der Log-Ausgaben während des
+Imports an. Je höher der Wert, desto mehr Informationen werden
+in das Logfile geschrieben. Aktuell sind die Werte `0`, `1` und
+`2` definiert. Wird der Wert `0` gesetzt, werden nur Fehler und
+Warnungen in das Logfile geschrieben. Bei `1` werden neben
+Fehlern und Warnungen auch Infos in das Logfile geschrieben. Bei
+`2` werden sämtliche Ausgaben des Programms geschrieben. Dieser
+Modus ist hauptsächlich für die Entwicklung gedacht.
+
+\textbf{OGR\_CONNECTION}
+\\Hiermit kann direkt ein beliebiger Verbindungs-String angegegeben
+werden, welcher dann anstatt HOST, USER und PASS verwendet wird.
+Diese Option wird direkt an die OGR-Bibliothek weitergegeben und ermöglicht
+verbesserte Tests und Entwicklung mit verschiedenen Backends.
+
+\textbf{SKIP\_AXIS}
+\\Bei gesetztem Wert `1` werden keine Flussachsen importiert.
+
+\textbf{SKIP\_KMS}
+\\Bei gesetztem Wert `1` werden keine Stationierungen importiert.
+
+\textbf{SKIP\_CROSSSECTIONS}
+\\Bei gesetztem Wert `1` werden keine Querprofilespuren importiert.
+
+\textbf{SKIP\_FIXPOINTS}
+\\Bei gesetztem Wert `1` werden keine Festpunkte importiert.
+
+\textbf{SKIP\_BUILDINGS}
+\\Bei gesetztem Wert `1` werden keine Bauwerke importiert.
+
+\textbf{SKIP\_FLOODPLAINS}
+\\Bei gesetztem Wert `1` werden keine Talauen importiert.
+
+\textbf{SKIP\_HYDR\_BOUNDARIES}
+\\Bei gesetztem Wert `1` werden keine hydrologischen Grenzen importiert.
+
+\textbf{SKIP\_HWS\_LINES}
+\\Bei gesetztem Wert `1` werden kein Hochwasserschutzanlagen  (Liniendaten) importiert.
+
+\textbf{SKIP\_HWS\_POINTS}
+\\Bei gesetztem Wert `1` werden kein Hochwasserschutzanlagen (Punktdaten) importiert.
+
+\textbf{SKIP\_UESG}
+\\Bei gesetztem Wert `1` werden keine Überschwemmungsflächen importiert.
+
+\textbf{SKIP\_DGM}
+\\Bei gesetztem Wert `1` werden keine Metadaten zu Digitalen Geländemodellen importiert.
+
+\textbf{SKIP\_JETTIES}
+\\Bei gesetztem Wert `1` werden keine Buhnen importiert.
+
+\textbf{SKIP\_FLOODMARKS}
+\\Bei gesetztem Wert `1` werden keine HW-Marken importiert.
+
+\subsection{Starten des Geodaten Importers}
+\label{Starten des Geodaten Importers}
+Der Geodaten Importer wird mittels des Shellskripts,
+dass auch für die Konfiguration verwendet wird, von einer Konsole
+gestartet. Dazu führen Sie folgenden Befehl aus:\\
+
+\begin{lstlisting}
+    sh ./run_geo.sh pfad/zur/beispiel.gew > geo-import.log
+\end{lstlisting}
+
+Bezüglich des übergebenen Pfades siehe auch Kapitel \ref{start-hydr}.
+Der Importer wird nun gestartet. Sämtliche Log-Ausgaben werden in die Datei
+$geo-import.log$ geschrieben.
+
+

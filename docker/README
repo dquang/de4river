@@ -1,0 +1,37 @@
+Configure:
+_ Add to gwt-client/config/mapfish/config.yaml to enable map printing:
+  - !dnsMatch
+    host: <your-host>
+    port: <your-host-port>
+
+
+Build and run:
+
+$ cd docker
+$ docker compose up
+
+Lookup the allocated host port:
+
+$ docker compose port wiki 80
+
+The application should now be accessible on your docker host
+(e.g. http://your-host:your-host-port).
+See docker/flys_user_file for credentials.
+
+In case an Oracle database should be used, the server service has to be
+build with a build-time argument:
+
+$ docker compose build --build-arg ORACLE=true artifacts
+
+Remote debugging:
+
+To enable remote debugging of the artifact server, uncomment the respective
+lines in docker-compose.yml, recreate the service and e.g. attach with JDB:
+$ docker compose up -d
+$ jdb -attach <your-docker-host>:8787 -sourcepath<your-checkout>/artifacts/src/main/java
+
+
+TODO:
+_ Avoid having to change configuration manually
+_ Something better than setting framework and http-client to a branch
+  explicitly in the Dockerfiles

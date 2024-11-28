@@ -1,0 +1,266 @@
+2011-09-19  RELEASE 2.5
+
+    NEW:
+
+        * Added new widgets:
+          - DistancePanel: allows users to enter a km range.
+          - ContinuePanel: offers a 'next' button only for states which do not require input data.
+          - BooleanPanel: allows users to answer for yes/no questions.
+          - TextProvider: allows users to enter text strings.
+          - AutoIntegerPanel: allows users to enter integer values or the value 'auto'.
+          - WaterlevelGroundPanel: allows users to enter three integer values for "from", "to", and "diff" used for floodmaps.
+          - DatacagePanel: displays a datacage widget, that allows users to select items from datacage.
+          - MapPanel: displays a Gwt-OpenLayers based map and a MapToolbar.
+          - DatacageWidget: reads XML documents from MetaDataService and displays the result as tree.
+          - DigitizePanel: allows users to digitize spatial geometries using a map based on Gwt-OpenLayers.
+          - DatacageTwinPanel: allows users to select items from two parallel datacage widgets.
+
+        * Added RPC services to:
+          - create new Artifacts based on a model Artifact (ArtifactService).
+          - read XML documents from MetaDataService (MetaDataService).
+          - read map information (as srid, extent) from MapInfoService (MapInfoService).
+          - feed an Artifact only (without forwarding into a new state) (FeedService).
+          - fetch the description of an Artifact only (DescribeArtifactService).
+          - create new Artifacts based on Recommendation objects and add them to
+            current Collection (LoadArtifactService).
+
+        * The DatacageWindow in charts now allows adding new themes to charts.
+
+        * Introduced a Recommendation mechanism in the CollectionView that loads Artifacts to the
+          current Collection based on the recommendations in the Artifact description of the master
+          Artifact.
+
+        * Extract background state/messages of master Artifacts. Lock CollectionView window if
+          master Artifacts have started background threads that have not finished yet and display
+          status messages in the lock screen.
+
+        * Added support to clone existing projects in the project list.
+
+        * Introduced copy&paste support in calculation result tables.
+
+        * Added new OutputTab MapOutputTab. This tab initializes map based on Gwt-OpenLayers.
+          The layers added to the map depend on the facets of the output.
+
+        * Added a CrossSectionChartThemePanel. This ThemePanel offers a spinner right besides the
+          theme name to modify the current km.
+
+        * Added a MapToolbar that offers controls for working with a map based on Gwt-OpenLayers.
+
+        * UI improvements:
+          - Stepping back/forward in parameterization no longer redraws the whole CollectionView.
+          - set the title of CollectionView windows when the name of a collection is modified in the project list.
+          - introduced "find-as-you-type" search in most input tables.
+
+        * Distinguish between 'chart' and 'map' output modes to create ChartOutputTabs or MapOutputTabs.
+
+        * Bumped GWT up to 2.3.0.
+
+
+    FIXES:
+
+        * flys/issue159 (WINFO: Radiobutton - Ortsauswahl bei "W für ungleichwertigen Abflusslängsschnitt" entfernen)
+
+        * flys/issue166 (Projektname in die Fensterleiste übernehmen)
+
+        * flys/issue181 (Erstes Thema in der Themenliste wählt sich automatisch wieder an)
+
+        * flys/issue185 (IE8 + Chromium: Kein Zoomen von Diagrammen möglich)
+
+        * flys/issue194 (Wasserspiegellagen: Hauptwerte Q/D Spaltenbezeichnung "Kenzeichnender Abfluss")
+
+        * flys/issue195 (Wasserspiegellagen: Q/D-Panel Spaltenbezeichnung "W/Q/D" -> "Q/D")
+
+        * flys/issue199 (Berechnete Abflusskurve / Dauerzahlen: Freies Textfeld akzeptiert mehr als einen Ort.)
+
+        * flys/issue203 (W-INFO: Wasserspiegellagenberechnung / Auswahlunterstützung Abfluss)
+
+        * flys/issue234 (W-INFO: Projektverwaltung)
+
+        * flys/issue239 (W-INFO: Wasserspiegellagenberechnung / Auswahlunterstützung Ort bzw. Strecke)
+
+        * flys/issue240 (W-INFO: Projektverwaltung / Einstellung dauerhaft)
+
+        * flys/issue259 (Daten aus Datenkorb in Diagramm einladen)
+
+        * flys/issue266 (Projektverwaltung: Duplizieren von Projekten)
+
+        * flys/issue282 (Karte: Abstand interpolierte Profile - Default wert)
+
+        * flys/issue285 (Projektverwaltung: Suche auf den Titeln)
+
+        * flys/issue286 (Karte: Tooltips für die Werkzeugleiste)
+
+        * flys/issue289 (Karte: Messen von Strecken und Flächen in falscher Dimension)
+
+        * flys/issue299 (Karte: Einige Farben vereinheitlichen)
+
+        * flys/issue293 (Karte: Farbliche Anpassung der digitalisierten Objekte)
+
+        * flys/issue305 (Suche: Löschen der Eingabe nach einem Wechseln des Tabs Strecke -> Ort)
+
+        * flys/issue309 (Querprofil: Manuelle Eingabe funktioniert nicht nach Return (nur nach Tab))
+
+        * flys/issue311 (Querprofil: i18n)
+
+        * flys/issue313 ("AssertionError" beim Wechsel von Deutsch zu Englisch in der Projektliste)
+
+
+
+2011-06-27  RELEASE 2.4
+
+    NEW:
+
+        * Introduced:
+          - a theme panel on the left of the chart. It allows to change
+            the state and order of the themes in the chart.
+          - a panel that displays the current mouse position in chart
+            coordinates.
+          - a Zoombox-Control that allows zooming in charts via zoombox.
+          - a control to zoom out for 10%.
+          - a control to zoom to the max extent of the chart.
+          - a control to pan charts.
+          - a panel that displays reports generated by calculations.
+          - a client side validation of user input.
+
+        * Improved the project list. The user can now rename projects and set
+          favorite projects that will never be deleted.
+
+        * Improved the chart output service to support zoom values.
+
+        * Added new services to:
+          - set the Collection's attribute to a new value
+          - set the name of a project
+          - set the time-to-live of a project
+          - delete a project
+          - retrieve meta information of the current chart
+            This service returns a ChartInfo object that stores information about
+            the axes ranges, data ranges and a transformation matrix to transform
+            image coordinates into chart coordinates
+          - fetch calculation reports
+
+        * flys/issue40 Input fields will show former selected values.
+
+    FIXES:
+
+        * flys/issue21 Projects cannot be opened twice but if a projects is
+          already open, it is brought to foreground.
+
+        * flys/issue22 Introduced a polling for user projects. Dead projects are
+          automatically removed.
+
+        * flys/issue43 I18N adjustments.
+
+        * flys/issue85 Location/Distance panel now distinguishes between these
+          two modes. Two (or more) locations will no longer end up in a distance.
+
+        * flys/issue88 I18N adjustments in the location/distance panel.
+
+        * flys/issue91 The WQ panel's initial mode is Q.
+
+        * flys/issue103 Append units in WQ panel.
+
+        * flys/issue104 The selected WQ mode is displayed in the static panel
+          now.
+
+        * flys/issue117 DoubleArrayPanel and DoubleRangePanel will no longer
+          return duplicate values.
+
+        * flys/issue118 The WQ panel has three modes now: W at gauge, Q at
+          gauge and Q free.
+
+        * flys/issue122 The values in the table displaying W values are no
+          longer selectable.
+
+        * flys/issue132 The initial location/distance mode is now distance.
+
+        * flys/issue139 Fixed NPE while initialising user values in the adapted
+          WQ panel.
+
+        * flys/issue140 Splitted the table - displaying W, Q and D values - up
+          in two tables for W (no longer selectable) and for QD.
+
+        * flys/issue156 The report panel is not displayed as tab besides the
+          chart tabs.
+
+        * flys/issue165 Limit the length of new project names to 50 characters.
+
+        * flys/issue170 Fixed broken initial chart info.
+
+
+
+2011-05-19  RELEASE 2.3.1
+
+    NEW:
+
+        * Enabled the UI to display more export modes that a single one.
+
+        * Added tooltips for export buttons.
+
+
+    FIXES:
+
+        * flys/issue23 (Doppel-Click auf Eintrag in der Projektliste sollte ein Projekt öffnen)
+
+        * flys/issue35 The project window is maximizable with a 'maximize' button.
+
+        * flys/issue38 (WINFO: Vorbelegung der Berechnungsart auf "Wasserstand/Wasserspiegellagen")
+
+        * flys/issue39 (WINFO: Auswahl einer Strecke in bei Eingabeunterstützung liefert nicht die richtigen Werte)
+
+        * flys/issue43 (i18n: Einige Verbesserungen)
+
+        * flys/issue44 (WINFO: Unterstützungstabellen werden in fester Fensterbreite angezeigt)
+
+        * flys/issue45 (WINFO: Ladedialog bei Laden der Daten in Unterstützungstabellen anzeigen)
+
+        * flys/issue48 (Diagramm: Bereiche für Themensteuerung und Werkzeugleiste vorgeben.)
+
+        * flys/issue56: (Knopf zum Exportieren der Berechnungsergebnissen nach CSV in GUI einbauen)
+
+
+
+2011-05-13  RELEASE 2.3
+
+    NEW:
+
+        * Initial GWT/Ajax based Web-Client for the REST based artifact system:
+          - Renderer for states specific for WINFO artifact
+          - Panels for W/Q selection
+          - Panels for Range selection
+          - Chart panels for chart output creation
+          - Export panels that provides download links for exporting computation
+            data
+          - Project list displays former projects that might be opened by
+            double click
+          - Datacage (dt. 'Datenkorb') UI that displays loadable data for charts
+
+        * RPC-services enable data exchange between client and server
+
+        * Connection settings are configured in config.xml
+
+        * I18N is splitted into two parts and support English and German:
+          - GUI elements are translated using the GWT i18n mechanism
+          - Information/data served by the artifact system is translated by the
+            artifact server
+
+
+    LIMITATIONS:
+
+        * Language switch drops the current session
+
+        * Charts served by the artifact system are rendered as PNG only
+
+        * Theme control for charts is not implemented yet.
+
+        * Data served by the datacage can't be added to projects/charts
+
+
+    !!!
+
+    The version number of this release depends on an existing desktop variant of
+    this software that is in version 2.1.
+
+    !!!
+
+
+2011-03-30  RELEASE 0.1

@@ -1,0 +1,39 @@
+# Docker file for D4E River documentation wiki
+FROM centos:7
+MAINTAINER tom@intevation.de
+
+# Necessary to run further yum-installs inside Docker container,
+# if not already part of the base image:
+RUN yum -q -y install yum-plugin-ovl && rpm --rebuilddb
+
+# Install prerequisites
+RUN yum -q -y install curl ca-certificates tar gzip \
+        python-setuptools gcc python-devel xmlsec1-nss-devel libtool-ltdl-devel
+WORKDIR /opt/xmlsec
+RUN curl -sL https://pypi.python.org/packages/source/p/pyxmlsec-next/pyxmlsec-next-0.3.1.tar.gz | \
+    tar -xz
+WORKDIR pyxmlsec-next-0.3.1
+RUN echo 3 | python setup.py build install
+
+WORKDIR /opt/wiki
+
+# User for wiki installation and WSGI
+RUN useradd wiki
+RUN chown wiki:wiki .
+USER wiki
+
+# Install MoinMoin
+RUN curl -s https://static.moinmo.in/files/moin-1.9.9.tar.gz | tar -xz
+ENV WIKI /opt/wiki/moin-1.9.9
+
+# Install tool for SSO
+RUN curl -s https://hg.intevation.de/moin/moin-was/archive/default.tar.gz | \
+    tar -xz -C $WIKI/MoinMoin/auth --strip-components=1 moin-was-default/was.py
+
+# Volume for Wiki data
+VOLUME $WIKI/wiki/data
+
+ENV PYTHONPATH $WIKI
+
+CMD ["/opt/wiki/moin-1.9.9/wiki/server/moin", "server", "standalone", \
+     "--hostname="]

@@ -1,0 +1,310 @@
+2011-09-19  RELEASE 2.5
+
+    NEW:
+
+        * Introduced the concept of a "datacage": the datacage is a service that
+          provides a list of chart themes that fit to a given chart type. The
+          service accepts a user uuid, the uuid of a master Artifact, the name
+          of the output type and a set of further string parameters. In general,
+          we distinguish between user-specific datacage and system-specific
+          datacage:
+          The user-specific datacage returns themes provided by old
+          calculations computed by the user.
+          The system-specific datacage returns themes that might be generated
+          using the data stored in the flys-backend.
+
+        * Introduced a database used by the datacage that stores information
+          about Artifacts, their outputs and their facets. This database
+          requires synchronization with the Artifact database. The intent of
+          this database is to have a fast access to data stored in Artifacts.
+
+        * Introduced a mechanism to clone existing Artifacts (with or without
+          restrictions). For cloning an Artifact, it is necessary to specify the
+          UUID of a "model Artifact". The clone will be based on that model by
+          extracting all required data from it.
+
+        * Introduced "recommendations": recommendations are themes in charts or
+          maps (Artifacts/Facets) that should be added automatically to an
+          existing chart/map. They are provided by the datacage.
+
+        * Introduced new Artifact types to provide further chart themes:
+          - Annotations
+          - Mainvalues
+
+        * Introduced new Facet type WMSLayerFacet. This type stores all required
+          information (server url, layer names, layer extent, layer srid) to
+          display a WMS layer in a WMS client.
+
+        * Introduced a new chart output "Querprofildiagramm". This output
+          calculates a waterlevel and displays it as single line together with
+          one or more cross section lines ("Querprofilspuren").
+
+        * Introduced a new chart output "W-Differenzen". This output calculates
+          waterlevel differences based on at least two waterlevels (a
+          "W-Differenzen" output can consist of more than a single waterlevel
+          difference calculation). Each waterlevel difference calculation
+          results in three chart themes: two W curves and a W-Differences curve.
+
+        * Introduced a new output "Überschwemmungskarte". The visualization of
+          this output is a map. One of the map's layers is a WMS layer that
+          displays the calculation result of WSPLGEN (external C++ tool).
+
+        * Improved the rendering process of chart themes: the styles configured
+          for themes are now used.
+
+        * Improved the DistanceInfoService: it supports filters to filter the
+          type of items returned by this service (reduces the number of returned
+          items of course).
+
+        * Introduced a CSV export for "W-Differenzen".
+
+        * Downgraded GNU Trove to 1.1-beta-5 (later versions have been removed
+          from maven repositories).
+
+
+    FIXES:
+
+        * flys/issue135 (Diagramm: Trotz abgeschalteter Themen bleiben Beschriftungen bestehen)
+
+        * flys/issue159 (WINFO: Radiobutton - Ortsauswahl bei "W für ungleichwertigen Abflusslängsschnitt" entfernen)
+
+        * flys/issue160 (WINFO: Auswahltabelle Orte bei Modus Strecke nach Step-Back)
+
+        * flys/issue176 (Diagramm: Benennung eines Abflusses bei gewählter Höhe am Pegel)
+
+        * flys/issue180 (WINFO: Zeilen der Tabelle können nach der Markierung in die Zwischenablage kopiert werden.)
+
+        * flys/issue181 (Erstes Thema in der Themenliste wählt sich automatisch wieder an)
+
+        * flys/issue191 (AT-Export: Längsten monoton steigenden Bereich exportieren.)
+
+        * flys/issue219 (W-INFO: Abflusskurvenberechnung / keine Themen im Diagramm)
+
+        * flys/issue254 (Datenkorb: Klonen von Artefakten in anderen Collections + Facettenfilter zum Ausblenden)
+
+        * flys/issue256 (Datenkorb: XXX Issue festhalten)
+
+        * flys/issue258 (Datenkorb: Outs statt States führen)
+
+        * flys/issue259 (Daten aus Datenkorb in Diagramm einladen)
+
+        * flys/issue260 (Datenkorb: Masterartefakt in View aufführen)
+
+        * flys/issue262 (Datenkorb: Vereinigung der beiden Konfigurations-Templates)
+
+        * flys/issue279 (WINFO: Elbe Wasserspiegellage - Index Out of Bounds)
+
+        * flys/issue280 (BoundingBoxen von Streckenfavoriten und Haupt- und Extremwerten unsichtbar machen)
+
+        * flys/issue281 (Karte: Auswahl der berechnten Wasserspiegellage über Inline-Datenkorb)
+
+        * flys/issue282 (Karte: Abstand interpolierte Profile - Default wert)
+
+        * flys/issue290 (Karte: Eingabe von Differenzen zw. WSP und Gelände findet keine Ausprägung in der Karte)
+
+        * flys/issue303 (Keine Streckenfavoriten, wenn nur Q im Längsschnittdiagram ausgewählt)
+
+        * flys/issue309 (Querprofil: Manuelle Eingabe funktioniert nicht nach Return (nur nach Tab))
+
+        * flys/issue310 (Querprofil: Farben der Themen)
+
+        * flys/issue311 (Querprofil: i18n)
+
+
+
+2011-06-27  RELEASE 2.4
+
+    NEW:
+
+        * Finalized the Facet concept: output modes and the output generation
+          are now based on facets. Facets are created dynamically by an Artifact
+          based on the results of a calculation.
+
+        * Introduced a report mechanism that gives feedback of calculation
+          problems.
+
+        * Introduced output modes that generate XML document with calculation
+          report information.
+
+        * Introduced deactivated themes in charts: such themes are not rendered.
+
+        * Introduced a cache to store distance info per river.
+
+        * Introduced output modes that generate XML documents which contain meta
+          information of charts as axes ranges, data ranges and a transformation
+          matrix that allows to transform image coordinates into chart
+          coordinates.
+
+        * Added support for zoom values in Chart output modes.
+
+        * Added support for min/max values in DESCRIBE documents.
+
+        * Added "Oberkante" and "Unterkante" columns to distance info service.
+
+        * Added a new export mode to save data in AT format.
+
+        * Improved performance while storing/loading Q values of WST columns.
+
+        * Improved the WQ values validation for calculation 1 & 4.
+
+        * Improved calculations to work independent of "from"/"to" order of
+          kilometer ranges.
+
+        * Improved the input of WQ values for calculation 1. We distinguish
+          between a selected Q at a given gauge or a selected Q that doesn't
+          base on a given gauge.
+
+        * Allow "from" to be greater than "to" in kilometer ranges.
+
+        * Write default values of the user into the Artifact's DESCRIBE
+          document (flys/issue40).
+
+
+    FIXES:
+
+        * flys/issue62 Artifacts no longer share their data with each other.
+
+        * flys/issue77 Added titles for themes in duration curve charts.
+
+        * flys/issue81
+
+        * flys/issue82 Fixed NPE after a calculation has taken place.
+
+        * flys/issue84
+
+        * flys/issue85 Fixed location input for calculation 1 & 4.
+
+        * flys/issue86 Fixed Q determination based on a given W.
+
+        * flys/issue90 Removed space between chart axes and chart area.
+
+        * flys/issue93 Renamed calculation 4.
+
+        * flys/issue103 Append values selected by the user in the correct format
+          to the DESCRIBE document of Artifacts (uses i18n).
+
+        * flys/issue147
+
+        * flys/issue150 Invert the X axis correctly for charts of type
+          calculation 1 & 4.
+
+        * flys/issue154 Repaired computed discharge curve that broke after the
+          facets had been finalized.
+
+        * flys/issue157 Discharge curve charts (computed an static) will now
+          have a lower x value set to "1".
+
+        * flys/issue161 Longitudinal section chart's second Y axis will
+          initially start at Q=0.
+
+        * flys/issue164 Improved input validation for WQ input of calculation 4.
+
+        * flys/issue172 Duration curve charts will now have a lower x value set
+          to "0".
+
+        * flys/issue173 Fixed broken gauge determination in calculation 4.
+
+        * flys/issue174 Repaired broken upper margin between chart data and
+          chart border in longitudinal section charts.
+
+        * Added missing "Corrected W" facet for results of calculation 4.
+
+        * Map datasets in duration curve charts to the correct axes.
+
+        * Fixed broken XPath to detect output modes in an attribute document of
+          a Collection.
+
+        * Feed operation will no longer save data if the validation of the given
+          values failed.
+
+
+
+2011-05-19  RELEASE 2.3.1
+
+    NEW:
+
+        * New export format for waterlevels: WST.
+
+        * Added descriptions for the curves of the following charts:
+          - discharge curves (dt. 'Abflusskurven am Pegel')
+          - computed discharge curves (dt. 'berechnete Abflusskurven')
+          - longitudinal section curves (dt. 'Längsschnitt')
+          - discharge longitudinal section curves (dt. 'Abflusslängsschnitt')
+
+        * Number formatting is done in a central place/class.
+
+    FIXES:
+
+        * flys/issue47 (Diagramm: Farbliche Unterscheidung von Abfluß und Wasserstand)
+
+        * flys/issue52 (WINFO: W-Längsschnitt - Wasser jeweils von links nach rechts laufen lassen)
+
+        * flys/issue53 (WINFO/Berechnungsausgabe: Kilometerierung und Wasserstände werden zum Teil mit vielen Nachkommastellen angezeigt)
+
+        * flys/issue66: (i18n: Untertitel bei Längsschnitten - Bereich der Strecke enthält "double")
+
+        * flys/issue67 (WINFO: Längsschnitt - Wasser fließt bergauf)
+
+        * flys/issue72: (WINFO: Q/W/D-Info liefert selten eine Antwort)
+
+
+
+2011-05-13  RELEASE 2.3
+
+    NEW:
+
+        * Initial release of the artifacts for FLYS. Currently there is a single
+          WINFO artifact for the following computations:
+          - waterlevels
+          - discharge curves
+          - duration curves
+          - discharge longitudinal section curves
+
+        * Configuration is placed in doc/conf/conf.xml
+
+        * WINFO Artifact specific configuration is placed in
+          doc/conf/artifacts/winfo.xml
+
+        * So called 'OutGenerators' produce different types of output.
+          Currently, the flys-artifacts are able to produce charts and exports.
+          Each output type has to be configured in conf.xml.
+
+        * New chart types:
+          - discharge curves (dt. 'Abflusskurven am Pegel')
+          - computed discharge curves (dt. 'Abflusskurve')
+          - longitudinal section curves (dt. 'Längsschnitte')
+          - duration curves (dt. 'Dauerlinie')
+          - discharge longitudinal section curve (dt. 'W bei
+            ungleichmäßigem Abflusslängsschnitt')
+
+        * New exports:
+          - csv of waterlevels
+          - csv of duration curves
+          - csv of computed discharge curves
+          - csv of discharge longitudinal section
+
+        * New services that provides:
+          - supported rivers
+          - main values of a gauge
+          - range information of a river
+          - meta information of a river
+
+        * Caching of computation relevant values
+
+        * Initial model to support chart specific themes (theme.xml)
+
+
+    LIMITATIONS:
+
+        * Charts are not rendered using the themes in theme.xml
+
+
+    !!!
+
+    The version number of this release depends on an existing desktop variant of
+    this software that is in version 2.1.
+
+    !!!
+
+
+2011-03-30  RELEASE 0.1

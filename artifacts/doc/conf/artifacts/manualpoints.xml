@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="manualpoints">
+  <states>
+    <state id="state.manualpoints.static"
+               description="state.manualpoints.static"
+               state="org.dive4elements.river.artifacts.states.ManualPointsSingleState">
+      <outputmodes>
+        <outputmode name="longitudinal_section" description="output.longitudinal_section" mime-type="image/png" type="chart">
+          <facets>
+            <facet name="longitudinal_section.manualpoints" description="Points provided by user." />
+            <facet name="discharge_longitudinal_section.manualpoints" description="Points provided by user." />
+            <facet name="discharge_curve.manualpoints" description="Points provided by user." />
+            <facet name="w_differences.manualpoints" description="Points provided by user." />
+            <facet name="duration_curve.manualpoints" description="Points provided by user." />
+            <facet name="computed_discharge_curve.manualpoints" description="Points provided by user." />
+            <facet name="cross_section.manualpoints" description="Points provided by user." />
+            <facet name="reference_curve.manualpoints" description="User-provided points *yawn*"/>
+            <facet name="reference_curve_normalized.manualpoints" description="points"/>
+            <facet name="historical_discharge.manualpoints" description="Points provided by user." />
+            <facet name="historical_discharge_wq.manualpoints" description="Points provided by user." />
+            <facet name="cross_section.manualline" description="Lines provided by user." />
+            <facet name="fix_wq_curve.manualpoints" description="Points provided by user." />
+            <facet name="fix_deltawt_curve.manualpoints" description="Points provided by user." />
+            <facet name="fix_longitudinal_section_curve.manualpoints" description="Points provided by user." />
+            <facet name="fix_derivate_curve.manualpoints" description="Points provided by user." />
+            <facet name="extreme_wq_curve.manualpoints" description="Points provided by user." />
+            <facet name="bedheight_middle.manualpoints" description="Points provided by user." />
+            <facet name="sedimentload_ls.manualpoints"/>
+            <facet name="flow_velocity.manualpoints"/>
+            <facet name="bedheight_difference.manualpoints" />
+            <facet name="sq_relation_a.manualpoints" />
+            <facet name="sq_relation_b.manualpoints" />
+            <facet name="sq_relation_c.manualpoints" />
+            <facet name="sq_relation_d.manualpoints" />
+            <facet name="sq_relation_e.manualpoints" />
+            <facet name="bed_longitudinal_section.manualpoints" />
+            <facet name="sq_relation_f.manualpoints" />
+          </facets>
+        </outputmode>
+      </outputmodes>
+    </state>
+  </states>
+</artifact>

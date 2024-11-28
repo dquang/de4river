@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sqrelation-defaults>
+    <axis name="Transport" logarithmic="true"/>
+    <axis name="W"/>
+    <domain-axis key="chart.sq_relation.xaxis.label" default="" logarithmic="true"/>
+    <processor class="org.dive4elements.river.exports.process.SQRelationProcessor" axis="Transport"/>
+    <processor class="org.dive4elements.river.exports.process.DischargeProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.MiscDischargeProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.FixWQProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.FixDerivedProcessor" axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor"
+        axis="Transport"/>
+    <subtitle key="chart.computed.discharge.curve.subtitle" default="-">
+      <arg expr="artifact.river"/>
+      <arg expr="artifact.ld_locations" type="double"/>
+    </subtitle>
+</sqrelation-defaults>
+

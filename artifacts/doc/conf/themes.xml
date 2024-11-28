@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE themes [
+    <!ENTITY virtual SYSTEM "${artifacts.config.dir}/themes/virtual.xml">
+    <!ENTITY default SYSTEM "${artifacts.config.dir}/themes/default.xml">
+    <!ENTITY second  SYSTEM "${artifacts.config.dir}/themes/second.xml">
+]>
+<themes>
+    &virtual;
+    &default;
+    &second;
+
+    <!-- Mappings are following now. A mapping maps between a name of a facet
+        and a theme. Always the first matching mapping is taken, so consider putting
+        most specific mappings on top of the list. -->
+    <mappings>
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ1)(\D.*)*" to="LongitudinalSectionW_HQ1_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ2)(\D.*)*" to="LongitudinalSectionW_HQ2_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ5)(\D.*)*" to="LongitudinalSectionW_HQ5_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ10)(\D.*)*" to="LongitudinalSectionW_HQ10_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ20)(\D.*)*" to="LongitudinalSectionW_HQ20_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ25)(\D.*)*" to="LongitudinalSectionW_HQ25_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ50)(\D.*)*" to="LongitudinalSectionW_HQ50_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ100)(\D.*)*" to="LongitudinalSectionW_HQ100_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ200)(\D.*)*" to="LongitudinalSectionW_HQ200_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ300)(\D.*)*" to="LongitudinalSectionW_HQ300_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ500)(\D.*)*" to="LongitudinalSectionW_HQ500_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQ1000)(\D.*)*" to="LongitudinalSectionW_HQ1000_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HQExtrem)(\D.*)*" to="LongitudinalSectionW_HQExtrem_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+           pattern=".*(HQRZ)(\D.*)*" to="LongitudinalSectionW_HQRZ_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(HSQ)(\D.*)*" to="LongitudinalSectionW_HSQ_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(MHQ)(\D.*)*" to="LongitudinalSectionW_MHQ_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(MNQ)(\D.*)*" to="LongitudinalSectionW_MNQ_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(MQ)(\D.*)*" to="LongitudinalSectionW_MQ_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+            pattern=".*(NQ)(\D.*)*" to="LongitudinalSectionW_NQ_Points" />
+        <mapping from="longitudinal_section.w" masterAttr="ld_mode==location"
+           to="LongitudinalSectionPoints" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ1)(\D.*)*"
+           to="LongitudinalSectionW_HQ1" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ2)(\D.*)*"
+           to="LongitudinalSectionW_HQ2" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ5)(\D.*)*"
+            to="LongitudinalSectionW_HQ5" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ10)(\D.*)*"
+            to="LongitudinalSectionW_HQ10" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ20)(\D.*)*"
+            to="LongitudinalSectionW_HQ20" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ25)(\D.*)*"
+            to="LongitudinalSectionW_HQ25" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ50)(\D.*)*"
+            to="LongitudinalSectionW_HQ50" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ100)(\D.*)*"
+            to="LongitudinalSectionW_HQ100" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ200)(\D.*)*"
+            to="LongitudinalSectionW_HQ200" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ300)(\D.*)*"
+            to="LongitudinalSectionW_HQ300" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ500)(\D.*)*"
+            to="LongitudinalSectionW_HQ500" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQ1000)(\D.*)*"
+            to="LongitudinalSectionW_HQ1000" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQExtrem)(\D.*)*"
+            to="LongitudinalSectionW_HQExtrem" />
+        <mapping from="longitudinal_section.w" pattern=".*(HQRZ)(\D.*)*"
+            to="LongitudinalSectionW_HQRZ" />
+        <mapping from="longitudinal_section.w" pattern=".*(HSQ)(\D.*)*"
+            to="LongitudinalSectionW_HSQ" />
+        <mapping from="longitudinal_section.w" pattern=".*(MHQ)(\D.*)*"
+            to="LongitudinalSectionW_MHQ" />
+        <mapping from="longitudinal_section.w" pattern=".*(MNQ)(\D.*)*"
+            to="LongitudinalSectionW_MNQ" />
+        <mapping from="longitudinal_section.w" pattern=".*(MQ)(\D.*)*"
+            to="LongitudinalSectionW_MQ" />
+        <mapping from="longitudinal_section.w" pattern=".*(NQ)(\D.*)*"
+            to="LongitudinalSectionW_NQ" />
+        <mapping from="longitudinal_section.w" to="LongitudinalSectionW" />
+        <mapping from="longitudinal_section.q" pattern="(HQ1)(\D.*)*"
+            to="LongitudinalSectionQ_HQ1" />
+        <mapping from="longitudinal_section.q" pattern="(HQ2)(\D.*)*"
+            to="LongitudinalSectionQ_HQ2" />
+        <mapping from="longitudinal_section.q" pattern="(HQ5)(\D.*)*"
+            to="LongitudinalSectionQ_HQ5" />
+        <mapping from="longitudinal_section.q" pattern="(HQ10)(\D.*)*"
+            to="LongitudinalSectionQ_HQ10" />
+        <mapping from="longitudinal_section.q" pattern="(HQ20)(\D.*)*"
+            to="LongitudinalSectionQ_HQ20" />
+        <mapping from="longitudinal_section.q" pattern="(HQ25)(\D.*)*"
+            to="LongitudinalSectionQ_HQ25" />
+        <mapping from="longitudinal_section.q" pattern="(HQ50)(\D.*)*"
+            to="LongitudinalSectionQ_HQ50" />
+        <mapping from="longitudinal_section.q" pattern="(HQ100)(\D.*)*"
+            to="LongitudinalSectionQ_HQ100" />
+        <mapping from="longitudinal_section.q" pattern="(HQ200)(\D.*)*"
+            to="LongitudinalSectionQ_HQ200" />
+        <mapping from="longitudinal_section.q" pattern="(HQ300)(\D.*)*"
+            to="LongitudinalSectionQ_HQ300" />
+        <mapping from="longitudinal_section.q" pattern="(HQ500)(\D.*)*"
+            to="LongitudinalSectionQ_HQ500" />
+        <mapping from="longitudinal_section.q" pattern="(HQ1000)(\D.*)*"
+            to="LongitudinalSectionQ_HQ1000" />
+        <mapping from="longitudinal_section.q" pattern="(HQExtrem)(\D.*)*"
+            to="LongitudinalSectionQ_HQExtrem" />
+        <mapping from="longitudinal_section.q" pattern="(HQRZ)(\D.*)*"
+            to="LongitudinalSectionQ_HQRZ" />
+        <mapping from="longitudinal_section.q" pattern="(HSQ)(\D.*)*"
+            to="LongitudinalSectionQ_HSQ" />
+        <mapping from="longitudinal_section.q" pattern="(MHQ)(\D.*)*"
+            to="LongitudinalSectionQ_MHQ" />
+        <mapping from="longitudinal_section.q" pattern="(MNQ)(\D.*)*"
+            to="LongitudinalSectionQ_MNQ" />
+        <mapping from="longitudinal_section.q" pattern="(MQ)(\D.*)*"
+            to="LongitudinalSectionQ_MQ" />
+        <mapping from="longitudinal_section.q" pattern="(NQ)(\D.*)*"
+            to="LongitudinalSectionQ_NQ" />
+        <mapping from="longitudinal_section.q" to="LongitudinalSection" />
+        <mapping from="discharge_longitudinal_section.q.infolding" to="LongitudinalSectionQInfolding" />
+        <mapping from="discharge_longitudinal_section.q.cutting" to="LongitudinalSectionQInfoldCut" />
+
+        <mapping from="discharge_curve.curve" to="DischargeCurve" />
+        <mapping from="historical_discharge.historicalq" to="HistoricalDischargeCurveQ" />
+        <mapping from="historical_discharge.historicalq.diff" to="HistoricalDischargeCurveQDiff" />
+        <mapping from="historical_discharge.historicalw" to="HistoricalDischargeCurveW" />
+        <mapping from="historical_discharge.historicalw.diff" to="HistoricalDischargeCurveWDiff" />
+        <mapping from="historical_discharge.wq.curve" to="DischargeCurve" />
+        <mapping from="historical_discharge.wq.w" to="HistoricalDischargeWQW" />
+        <mapping from="historical_discharge.wq.q" to="HistoricalDischargeWQQ" />
+        <mapping from="cross_section" to="CrossSection" />
+        <mapping from="cross_section_water_line" to="CrossSectionWaterLine" />
+        <mapping from="computed_discharge_curve.q" to="DischargeCurve" />
+        <mapping from="duration_curve.w" to="DurationCurveW" />
+        <mapping from="duration_curve.q" to="DurationCurveQ" />
+        <mapping from="discharge_longitudinal_section.w" to="DischargeLongitudinalSectionW" />
+        <mapping from="discharge_longitudinal_section.c" to="DischargeLongitudinalSectionC" />
+        <mapping from="discharge_longitudinal_section.q" to="DischargeLongitudinalSectionQ" />
+        <mapping from="mainvalues.q" to="MainValuesQ" />
+        <mapping from="mainvalues.w" to="MainValuesW" />
+        <mapping from="longitudinal_section.annotations" to="Annotations" />
+        <mapping from="w_differences" to="Differences" />
+        <mapping from="w_differences.filtered" to="Differences" />
+        <mapping from="floodmap.wsplgen" to="WSPLGEN" />
+        <mapping from="floodmap.riveraxis" to="RiverAxis" />
+        <mapping from="floodmap.kms" to="Kms" />
+        <mapping from="floodmap.qps" to="Qps" />
+        <mapping from="floodmap.hws_lines" to="Hws" />
+        <mapping from="floodmap.hws_points" to="HwsPoints" />
+        <mapping from="floodmap.hydr_boundaries" to="HydrBoundariesLines" />
+        <mapping from="floodmap.hydr_boundaries_poly" to="HydrBoundariesPolys" />
+        <mapping from="floodmap.catchment" to="Catchment" />
+        <mapping from="floodmap.floodplain" to="Floodplains" />
+        <mapping from="floodmap.lines" to="FloodmapLines" />
+        <mapping from="floodmap.buildings" to="Buildings" />
+        <mapping from="floodmap.fixpoints" to="Fixpoints" />
+        <mapping from="floodmap.floodmarks" to="Floodmarks" />
+        <mapping from="floodmap.floodmaps" to="Floodmaps" />
+        <mapping from="floodmap.gauge_location" to="GaugeLocation" />
+        <mapping from="floodmap.jetties" to="Jetties" />
+        <mapping from="other.wq" to="WQPoints" />
+        <mapping from="other.wkms" to="WKms" />
+        <mapping from="other.delta_w" to="WKms" />
+        <mapping from="other.delta_w_cma" to="WKms" />
+        <mapping from="other.wkms.marks" to="WKmsAnnotation" />
+        <mapping from="other.wqkms" to="WQKmsHorizontal" masterAttr="calculation_mode==calc.discharge.curve" />
+        <mapping from="other.wqkms" to="WQKms" />
+        <mapping from="other.wqkms.w" to="WQKmsHorizontal" masterAttr="calculation_mode==calc.discharge.curve" />
+        <mapping from="other.wqkms.w" to="WQKms" />
+        <mapping from="other.wqkms.q" to="WQKms" />
+        <mapping from="other.w.interpol" to="MainValuesW" />
+        <mapping from="heightmarks_points" to="heightmarks_points" />
+        <mapping from="area" to="Area" />
+        <mapping from="cross_section.area" to="CrossSectionArea" />
+        <mapping from="hyk" to="Hyk" />
+        <mapping from="longitudinal_section.area" to="LongitudinalSectionArea" />
+        <mapping from="longitudinal_section.manualpoints" to="ManualPoints" />
+        <mapping from="cross_section.manualpoints" to="ManualPoints" />
+        <mapping from="cross_section.manualline" to="CrossSectionWaterLine" />
+        <mapping from="computed_discharge_curve.manualpoints" to="ManualPoints" />
+        <mapping from="duration_curve.manualpoints" to="ManualPoints" />
+        <mapping from="wdifferences.manualpoints" to="ManualPoints" />
+        <mapping from="discharge_longitudinal_section.manualpoints"
+            to="ManualPoints" />
+        <mapping from="discharge_curve.manualpoints" to="ManualPoints" />
+        <mapping from="reference_curve.manualpoints" to="ManualPoints" />
+        <mapping from="reference_curve_normalized.manualpoints" to="ManualPoints" />
+        <mapping from="historical_discharge.manualpoints" to="ManualPoints" />
+        <mapping from="manualpoints" to="ManualPoints" />
+        <mapping from="reference_curve" to="ReferenceCurve" />
+        <mapping from="reference_curve_normalized" to="ReferenceCurveNormalized" />
+        <mapping from="flow_velocity.totalchannel" to="FlowVelocityVTotalChannel" />
+        <mapping from="flow_velocity.mainchannel" to="FlowVelocityVMainChannel" />
+        <mapping from="flow_velocity.tau" to="FlowVelocityTau" />
+        <mapping from="flow_velocity.totalchannel.filtered" to="FlowVelocityVTotalChannel" />
+        <mapping from="flow_velocity.mainchannel.filtered" to="FlowVelocityVMainChannel" />
+        <mapping from="flow_velocity.tau.filtered" to="FlowVelocityTau" />
+        <mapping from="flow_velocity.discharge" to="FlowVelocityDischarge" />
+        <mapping from="flow_velocity.measurement" to="FlowVelocityDischarge" />
+        <mapping from="bedheight_middle.single" to="MiddleBedHeightSingle" />
+        <mapping from="bedheight_middle.manualpoints" to="ManualPoints" />
+        <mapping from="bed_longitudinal_section.porosity.toplayer.interpol" to="PorosityTopLines" />
+        <mapping from="bed_longitudinal_section.porosity.sublayer.interpol" to="PorositySubLines" />
+        <mapping from="bed_longitudinal_section.density.toplayer.interpol" to="DensityTopLines" />
+        <mapping from="bed_longitudinal_section.density.sublayer.interpol" to="DensitySubLines" />
+        <mapping from="bed_longitudinal_section.diameter.toplayer.interpol" to="BedDiameterTopLines" />
+        <mapping from="bed_longitudinal_section.diameter.sublayer.interpol" to="BedDiameterSubLines" />
+        <mapping from="bed_longitudinal_section.diameter.bedload.interpol" to="BedLoadDiameterLines" />
+        <mapping from="bed_longitudinal_section.porosity.toplayer" to="PorosityTopPoints" />
+        <mapping from="bed_longitudinal_section.porosity.sublayer" to="PorositySubPoints" />
+        <mapping from="bed_longitudinal_section.density.toplayer" to="DensityTopPoints" />
+        <mapping from="bed_longitudinal_section.density.sublayer" to="DensitySubPoints" />
+        <mapping from="bed_longitudinal_section.diameter.toplayer" to="BedDiameterTopPoints" />
+        <mapping from="bed_longitudinal_section.diameter.sublayer" to="BedDiameterSubPoints" />
+        <mapping from="bed_longitudinal_section.diameter.bedload" to="BedLoadDiameterPoints" />
+        <mapping from="bed_longitudinal_section.diameter.toplayer.data" to="BedDiameterDataTop"/>
+        <mapping from="bed_longitudinal_section.diameter.sublayer.data" to="BedDiameterDataSub"/>
+        <mapping from="bed_longitudinal_section.diameter.bedload.data" to="BedloadDiameterData"/>
+        <mapping from="bedheight_difference.year" to="BedheightDiffYear"/>
+        <mapping from="bedheight_difference.year.filtered" to="BedheightDiffYear"/>
+        <mapping from="bedheight_difference.morph_width" to="BedheightDiffMorphWidth"/>
+        <mapping from="bedheight_difference.epoch" to="BedheightDiffEpoch"/>
+        <mapping from="bedheight_difference.year.height1" to="BedheightDiffAbsHeight1"/>
+        <mapping from="bedheight_difference.year.height2" to="BedheightDiffAbsHeight2"/>
+        <mapping from="bedheight_difference.epoch.height1" to="BedheightDiffAbsHeight1"/>
+        <mapping from="bedheight_difference.epoch.height2" to="BedheightDiffAbsHeight2"/>
+        <mapping from="bedheight_difference.height_year" to="BedheightDiffHeightYear"/>
+        <mapping from="bedheight_difference.epoch.filtered" to="BedheightDiffEpoch"/>
+        <mapping from="bedheight_difference.year.height1.filtered" to="BedheightDiffAbsHeight1"/>
+        <mapping from="bedheight_difference.year.height2.filtered" to="BedheightDiffAbsHeight2"/>
+        <mapping from="bedheight_difference.epoch.height1.filtered" to="BedheightDiffAbsHeight1"/>
+        <mapping from="bedheight_difference.epoch.height2.filtered" to="BedheightDiffAbsHeight2"/>
+        <mapping from="bedheight_difference.height_year.filtered" to="BedheightDiffHeightYear"/>
+        <mapping from="morph-width" to="MorphologicWidth"/>
+        <mapping from="relativepoint" to="RelativePoint" />
+
+        <mapping from="sq_a_measurement" to="SQMeasurementsA" />
+        <mapping from="sq_a_outlier" to="SQOutliersA" />
+        <mapping from="sq_a_curve" to="SQCurveA" />
+        <mapping from="sq_a_outlier_curve" to="SQOutlierCurveA" />
+        <mapping from="sq_a_outlier_measurement" to="SQMeasurementsA" />
+        <mapping from="sq_b_measurement" to="SQMeasurementsB" />
+        <mapping from="sq_b_outlier" to="SQOutliersB" />
+        <mapping from="sq_b_curve" to="SQCurveB" />
+        <mapping from="sq_b_outlier_curve" to="SQOutlierCurveB" />
+        <mapping from="sq_b_outlier_measurement" to="SQMeasurementsB" />
+        <mapping from="sq_c_measurement" to="SQMeasurementsC" />
+        <mapping from="sq_c_outlier" to="SQOutliersC" />
+        <mapping from="sq_c_curve" to="SQCurveC" />
+        <mapping from="sq_c_outlier_curve" to="SQOutlierCurveC" />
+        <mapping from="sq_c_outlier_measurement" to="SQMeasurementsC" />
+        <mapping from="sq_d_measurement" to="SQMeasurementsD" />
+        <mapping from="sq_d_outlier" to="SQOutliersD" />
+        <mapping from="sq_d_curve" to="SQCurveD" />
+        <mapping from="sq_d_outlier_curve" to="SQOutlierCurveD" />
+        <mapping from="sq_d_outlier_measurement" to="SQMeasurementsD" />
+        <mapping from="sq_e_measurement" to="SQMeasurementsE" />
+        <mapping from="sq_e_outlier" to="SQOutliersE" />
+        <mapping from="sq_e_curve" to="SQCurveE" />
+        <mapping from="sq_e_outlier_curve" to="SQOutlierCurveE" />
+        <mapping from="sq_e_outlier_measurement" to="SQMeasurementsE" />
+        <mapping from="sq_f_measurement" to="SQMeasurementsF" />
+        <mapping from="sq_f_outlier" to="SQOutliersF" />
+        <mapping from="sq_f_curve" to="SQCurveF" />
+        <mapping from="sq_f_outlier_curve" to="SQOutlierCurveF" />
+        <mapping from="sq_f_outlier_measurement" to="SQMeasurementsF" />
+        <mapping from="sq_g_measurement" to="SQMeasurementsG" />
+        <mapping from="sq_g_outlier" to="SQOutliersG" />
+        <mapping from="sq_g_curve" to="SQCurveG" />
+        <mapping from="sq_g_outlier_curve" to="SQOutlierCurveG" />
+        <mapping from="sq_g_outlier_measurement" to="SQMeasurementsG" />
+        <mapping from="sq_a_measurement_overview" to="SQMeasurementsOverviewA" />
+        <mapping from="sq_a_outlier_overview" to="SQOutliersOverviewA" />
+        <mapping from="sq_a_curve_overview" to="SQCurveA" />
+        <mapping from="sq_a_outlier_curve_overview" to="SQOutlierCurveA" />
+        <mapping from="sq_a_outlier_measurement_overview" to="SQMeasurementsOverviewA" />
+        <mapping from="sq_b_measurement_overview" to="SQMeasurementsOverviewB" />
+        <mapping from="sq_b_outlier_overview" to="SQOutliersOverviewB" />
+        <mapping from="sq_b_curve_overview" to="SQCurveB" />
+        <mapping from="sq_b_outlier_curve_overview" to="SQOutlierCurveB" />
+        <mapping from="sq_b_outlier_measurement_overview" to="SQMeasurementsOverviewB" />
+        <mapping from="sq_c_measurement_overview" to="SQMeasurementsOverviewC" />
+        <mapping from="sq_c_outlier_overview" to="SQOutliersOverviewC" />
+        <mapping from="sq_c_curve_overview" to="SQCurveC" />
+        <mapping from="sq_c_outlier_curve_overview" to="SQOutlierCurveC" />
+        <mapping from="sq_c_outlier_measurement_overview" to="SQMeasurementsOverviewC" />
+        <mapping from="sq_d_measurement_overview" to="SQMeasurementsOverviewD" />
+        <mapping from="sq_d_outlier_overview" to="SQOutliersOverviewD" />
+        <mapping from="sq_d_curve_overview" to="SQCurveD" />
+        <mapping from="sq_d_outlier_curve_overview" to="SQOutlierCurveD" />
+        <mapping from="sq_d_outlier_measurement_overview" to="SQMeasurementsOverviewD" />
+        <mapping from="sq_e_measurement_overview" to="SQMeasurementsOverviewE" />
+        <mapping from="sq_e_outlier_overview" to="SQOutliersOverviewE" />
+        <mapping from="sq_e_curve_overview" to="SQCurveE" />
+        <mapping from="sq_e_outlier_curve_overview" to="SQOutlierCurveE" />
+        <mapping from="sq_e_outlier_measurement_overview" to="SQMeasurementsOverviewE" />
+        <mapping from="sq_f_measurement_overview" to="SQMeasurementsOverviewF" />
+        <mapping from="sq_f_outlier_overview" to="SQOutliersOverviewF" />
+        <mapping from="sq_f_curve_overview" to="SQCurveF" />
+        <mapping from="sq_f_outlier_curve_overview" to="SQOutlierCurveF" />
+        <mapping from="sq_f_outlier_measurement_overview" to="SQMeasurementsOverviewF" />
+        <mapping from="sq_g_measurement_overview" to="SQMeasurementsOverviewG" />
+        <mapping from="sq_g_outlier_overview" to="SQOutliersOverviewG" />
+        <mapping from="sq_g_curve_overview" to="SQCurveG" />
+        <mapping from="sq_g_outlier_curve_overview" to="SQOutlierCurveG" />
+        <mapping from="sq_g_outlier_measurement_overview" to="SQMeasurementsOverviewG" />
+
+        <mapping from="fix_sector_average_wq_0" to="FixingSectorAverageWQ0" />
+        <mapping from="fix_sector_average_wq_1" to="FixingSectorAverageWQ1" />
+        <mapping from="fix_sector_average_wq_2" to="FixingSectorAverageWQ2" />
+        <mapping from="fix_sector_average_wq_3" to="FixingSectorAverageWQ3" />
+        <mapping from="fix_analysis_events_wq" to="FixingAnalysisEventsWQ" />
+        <mapping from="fix_outlier" to="FixingOutlier" />
+        <mapping from="fix_wq_curve" to="FixingWQCurve" />
+        <mapping from="fix_wq_ls" to="FixingCalculatedPoint" />
+        <mapping from="fix_reference_events_wq" to="FixingReferenceEvents" />
+        <mapping from="fix_sector_average_dwt_0" to="FixingDeltaWtAverage0" />
+        <mapping from="fix_sector_average_dwt_1" to="FixingDeltaWtAverage1" />
+        <mapping from="fix_sector_average_dwt_2" to="FixingDeltaWtAverage2" />
+        <mapping from="fix_sector_average_dwt_3" to="FixingDeltaWtAverage3" />
+        <mapping from="fix_analysis_events_dwt" to="FixingDeltaWtAnalysis" />
+        <mapping from="fix_analysis_periods_dwt" to="FixingDeltaWtAnalysisPeriods" />
+        <mapping from="fix_reference_events_dwt" to="FixingReferenceEvents" />
+        <mapping from="fix_reference_period_dwt" to="FixingReferencePeriod" />
+        <mapping from="fix_sector_average_ls_deviation_0" to="FixingSectorDeviationLS0" />
+        <mapping from="fix_sector_average_ls_deviation_1" to="FixingSectorDeviationLS1" />
+        <mapping from="fix_sector_average_ls_deviation_2" to="FixingSectorDeviationLS2" />
+        <mapping from="fix_sector_average_ls_deviation_3" to="FixingSectorDeviationLS3" />
+        <mapping from="fix_sector_average_ls_0" to="FixingLSAverage0" />
+        <mapping from="fix_sector_average_ls_1" to="FixingLSAverage1" />
+        <mapping from="fix_sector_average_ls_2" to="FixingLSAverage2" />
+        <mapping from="fix_sector_average_ls_3" to="FixingLSAverage3" />
+        <mapping from="fix_deviation_ls" to="FixLSDeviation" />
+        <mapping from="fix_deviation_dwt" to="FixDeltaWtDeviation" />
+        <mapping from="fix_analysis_events_ls" to="FixLSAnalysis" />
+        <mapping from="fix_reference_events_ls" to="FixLSReference" />
+        <mapping from="fix_derivate_curve" to="FixingDerivedCurve" />
+        <mapping from="fix_derivate_curve.manualpoints" to="ManualPoints" />
+        <mapping from="fix_deltawt_curve.manualpoints" to="ManualPoints" />
+        <mapping from="fix_events_wqkms" to="FixPoints" />
+        <mapping from="qsectors" to="QSectors" />
+        <mapping from="gauge_discharge_curve" to="DischargeCurve" />
+        <mapping from="extreme_wq_curve" to="ExtremeWQCurve" />
+        <mapping from="extreme_wq_curve_base" to="ExtremeWQBaseCurve" />
+
+        <!-- Mappings for sediment load -->
+        <mapping from="sedimentload.ls.ta.coarse" to="SedimentLoadLSTACoarse" />
+        <mapping from="sedimentload.ls.ta.fine_middle" to="SedimentLoadLSTAFineMid" />
+        <mapping from="sedimentload.ls.ta.sand" to="SedimentLoadLSTASand" />
+        <mapping from="sedimentload.ls.ta.susp_sand" to="SedimentLoadLSTASuspSand" />
+        <mapping from="sedimentload.ls.ta.susp_sand_bed" to="SedimentLoadLSTASuspSandBed" />
+        <mapping from="sedimentload.ls.ta.suspended_sediment" to="SedimentLoadLSTASediment" />
+        <mapping from="sedimentload.ls.ta.suspended_load" to="SedimentLoadLSTASusp" />
+        <mapping from="sedimentload.ls.ta.total" to="SedimentLoadLSTATotal" />
+        <mapping from="sedimentload.ls.ta.bed_load" to="SedimentLoadLSTABed" />
+        <mapping from="sedimentload.ls.ta.bed_load_susp_sand" to="SedimentLoadLSTABedSusp" />
+
+        <mapping from="sedimentload.ls.m3a.coarse" to="SedimentLoadLSM3ACoarse" />
+        <mapping from="sedimentload.ls.m3a.fine_middle" to="SedimentLoadLSM3AFineMid" />
+        <mapping from="sedimentload.ls.m3a.sand" to="SedimentLoadLSM3ASand" />
+        <mapping from="sedimentload.ls.m3a.susp_sand" to="SedimentLoadLSM3ASuspSand" />
+        <mapping from="sedimentload.ls.m3a.susp_sand_bed" to="SedimentLoadLSM3ASuspSandBed" />
+        <mapping from="sedimentload.ls.m3a.suspended_sediment" to="SedimentLoadLSM3ASediment" />
+        <mapping from="sedimentload.ls.m3a.suspended_load" to="SedimentLoadLSM3ASusp" />
+        <mapping from="sedimentload.ls.m3a.total" to="SedimentLoadLSM3ATotal" />
+        <mapping from="sedimentload.ls.m3a.bed_load" to="SedimentLoadLSM3ABed" />
+        <mapping from="sedimentload.ls.m3a.bed_load_susp_sand" to="SedimentLoadLSM3ABedSusp" />
+
+        <mapping from="sedimentload.ta.coarse" to="SedimentLoadTACoarse" />
+        <mapping from="sedimentload.ta.fine_middle" to="SedimentLoadTAFineMid" />
+        <mapping from="sedimentload.ta.sand" to="SedimentLoadTASand" />
+        <mapping from="sedimentload.ta.susp_sand" to="SedimentLoadTASuspSand" />
+        <mapping from="sedimentload.ta.susp_sand_bed" to="SedimentLoadTASuspSandBed" />
+        <mapping from="sedimentload.ta.suspended_sediment" to="SedimentLoadTASediment" />
+        <mapping from="sedimentload.ta.suspended_load" to="SedimentLoadTASusp" />
+        <mapping from="sedimentload.ta.total" to="SedimentLoadTATotal" />
+        <mapping from="sedimentload.ta.bed_load" to="SedimentLoadTABed" />
+        <mapping from="sedimentload.ta.bed_load_susp_sand" to="SedimentLoadTABedSusp" />
+
+        <mapping from="sedimentload.m3a.coarse" to="SedimentLoadM3ACoarse" />
+        <mapping from="sedimentload.m3a.fine_middle" to="SedimentLoadM3AFineMid" />
+        <mapping from="sedimentload.m3a.sand" to="SedimentLoadM3ASand" />
+        <mapping from="sedimentload.m3a.susp_sand" to="SedimentLoadM3ASuspSand" />
+        <mapping from="sedimentload.m3a.susp_sand_bed" to="SedimentLoadM3ASuspSandBed" />
+        <mapping from="sedimentload.m3a.suspended_sediment" to="SedimentLoadM3ASediment" />
+        <mapping from="sedimentload.m3a.suspended_load" to="SedimentLoadM3ASusp" />
+        <mapping from="sedimentload.m3a.total" to="SedimentLoadM3ATotal" />
+        <mapping from="sedimentload.m3a.bed_load" to="SedimentLoadM3ABed" />
+        <mapping from="sedimentload.m3a.bed_load_susp_sand" to="SedimentLoadM3ABedSusp" />
+
+        <!-- Mappings for porosity from backend-DB -->
+        <mapping from="porosity" to="Porosity" />
+    </mappings>
+
+</themes>

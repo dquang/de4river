@@ -1,0 +1,943 @@
+\section{Fachdatenimport}
+
+Der Fachdatenimporter dient dazu, hydrologische und morphologische Gewässerdaten
+aus dem Dateisystem in die FLYS3-Datenbank zu importieren. Das Werkzeug
+orientiert sich hierbei an der Dateihierachie, so wie sie auch von Desktop-FLYS
+ausgelesen wird. Der Import Vorgang ist in zwei Phasen unterteilt:
+
+\begin{itemize}
+    \item Lesen aller Daten eines Gewässers aus dem Dateisystem.
+    \item Schreiben der erfolgreich eingelesenen Daten in die Datenbank.
+\end{itemize}
+
+Beim Import wird versucht, Datensätze nicht zu importieren,
+die bereits in der Datenbank vorhanden sind.
+Dies kann aber nicht immer eindeutig bestimmt werden,
+so dass vor dem Import geänderter Daten
+ein Löschen der entsprechenden Datensätze in der Datenbank notwendig sein kann,
+da sonst möglicherweise aus fachlicher Sicht Duplikate in der Datenbank vorhanden sind,
+geänderte Daten nicht importiert werden
+oder es zu unerwarteten Fehlern kommt.
+
+Sollte beim Lese- oder Schreib-Vorgang eines Gewässers ein Fehler auftreten, so
+werden sämtliche Daten des Gewässers verworfen. Beide Phasen zusammen bilden
+somit eine Transaktion.
+
+\textbf{Hinweis}
+\\Der Import geht, wie auch Desktop-FLYS, davon aus, dass die Dateien Latin-1
+encodiert vorliegen! Stellen Sie also sicher, dass das von Ihnen verwendete
+Encoding korrekt ist. Andernfalls ist es möglich, dass es während des Imports zu
+unerwarteten Problemen kommt.
+
+Der Importer ist ein in Java geschriebenes Werkzeug und kann von der Konsole aus
+gestartet werden. Sämtlich Konfigurationen können über sogenannte
+\textit{System-Properties} übergeben werden. Eine \textit{System-Property} wird
+dabei mittels \textit{-Dkey=value} beim Start übergeben. Im folgenden Beispiel
+würde der Importer mit einer Konfiguration \textit{flys.backend.importer.dry.run},
+welche den Wert \textit{true} gesetzt hat, gestartet.
+
+\begin{lstlisting}
+    java -Dflys.backend.importer.dry.run=true de.intevation.flys.importer.Importer
+\end{lstlisting}
+
+Auf gleiche Weise können dem Importer sämtliche Optionen zur Konfiguration
+beim Start mitgegeben werden. Im Folgenden werden die möglichen \textit{System-Properties} und
+ihre Auswirkung auf den Import genauer beschrieben. In den Kapiteln
+\ref{configuration} und \ref{start-hydr} wird zur Einfachheit jedoch ein
+Shellskript verwendet, das eine Standardkonfiguration vorgibt und den Importer
+mit allen erforderlichen Konfigurationen startet.
+
+
+\subsection{Importierte Daten}
+\label{import_data}
+In diesem Kapitel werden die verschiedenen Daten aufgelistet und erläutert, wie sie vom
+Importer eingelesen werden.
+
+\subsubsection{Wasserstandsmodell-Stammdaten und Höhenreferenz (Basis-*.wst-Datei)}
+Mit \textbf{-Dflys.backend.importer.skip.wst=true} kann der
+der Import von Wasserständen der Basis-*.wst-Datei unterdrückt werden.
+Aus der Basis-*.wst-Datei wird auch die Höhenreferenz und -einheit
+des Gewässers ausgelesen (z.B. 'NN + m'),
+sowie die Fließrichtung des Gewässers relativ zur Stationierung ermittelt.
+Der Import dieser Informationen in die Datenbank wird daher ebenfalls durch
+diese Option unterdrückt.
+Da es sich hierbei um Gewässer-Stammdaten handelt,
+kann diese Option erst genutzt werden, wenn sich das Gewässer bereits
+in der Datenbank befindet.
+
+\subsubsection{Pegel-Stammdaten (PEGEL.GLT, *.at und *.sta-Dateien)}
+Der Import von Pegel- und Stammdaten kann mit \textbf{'-Dflys.backend.importer.skip.gauges=true'}
+unterdrückt werden. Die PEGEL.GLT-Datei, die neben der Basis-*.wst-Datei liegt, wird zuerst
+ausgelesen. Es werden nur Stammdaten von Pegeln geladen, die in der PEGEL.GLT-Datei
+vermerkt sind.
+
+Die System-Property \textbf{flys.backend.main.value.types} kann einen String
+mit gültigen Typen von Stammdaten enthalten. Vorbelegt ist \textit{QWTD-}.
+
+\subsubsection{Streckenfavoriten (*.km-Dateien)}
+Der Import der Streckenfavoriten kann mit \textbf{-Dflys.backend.importer.skip.annotations=true}
+unterdrückt werden.
+Ausgehend vom Verzeichnis \textit{./Hydrologie} des Gewässers
+werden die Verzeichnisse \textit{./Basisdaten}, \textit{./Streckendaten}
+und \textit{../Morphologie/Streckendaten} nach *.km-Dateien durchsucht.
+
+Zur Klassifikation von Streckenfavoriten muss mittels\\
+\textbf{-Dflys.backend.importer.annotation.types=DATEI} der Pfad zu einer
+XML-Datei angegeben werden. In dieser Datei werden die Typen und Regeln
+festgelegt, anhand derer die Klassifikation während des Import-Vorgangs
+vorgenommen wird. Details hierzu befinden sich im Kapitel \ref{annotation-types}.
+
+\subsubsection{Bundeswasserstraßen-IDs}
+Der Import und die Zuweisung der Bundeswasserstraßen-IDs kann unterbunden werden
+mit \textbf{-Dflys.backend.importer.skip.bwastr=true}.
+Beim Import wird davon ausgegangen, dass sich die Datei \textbf{BWASTR\_ID.csv}
+neben der oder den zu importierenden gew-Dateien befindet.
+
+\subsubsection{Historische Abflusstafeln (*.at-Dateien)}
+Mit \textbf{'-Dflys.backend.importer.skip.historical.discharge.tables=true'}
+kann der Import von historischen Abflusstafeln
+unterdrückt werden. Diese Flagge wird nur ausgewertet, wenn überhaupt
+Pegel-Daten (siehe oben) importiert werden.
+
+% Mittels \textbf{-Dflys.backend.sta.parse.gauge.numbers=true} wird versucht, die
+% offiziellen Pegelnummern aus den Stammdaten zu extrahieren.
+% \textbf{Dies ist mit Vorsicht zu behandeln, denn die meisten STA-Dateien
+% enthalten invalide Pegelnummern.}
+
+\subsubsection{Zusätzliche Längsschnitte (*.zus, *.wst-Dateien)}
+Mit \textbf{-Dflys.backend.importer.skip.extra.wsts=true} kann
+der Import von zusätzlichen Längs\-schnitten
+unterdrückt werden. Es werden die *.zus- und *.wst-Dateien aus dem Verzeichnis
+\textit{../Zus.Laengsschnitte} relativ zur
+\textit{gewaesser}.wst-Datei betrachtet.
+
+\subsubsection{Fixierungen (*.wst-Dateien)}
+Der Import von Fixierungen kann mit \textbf{-Dflys.backend.importer.skip.fixations=true}
+unterdrückt werden. Es werden die *.wst-Dateien aus
+\textit{../Fixierungen} relativ zur \textit{gewaesser}.wst-Datei betrachtet.
+
+\subsubsection{Amtliche Linien (*.wst-Dateien)}
+Der Import von amtlichen Linien kann mit \textbf{-Dflys.backend.importer.skip.official.lines=true}
+unterdrückt werden. Es werden die \textit{Amtl\_Linien.wst}-Dateien aus dem
+Verzeichnis \textit{../Basisdaten} und \textit{../Fixierungen} relativ zur
+\textit{gewaesser.wst}-Datei betrachtet.
+
+Für die Zuordnung zu den Hauptwerten wird zudem die Datei
+\textit{Amtl\_Linien.config} benötigt.
+
+\subsubsection{Profilspuren (*.prf-Dateien)}
+Der Import von Profilspuren kann mit \textbf{-Dflys.backend.importer.skip.prfs=true}
+unterdrückt werden. Es werden rekursiv alle *.prf-Dateien aus \textit{../../..}
+relativ zur gewaesser.wst-Datei betrachtet.
+
+Vor dem Import von Profilspuren werden mit Hilfe
+eines Längen- und eines MD5-Summen-Vergleichs inhaltliche Duplikate
+ausgeschlossen.
+
+\subsubsection{Profilspuren (*.w80-Dateien)}
+Der Import von W80-Profilspuren kann mit \textbf{-Dflys.backend.importer.skip.w80s=true}
+unterdrückt werden. Es werden rekursiv alle *.w80-Dateien aus \textit{../../..}
+relativ zur \textit{gewaesser}.wst-Datei betrachtet.
+
+\subsubsection{Profilspuren (*.d50-Dateien)}
+Der Import von D50-Profilspuren kann mit \textbf{-Dflys.backend.importer.skip.da50s=true}
+unterdrückt werden. Es werden rekursiv alle *.d50-Dateien aus \textit{../../..}
+relativ zur \textit{gewaesser}.wst-Datei betrachtet.
+
+\subsubsection{Profilspuren (*.d66-Dateien)}
+Der Import von D66-Profilspuren kann mit \textbf{-Dflys.backend.importer.skip.da66s=true}
+unterdrückt werden. Es werden rekursiv alle *.d66-Dateien aus \textit{../../..}
+relativ zur \textit{gewaesser}.wst-Datei betrachtet.
+
+\subsubsection{Profilspuren (*.csv-Dateien)}
+Der Import von CSV-Profilspuren kann mit
+\textbf{-Dflys.backend.importer.skip.w80.csvs=true}
+unterdrückt werden.
+Es werden rekursiv alle *.csv-Dateien aus
+\textit{./Geodaesie/Querprofile/QP-Daten} im Verzeichnis des
+Gewässers betrachtet.
+
+\subsubsection{Hydraulische Kennzahlen (*.hyk)}
+Der Import von hydraulischen Kennzahlen kann mit \textbf{-Dflys.backend.importer.skip.hyks=true} unterdrückt
+werden. Es werden rekursiv alle *.hyk-Dateien aus \textit{../../..} relativ zur
+\textit{gewaesser}.wst-Datei betrachtet. Vor dem Import werden mit Hilfe eines Längen- und
+eines MD5-Summen-Vergleichs inhaltliche Duplikate ausgeschlossen.
+
+\subsubsection{Hochwassermarken (*.zus, *.wst)}
+Der Import von Hochwassermarken kann mit \textbf{-Dflys.backend.importer.skip.flood.water=true}
+unterdrückt werden. Es werden die *.zus- und *.wst-Dateien aus dem Verzeichnis
+\textit{../HW-Marken} relativ zur \textit{gewaesser}.wst-Datei betrachtet.
+
+\subsubsection{Hochwasserschutzanlagen (*.zus, *.wst)}
+Mit \textbf{-Dflys.backend.importer.skip.flood.protection=true}
+kann der Import von Hochwasserschutzanlagen
+unterdrückt werden. Es werden die *.zus- und *.wst-Dateien aus dem Verzeichnis
+\textit{../HW-Schutzanlagen} relativ zur \textit{gewaesser.wst}-Datei betrachtet.
+
+\subsubsection{Messstellen-Stammdaten}
+Mit \textbf{-Dflys.backend.importer.skip.measurement.stations=true}
+kann der Import von Messstellen-Stammdaten aus
+\textit{Morphologie/Basisdaten/Messstellen-Stammdaten.csv}
+unterdrückt werden.
+
+\subsubsection{Sohlhöhen (Peilungen)}
+Mit \textbf{-Dflys.backend.importer.skip.bed.height=true}
+kann der Import von Sohlhöhen-Peilungen unterdrückt werden.
+Es werden die CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/Sohlhoehen/Einzeljahre} geladen.
+
+\subsubsection{Sedimentdichte}
+Der Import der Sedimentdichte kann mit
+\textbf{-Dflys.backend.importer.skip.sediment.density=true}
+unterdrückt werden. Es werden die CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/Sedimentdichte} geladen.
+
+\subsubsection{Porosität}
+Der Import der Porositätsdaten kann mit
+\textbf{-Dflys.backend.importer.skip.porosity=true}
+unterdrückt werden. Es werden die CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/Porositaet} geladen.
+
+\subsubsection{Morphologische Breite}
+Mit \textbf{-Dflys.backend.importer.skip.morphological.width=true}
+kann der Import der morphologischen Breite unterdrückt werden.
+Es werden alle CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/morphologische\_Breite} geladen.
+
+\subsubsection{Fließgeschwindigkeit}
+Der Import der Fließgeschwindigkeit kann mit
+\textbf{-Dflys.backend.importer.skip.flow.velocity=true}
+unterdrückt werden. Es werden die CSV-Dateien aus dem Verzeichnis\\
+\textit{Morphologie/Geschwindigkeit\_Schubspannung/Modellrechnungen} und\\
+\textit{Morphologie/Geschwindigkeit\_Schubspannung/v-Messungen} geladen.
+
+\subsubsection{Sedimentfracht an Messstellen}
+Mit
+\textbf{-Dflys.backend.importer.skip.sediment.load=true}
+kann der Import der Sedimentfracht an Messstellen unterdrückt werden.
+Es werden die CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/Fracht/Messstellen} geladen.
+Dabei werden die Dateien aus den
+Unterverzeichnissen \textit{Einzeljahre}, \textit{Epochen}
+und \textit{amtliche Epochen} entsprechend als
+\textit{Einzeljahre}, \textit{Epochen} und
+\textit{amtliche Epochen} gespeichert.
+
+Voraussetzung für den Import ist, dass die Messstellen-Stammdaten
+bereits importiert sind.
+
+\subsubsection{Sedimentfracht (Längsschnitt-Daten)}
+Mit
+\textbf{-Dflys.backend.importer.skip.sediment.load.ls=true}
+kann der Import der Längsschnitt-Daten (auf freier Strecke)
+der Sedimentfracht unterdrückt werden.
+Es werden die CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/Fracht/Laengsschnitte} geladen.
+Dabei werden die Dateien aus den
+Unterverzeichnissen \textit{Einzeljahre}, \textit{Epochen}
+und \textit{amtliche Epochen} entsprechend als
+\textit{Einzeljahre}, \textit{Epochen} und
+\textit{amtliche Epochen} gespeichert.
+
+\subsubsection{Wasserspiegellagen für M-INFO}
+Mit \textbf{-Dflys.backend.importer.skip.waterlevels=true}
+kann der Import der für M-INFO spezifischen Wasserspiegellagen
+unterdrückt werden. Es werden die CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/Fixierungsanalyse/Wasserspiegellagen} geladen.
+
+\subsubsection{Wasserspiegeldifferenzen für M-INFO}
+Mit \textbf{-Dflys.backend.importer.skip.waterlevel.differences=true}
+kann der Import der für M-INFO spezifischen Wasserspiegeldifferenzen
+unterdrückt werden. Es werden die CSV-Dateien aus dem Verzeichnis
+\textit{Morphologie/Fixierungsanalyse/Wasserspiegeldifferenzen} geladen.
+
+\subsubsection{Transport-Abfluss-Beziehung}
+Mit \textbf{flys.backend.importer.skip.sq.relation=true}
+kann der Import der Daten für die Transport-Abfluss-Beziehung
+unterdrückt werden. Es werden die CSV-Dateien unter
+\textit{Feststofftransport-Abfluss-Beziehung} geladen.
+
+Voraussetzung für den Import ist, dass die Messstellen-Stammdaten
+bereits importiert sind.
+
+\subsection{Klassifikation von Streckenfavoriten}
+\label{annotation-types}
+Streckenfavoriten werden aus KM-Dateien importiert. Um die einzelnen Einträge
+einer Kategorie (Brücke, Pegel, etc.) zuzuordnen, kann eine XML angegeben werden,
+in der Regeln für diese Klassifikation definiert werden. Schematisch gliedert
+sich diese Datei in die zwei Bereiche 'types' und 'patterns':
+
+\begin{lstlisting}
+    <annotation>
+        <types>
+            <type>...</type>
+            <type>...</type>
+            ...
+        </types>
+        <patterns>
+            <pattern>...</pattern>
+            <pattern>...</pattern>
+            ...
+        </patterns>
+    </annotation>
+\end{lstlisting}
+
+In der Sektion \textit{types} werden die Kategorien vereinbart, in die klassifiziert
+werden soll. Dies geschieht mit entsprechenden Zeilen in der XML Datei. Es folgt
+ein Auszug aus einer solchen Datei:
+
+\begin{lstlisting}
+  <type name="Pegel"/>
+  <type name="Br%*ü*)cke"/>
+  ...
+  <type name="Sonstige" default="true"/>
+\end{lstlisting}
+
+Das Attribut 'default' darf maximal einmal vergeben werden und besagt, dass diese
+Kategorie gewählt werden soll, wenn keine andere Kategorie zugeordnet werden kann.
+
+In der Sektion 'patterns' werden dann die Regeln definiert, die einzelne Einträge
+den zuvor definierten Kategorien zuordnet. Hierfür können zwei Arten von
+Definitionen angegeben werden:
+
+\begin{lstlisting}
+  <file pattern="^Br%*ü*)cken$" type="Br%*ü*)cke"/>
+\end{lstlisting}
+
+oder
+
+\begin{lstlisting}
+  <line pattern="^Br%*ü*)cke[:\s].*$" type="Br%*ü*)cke"/>
+\end{lstlisting}
+
+Die erste Variante bestimmt die Kategorie, die pro KM-Datei gelten soll.
+\textit{pattern} ist hierbei ein regulärer Ausdruck, der auf den Dateinamen
+angewandt wird. Passt der Name der Datei auf den regulären Ausdruck, wird
+\textit{type} als Vorgabe angenommen. Treffen mehrere \textit{file}-Regeln zu,
+wird der erste Treffer angewandt. Findet keine der \textit{file}-Regeln Anwendung, wird
+die Kategorie ausgewählt, die in der \textit{types}-Section das Attribut
+\textit{default} gesetzt hat.
+
+Die zweite Regel-Variante \textit{line} wird auf jeden Eintrag innerhalb einer KM-Datei
+auf den Bezeichner der Streckenfavoriten angewandt. Als Muster dient auch hier
+ein regulärer Ausdruck, der über das Attribut \textit{pattern} definiert wird.
+Die Kategorie wird im Trefferfall über das Attribut \textit{type} bestimmt.
+Treffen mehrere Regeln zu, wird die Kategorie gewählt, die zum ersten Treffer
+gehört. Trifft keine Regel zu, wird der Eintrag der Kategorie zugeteilt, die für
+die beinhaltende Datei als Vorgabe gilt.
+
+
+\subsection{Konfiguration}
+\label{configuration}
+Zum Starten des Importers ist es notwendig, in der Datei
+\textit{./run\_hydr\_morph.sh} die Variablen am Anfang der Datei
+anzupassen. Im folgenden werden notwendige und optionale Einstellungen
+beschrieben, die beim Starten des Importers berücksichtigt werden. Folgende
+Einstellungen sind zwangsläufig an die bestehende Umgebung anzupassen:
+
+\textbf{BACKEND\_USER}
+\\Der Nutzername, der zum Verbinden zur Datenbank verwendet werden soll.
+
+\textbf{BACKEND\_PASS}
+\\Das Passwort, welches in Kombination mit \textbf{BACKEND\_USER} zum Verbinden
+zur Datenbank verwendet werden soll.
+
+\textbf{BACKEND\_HOST}
+\\Der Datenbank-Host. In der Regel sollte hier \textit{localhost} eingetragen
+werden, da es empfohlen wird, den Importer auf dem selben Host zu starten, auf
+dem auch die Datenbank läuft.
+
+\textbf{BACKEND\_PORT}
+\\Der Port auf dem die Datenbank zu erreichen ist. Bei einer Oracle XE Instanz
+z.B.: \textit{1521}, sofern nicht anders konfiguriert.
+
+\textbf{BACKEND\_NAME}
+\\Der Name der Datenbank Instanz. Beispielsweise \textit{XE} bei einer Oracle XE
+Instanz.
+
+\textbf{BACKEND\_DB\_PREFIX}
+\\Der Präfix zum Aufbau einer Datenbankverbindung. Für Oracle z.B.: \textit{jdbc:oracle:thin:@}.
+
+\textbf{BACKEND\_DB\_DRIVER}
+\\Der Name des JDBC-Treibers, der es erlaubt das Protokoll der Datenbank zu
+sprechen. Im Falle einer Oracle XE wäre dies z.B.: \textit{oracle.jdbc.OracleDriver}.
+
+\textbf{BACKEND\_DB\_DIALECT}
+\\Der Hibernate-Dialekt, den die Datenbank versteht. Im Falle einer Oracle-XE
+wäre dies z.B.: \textit{org.hibernate.dialect.OracleDialect}.
+
+
+Weitere Details zum Verbinden zu einer Oracle Datenbank finden Sie unter\\
+\href{http://www.orafaq.com/wiki/JDBC}{http://www.orafaq.com/wiki/JDBC}.
+
+Alle weiteren Einstellungen sind optional anpassbar:
+
+\textbf{LOG4J\_CONFIG}
+\\Der Fachdatenimport verwendet die externe Bibliothek \textit{Apache Log4J} zum Loggen
+von Informationen. Dazu ist es notwendig eine entsprechende Konfiguration beim
+Start anzugeben. \textit{LOG4J\_CONFIG} verweist in diesem Fall auf eine externe
+Datei zur Konfiguration von Log4J. Im Standardfall wird die Datei
+\textit{conf/log4j2.xml} verwendet, welche eine sinnvolle Standardkonfiguration
+enthält. Sollten Sie diese Konfiguration verwenden, wird beim Import eine
+Log-Datei namens \textit{import.log} erstellt, die maximal 100 MB groß werden
+kann. Sollte die Log-Datei größer als 100 MB anwachsen, wird die aktuelle Datei
+nach \textit{import.log.1} umbenannt und eine neue Datei \textit{import.log}
+wird begonnen. Maximal werden 10 Log-Dateien gespeichert. Für weitere Details
+zu Log4J siehe Online Dokumentation unter
+\href{http://logging.apache.org/log4j}{http://logging.apache.org/log4j}
+
+
+\textbf{IMPORTER\_MAINVALUE\_TYPES}
+\\Diese Einstellung erlaubt die Angabe eines Textes, der aus den gültigen Typen
+für Hauptwerte zusammengesetzt ist. \textit{QWTD-} ist standardmäßig gesetzt.
+
+\textbf{IMPORTER\_ANNOTATION\_TYPES}
+\\Diese Einstellung verweist auf eine Datei (relativ zum Ort der \textit{run\_hydr\_morph.sh}
+im Dateisystem), die die möglichen Typen von Streckenfavoriten und deren Regeln
+definiert. Siehe hierzu auch Kapitel \ref{annotation-types}.
+
+
+Die im folgenden beschriebenen Einstellungen können jeweils die Werte
+\textit{true} oder \textit{false} annehmen und sind optional anzupassen.
+
+\textbf{IMPORTER\_DRY\_RUN}
+\\Falls \textit{true} gesetzt wird, wird der Import nur simuliert. Es werden
+keine Daten in die Datenbank geschrieben. Die Log-Dateien können dann verwendet werden, um Fehler in den Daten vor dem Schreiben in die
+Datenbank zu ermitteln.
+
+Die weiteren Optionen haben selbsterklärende Namen und
+entsprechen je einer System-Property,
+die in Kapitel \ref{import_data} bereits erläutert wurde.
+
+\subsection{Fehler und Warnungen}
+Selbsterklärende Meldungen sind hier nicht alle aufgeführt.
+
+\subsubsection{Fehler}
+
+\textbf{error while parsing gew}
+\\Die GEW-Datei ist fehlerhaft oder konnte nicht geöffnet werden.
+
+\textbf{River not yet in database. You cannot skip importing waterlevel model.}
+\\\textbf{-Dflys.backend.importer.skip.wst=true} wurde verwendet,
+obwohl sich das Gewässer noch nicht in der Datenbank befindet
+(siehe Kapitel \ref{import_data}).
+
+\textbf{WST: Stations in 'XYZ' near line \# not ordered. File rejected.}
+\\Die Stationen in einer WST-Datei sind nicht konsequent auf- oder
+absteigend geordnet. Die Datei wird verworfen.
+
+\textbf{File 'XYZ' is broken!}
+\\Die Datei XYZ ist inkonsistent und führt zu Fehlern.
+
+\textbf{Error while parsing file for morph. width.}
+\\Beim Lesen der morphologischen Breite trat ein Fehler auf.
+
+\textbf{Error while storing flow velocity model.}
+\\Beim Schreiben eines Fließgeschwindigkeitsmodells trat ein Fehler auf.
+
+\textbf{Error while storing flow velocity measurement.}
+\\Beim Schreiben einer Fließgeschwindigkeitsmessung trat ein Fehler auf.
+
+\textbf{Error while storing sediment yield.}
+\\Beim Schreiben einer Sedimentablagerung trat ein Fehler auf.
+
+\textbf{Error while storing waterlevel diff.}
+\\Beim Schreiben einer Wasserspiegeldifferenz trat ein Fehler auf.
+
+\textbf{No core data file '...' found}
+\\Keine \textit{Stammdaten\_Messstellen.csv} gefunden.
+
+\textbf{No measurement stations found at km \#}
+\\Für eine in einer SQ-Beziehungs-Datei gegebene Station liegt
+keine Messstelle vor.
+
+\textbf{No km for measurement station: Can not reference measurement station: ...}
+\\In der gegebenen Zeile einer SQ-Beziehungs-Datei liegt ist keine
+Station gegeben. Damit ist keine Zuordnung zu einer Messstelle möglich.
+Die Zeile wird verworfen.
+
+\textbf{Incomplete SQ-relation row (missing a, b, Qmax or parameter): ...}
+\\In der gegebenen Zeile einer SQ-Beziehungs-Datei liegt mindestens
+ein Pflicht-Wert nicht vor. Die Zeile wird verworfen.
+
+\textbf{Error while storing sq relation.}
+\\Beim Schreiben einer S(Q) Beziehung trat ein Fehler auf.
+
+\textbf{Unknown bed height type: \#. File ignored.}
+\\Die gegebene Aufnahmeart ist unbekannt. Die Datei wird ignoriert.
+\\Bekannte Aufnahmearten:
+\begin{itemize}
+\item Querprofile
+\item Flächenpeilung
+\item Flächen- u. Querprofilpeilungen
+\item DGM
+\item TIN
+\item Modell
+\end{itemize}
+
+\textbf{Error reading PRF file.}
+\\Beim Lesen einer PRF-Datei trat ein Fehler auf.
+
+\textbf{Error closing PRF file.}
+\\Beim Schließen einer PRF-Datei trat ein Fehler auf.
+
+\textbf{HYK 1: not enough elements in line \#}
+\\Eine Zeile in einer HYK-Datei hat nicht genügend Elemente.
+
+\textbf{HYK 2: not enough elements in line \#}
+\\Eine Zeile in einer HYK-Datei hat nicht genügend Elemente.
+
+\textbf{HYK 5: not enough elements in line \#}
+\\Eine Zeile in einer HYK-Datei hat nicht genügend Elemente.
+
+\textbf{HYK 6: not enough elements in line \#}
+\\Eine Zeile in einer HYK-Datei hat nicht genügend Elemente.
+
+\textbf{HYK: parsing num zones, bottom or top height failed in line \#}
+\\Die Anzahl der Zonen oder Daten über die Zonen sind nicht korrekt.
+
+\textbf{HYK: HYK: number of flow zones mismatches in line \#}
+\\Die Anzahl der Zonen oder Daten über die Zonen sind nicht korrekt.
+
+\textbf{HYK: cannot parse number in line \#}
+\\Eine Zahl wurde erwartet.
+
+\textbf{HYK: Error reading file.}
+\\Beim Lesen einer HYK-Datei trat ein Fehler auf.
+
+\textbf{HYK: Error closing file.}
+\\Beim Schließen einer HYK-Datei trat ein Fehler auf.
+
+\textbf{Null Start time will be ignored}
+\\Für ein Zeitintervall wurde keine Anfangszeit gegeben.
+
+\textbf{Skipping malformed w80csv line \#}
+\\Die genannte Zeile einer QP-Daten-CSV-Datei wurde verworfen
+(z.B.\ weil keine Höhe gegeben war).
+
+\subsubsection{Warnungen}
+\textbf{No unit given. Waterlevel-model WST-file has to be imported already.}
+\\Es wird keine Höhenreferenz mit dazugehöriger Einheit importiert.
+Dies ist nur möglich, wenn sich die Gewässer-Stammdaten bereits
+in der Datenbank befinden (siehe Kapitel \ref{import_data}).
+
+\textbf{no unit and height reference found. Using default.}
+\\Aus einer WST-Datei konnte keine Höhenreferenz
+mit dazugehöriger Einheit ausgelesen werden.
+Als Default wird 'm ü. unbekannte Referenz' verwendet.
+Dies hat nur im Falle der Basis-WST-Datei einen Einfluss auf den Import.
+
+\textbf{annotation type file 'XYZ' is not readable.}
+\\Die Datein XYZ kann nicht gelesen werden.
+
+\textbf{cannot parse annotation types file.}
+\\Während der Verarbeitung der Annotationsdatei ist Fehler aufgetreten.
+
+\textbf{Cannot read directory.}
+\\Verzeichnis konnte nicht gelesen werden.
+
+\textbf{no official lines wst file found}
+\\Keine Datei mit amtlichen Linien gefunden.
+
+\textbf{Invalid bwastr-id line: ...}
+\\Aus einer Zeile in \textbf{BWASTR\_ID.csv} konnte kein Gewässer bzw.
+Bundeswasserstraßen-ID gelesen werden.
+
+\textbf{cannot read fixations wst file directory}
+\\Das Verzeichnis mit den Fixierungen kann nicht gelesen werden.
+
+\textbf{cannot read extra longitudinal wst file directory}
+\\Das Verzeichnis mit den zusätzlichen Längsschnitten kann nicht gelesen werden.
+
+\textbf{cannot read gauges from 'XYZ'}
+\\Die Pegelgültigkeiten können nicht gelesen werden.
+
+\textbf{'XYZ' does not exist. Gauge ignored.}
+\\Ein in PEGEL.GLT gegebener Pegel wird ignoriert,
+weil die gegebene *.sta- oder *.at-Datei nicht vorhanden ist.
+
+\textbf{HYK file 'XYZ' seems to be a duplicate.}
+\\Die HYK-Datei wurde unter anderem Namen aber gleichen Inhalts bereits
+gefunden.
+
+\textbf{PRF file 'XYZ' seems to be a duplicate.}
+\\Die PRF-Datei wurde unter anderem Namen aber mit gleichem Inhalt bereits
+gefunden.
+
+\textbf{Skip invalid SedimentYield: time interval or unit null!}
+\\Eine Sedimentablagerung ist ungültig und wurde ausgelassen.
+
+\textbf{skip flow velocity model: No discharge zone specified.}
+\\Da kein Abflussbereich angegeben wurde, wurde das Fließgeschwindigkeitsmodell ausgelassen.
+
+\textbf{skip invalid waterlevel - no unit set!}
+\\Ein einheitenloser Wasserstand wurde ausgelassen.
+
+\textbf{Cannot parse time range.}
+\\Das Zeitformat wurde nicht erkannt.
+
+\textbf{skip invalid data line \#}
+\\Ungültige Datenzeile wurde ausgelassen.
+
+\textbf{Error while parsing sq relation row \#}
+\\Eine Zeile in der S(Q)-Beziehung ist ungültig.
+
+\textbf{GLT: no gauge found in line \#}
+\\In der GLT-Datei wurde ein Pegel erwartet, aber nicht gefunden.
+
+\textbf{GLT: line \# has not enough columns.}
+\\Eine Zeile in der Pegelgültigkeitsdatei hat nicht genug Spalten.
+
+\textbf{Error while parsing flow velocity values.}
+\\Invalide Datenzeile in einer Datei mit einer Fließgeschwindigkeitsmessung.
+
+\textbf{skip invalid data line: \#}
+\\Invalide Datenzeile (weniger als acht Spalten)
+in einer Datei mit einer Fließgeschwindigkeitsmessung.
+
+\textbf{Unparseable flow velocity values: ...}
+\\Invalide Werte in einer Datenzeile einer Fließgeschwindigkeitsmessung.
+
+\textbf{skip invalid waterlevel line: \#}
+\\Invalide Datenzeile in einer Datei mit Wasserstandsdifferenzen.
+
+\textbf{Error while parsing value: \#}
+\\Invalide Datenzeile in einer Datei mit Wasserstandsdifferenzen.
+
+\textbf{Error while parsing station: \#}
+\\Invalide Datenzeile in einer Datei mit Wasserstandsdifferenzen.
+
+\textbf{skip invalid MainValue part: \#}
+\\Invalide Datenzeile in einer Datei Fließgeschwindigkeitsmodellen.
+
+\textbf{skip invalid gauge part: \#}
+\\Invalide Datenzeile in einer Datei Fließgeschwindigkeitsmodellen.
+
+\textbf{Error while parsing Q value: $<Q>$}
+\\Invalide Datenzeile in einer Datei Fließgeschwindigkeitsmodellen.
+
+\textbf{skip invalid data line: \#}
+\\Invalide Datenzeile in einer Datei Fließgeschwindigkeitsmodellen.
+
+\textbf{Error while parsing flow velocity values.}
+\\Invalide Datenzeile in einer Datei Fließgeschwindigkeitsmodellen.
+
+\textbf{Error while parsing number from data row: \#}
+\\In der eingelesenen Zeile konnte keine Zahl gefunden werden.
+
+\textbf{Unknown meta line: \#}
+\\Meta-Informationen unbekannt. Werden ignoriert.
+
+\textbf{Unparseable numbers in '...'}
+\\Invalide Zahlen in einer Datenzeile in einer Datei mit Sedimentdichten.
+
+\textbf{skip invalid data line: \#}
+\\Invalide Datenzeile in einer Datei mit Sedimentdichten wird ignoriert.
+
+\textbf{SDP: No km nor density given. Skip line}
+\\Weder Station noch Dichte gegeben in einer Datenzeile in einer Datei mit Sedimentdichten.
+Zeile wird ignoriert.
+
+\textbf{STA file is empty}
+\\Stammdatendatei ist leer oder hat zu wenige Zeilen.
+
+\textbf{STA file has not enough lines}
+\\Stammdatendatei ist leer oder hat zu wenige Zeilen.
+
+\textbf{STA file is too short}
+\\Stammdatendatei ist leer oder hat zu wenige Zeilen.
+
+\textbf{First line in STA file is too short.}
+\\Die erste Zeile der Stammdaten ist zu kurz.
+
+\textbf{STA: second line is too short}
+\\Die zweite Zeile ist zu kurz.
+
+\textbf{STA: parsing of the datum of the gauge failed}
+\\Die Station in der Stammdatendatei konnte nicht gelesen werden.
+
+\textbf{STA: 'XYZ' is not a valid long number.}
+\\Die Pegelnummer ist invalide.
+
+\textbf{STA: Not enough columns for aeo and datum}
+\\AEO und Pegelnullpunkt können nicht ermittelt werden.
+
+\textbf{STA: cannot parse aeo or datum.}
+\\AEO oder Pegelnullpunkt sind invalide.
+
+\textbf{STA: value not parseable in line \#}
+\\Wert ist nicht als Zahl zu interpretieren (meist Kommentare).
+
+\textbf{STA: Invalid date ...}
+\textbf{STA: Invalid start date ...}
+\textbf{STA: Invalid end date ...}
+\textbf{STA: Need start date.}
+\\Mögliche Datumsangabe zu Hauptwert ist kein gültiger Zeitraum.
+
+\textbf{PRF: cannot open file $<FILE>$}
+\\Die PRF-Datei kann nicht geöffnet werden.
+
+\textbf{PRF: First line does not look like a PRF data pattern.}
+\\Erste Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: premature EOF. Expected integer in line 2}
+\\Zweite Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: Expected $<num>$ in line 2}
+\\Zweite Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: invalid integer in line 2}
+\\Zweite Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: premature EOF. Expected pattern for km extraction}
+\\Vierte Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: line 4 does not look like a PRF km extraction pattern.}
+\\Vierte Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: premature EOF. Expected skip row count.}
+\\Fünfte Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: line 5 is not an positive integer.}
+\\Fünfte Zeile entspricht nicht der PRF-Spezifikation.
+
+\textbf{PRF: cannot extract km in line \#}
+\\Der gegebenen Zeile konnte die Station nicht entnommen werden.
+
+Das PRF-Format ist komplex! Bei oben genannten Fehlern sollten ggf. weitere
+Information zur genaueren Analyse herangezogen werden.
+
+\textbf{cannot access WST file $FILE$}
+\\Die WST-Datei konnte nicht gefunden werden.
+
+\textbf{Found an invalid row in the AT file.}
+\\Eine Zeile in einer AT-Datei ist nicht korrekt.
+
+\textbf{AT: invalid number $XYZ$}
+\\Eine Zahl wurde erwartet aber nicht gefunden.
+
+\textbf{Try to add Q range without waterlevel!}
+\\Q-Bereich ohne Wasserstand gefunden.
+
+\textbf{Error while parsing Q range: \#}
+\\Invalider Q-Bereich
+
+\textbf{skip invalid waterlevel line: \#}
+\\Ungültige Wasserstands-Zeile.
+
+\textbf{Error while parsing number values: \#}
+\\Ungültige Zahlenwerte.
+
+\textbf{ANN: not enough columns in line \#}
+\\Nicht genug Zeichenspalten in KM-Datei
+
+\textbf{ANN: invalid number in line \#}
+\\Ungültige Zahl.
+
+\textbf{ANN: cannot parse 'Unterkante' in line \#}
+\\Die Unterkante in einer KM-Datei konnte nicht gelesen werden.
+
+\textbf{ANN: cannot parse 'Unterkante' or 'Oberkante' in line \#}
+\\Unter- oder Oberkannte liegen in einem falschen Format vor.
+
+\textbf{ANN: duplicated annotation 'XYZ' in line \#}
+\\Ein Duplikat eines Streckenfavoriten wurde gefunden.
+
+\textbf{ANN: 'XYZ' is not a directory.}
+\\Unterverzeichnis konnte nicht geöffnet werden.
+
+\textbf{ANN: cannot list directory 'XYZ'}
+\\Unterverzeichnis konnte nicht durchsucht werden.
+
+\textbf{BHP: Meta line did not match any known type: \#}
+\\Meta-Informationen unbekannt. Werden ignoriert.
+
+\textbf{BHP: Error while parsing timeinterval!}
+\\Ungültiges Zeitinterval.
+
+\textbf{BHP: Error while parsing year!}
+\\Ungültige Jahresangabe.
+
+\textbf{BHP: Error while parsing sounding width!}
+\\Unbekannte Peilungsbreite.
+
+\textbf{BHP: Error while parsing range!}
+\\Bereichsangabe fehlerhaft.
+
+\textbf{BHP: Could not parse sounding width in line '...'. -$>$ Set default value '0'}
+\\Peilbreite in gegebener Zeile wurde nicht als gültige Zahl erkannt. Setze 0.
+
+\textbf{Unparseable number in data row: \#}
+\\In der gegebenen Zeile wurde eine Zahl erwartet,
+es konnte aber an entsprechender Stelle nichts als solche gelesen werden.
+
+\textbf{MWP: Unknown meta line: \#}
+\\Meta-Informationen unbekannt. Werden ignoriert.
+
+\textbf{MWP: skip invalid data line: \#}
+\\Ungültige Datenzeile wurde übersprungen.
+
+\textbf{MWP: unparseable number in data row: \#}
+\\Falsche Zahlenformat.
+
+\textbf{ANNCLASS: rule has no name}
+\\Klassifizierungsregel für Streckenfavoriten hat keinen Namen.
+
+\textbf{ANNCLASS: pattern has no 'pattern' attribute.}
+\\Klassifizierungsmuster für Streckenfavoriten hat kein Muster.
+
+\textbf{ANNCLASS: pattern has unknown type 'XYZ'}
+\\Klassifizierungsmuster für Streckenfavoriten konnte keinem Typ zugeordnet werden.
+
+\textbf{ANNCLASS: pattern 'XYZ' is invalid.}
+\\Klassifizierungsmuster für Streckenfavoriten ist ungültig.
+
+\textbf{BSP: Error while parsing data row.}
+\\Ungültige Datenzeile.
+
+\textbf{duplicate station '...': -$>$ ignored}
+\\Duplikat einer Station. Wird ignoriert.
+
+\textbf{BSP: unparseable height ...}
+\\Nicht lesbare Sohlhöhe in einer Sohlhöhen-Datei.
+
+\textbf{BSP: unparseable uncertainty value ...}
+\\Nicht lesbare Unsicherheit in einer Sohlhöhen-Datei.
+
+\textbf{BSP: unparseable data gap ...}
+\\Nicht lesbare Datenlücke in einer Sohlhöhen-Datei.
+
+\textbf{BSP: unparseable sounding width ...}
+\\Nicht lesbare Peilbreite in einer Sohlhöhen-Datei.
+
+\textbf{BSP: unparseable width ...}
+\\Nicht lesbare Breite in einer Sohlhöhen-Datei.
+
+\textbf{BSP: unparseable value in data row.}
+\\Nicht lesbare Werte in einer Sohlhöhen-Datei.
+
+\textbf{SYP: Unknown meta line: \#}
+\\Meta-Informationen unbekannt. Werden ignoriert.
+
+\textbf{SYP: skip invalid data line \#}
+\\Ungültige Datenzeile wurde übersprungen.
+
+\textbf{SYP: Error while parsing numbers in \#}
+\\Ungültige Zahlenformatierung.
+
+\textbf{SYP: Unknown time interval string 'XYZ'}
+\\Falsches Datumformat.
+
+\textbf{SYP: Error while parsing years 'XYZ'}
+\\Falsches Jahreszahlformat.
+
+\textbf{SYP: Error while parsing ranges of 'XYZ'}
+\\Bereichsangaben fehlerhaft.
+
+\textbf{SYP: Unknown grain fraction 'XYZ'}
+\\Unbekannte Kornfraktion.
+
+\textbf{WST: invalid number.}
+\\Ungültige Zahl.
+
+\textbf{WST: km $km$ ($<Zeile>$) found more than once. -$>$ ignored.}
+\\Ein Kilometer ist doppelt in einer WST-Datei enthalten.
+
+\textbf{WST: String ... could not be interpreted as valid timestamp}
+\\In einer Kopfzeile einer WST-Datei konnte ein Eintrag nicht als Datum erkannt werden.
+
+\textbf{HYK: zone coordinates swapped in line \#}
+\\Fließzonenkordinaten wurden in umgekehrter Reihenfolge angeben.
+
+\textbf{BHS: Skip invalid file 'XYZ'}
+\\Die Inhalte der Datei sind ungültig.
+
+\textbf{ISQ: Unable to store sq relation value.}
+\\S(Q) Beziehung konnte nicht gespeichert werden.
+
+\textbf{ISQ: Cannot determine sq relation without time interval.}
+\\Einer S(Q)-Beziehung ist keine zeitliche Gültigkeit zugeordnet.
+
+\textbf{Unparseable ... in sq relation row: ...}
+\\Der gegebene Wert in der gegebenen Zeile konnte nicht als Zahl gelesen werden.
+
+\textbf{IWD: skip invalid waterlevel difference - no unit set!}
+\\Wasserstandsdifferenz hat keine Einheit.
+
+\textbf{BHE: Skip file - invalid current elevation model.}
+\\Höhenmodell ungültig.
+
+\textbf{BHE: Skip file - invalid time range.}
+\\Zeitbereich ungültig.
+
+\textbf{BHE: Skip file - invalid km range.}
+\\Kilometerbereich ungültig.
+
+\textbf{No upper value for range found in ...}
+\textbf{No range found for measurement station '...'}
+\\Streckengültigkeit einer Messstelle in \textit{Stammdaten\_Messstellen.csv} ungültig.
+
+\textbf{invalid gauge found: ...}
+\\Kein gültiger Pegel zur Messstelle gegeben.
+
+\textbf{Found invalid observation time ...}
+\textbf{Observation time date invalid: ...}
+\textbf{Observation time date not parseable: ...}
+\\Kein gültiger zeitlicher Bezug zur Messstelle gegeben.
+
+\textbf{No gauge found for measurement station '...'}
+\\Der in \textit{Stammdaten\_Messstellen.csv} gegebene Pegel existiert nicht in der Datenbank.
+
+\subsection{Hinweise zum Betrieb}
+Aufgrund des hohen Speicherverbrauchs des Importers wird empfohlen, der JVM
+mindestens 8 GiB Hauptspeicher zuzuordnen. Dies kann beim Starten des Java
+Prozesses mittels folgendem Parameter '-Xmx8192m' getan werden. Das
+Shellskript zum Starten des Importers setzt diesen Wert standardmäßig.
+Besonders speicherintensiv ist der Import der HYKs und der PRFs.
+Hier ist es unter Umständen empfehlenswert, diese in zwei oder drei
+Schritten zu importieren. Zuerst die sonstigen hydrologischen Daten importieren;
+anschließend einen Import-Vorgang ausschließlich für HYKs starten; anschließend
+einen Import-Vorgang für PRFs starten. Siehe Kapitel \ref{configuration} für
+weitere Informationen zum Aktivieren/Deaktivieren einzelner Dateitypen beim
+Import.
+
+
+\subsection{Starten des Fachdaten Importers}
+\label{start-hydr}
+Der Fachdaten Importer wird mit Hilfe eines Shellskripts von einer Konsole
+gestartet. Dazu folgenden Befehl ausführen:\\
+
+\begin{lstlisting}
+    ./run_hydr_morph.sh pfad/zur/beispiel.gew
+\end{lstlisting}
+
+Der übergebene Pfad muss auf eine valide *.gew Datei verweisen (bekannt aus
+Desktop-FLYS). Wichtig für den Importer sind in dieser Datei die Zeilen, die mit
+\textit{WSTDatei:} beginnen. In ihnen wird der Pfad zu der zentralen WST-Datei
+des jeweiligen Gewässers angegeben. Alle anderen importierten Dateien werden in
+ihrer Lage im Dateisystem relativ zur Lage dieser Datei betrachtet.
+Ebenfalls wichtig ist die Zeile beginnend mit \textit{Gewässer:}
+in der der Name des Gewässers festgelegt wird.
+
+Zusätzlich kann die Datei eine Zeile beginnend mit \textit{uuid:}
+enthalten. Dahinter kann eine
+UUID\footnote{\url{http://de.wikipedia.org/wiki/UUID}} stehen,
+die als eindeutiger Bezeichner des Datensatzes verwendet wird
+(derzeit für die Zuordnung der Darstellung von Gewässern in der
+interaktiven Einstiegskarte zu Datensätzen in der Datenbank).
+
+Nachdem der Prompt der Konsole zurückkehrt, ist der Import abgeschlossen oder es
+ist ein Fehler aufgetreten. Weitere Informationen entnehmen Sie der Log-Datei.
+
+Um einen Gewässerdatensatz in einem Durchlauf (inkl.\ Geodaten)
+zu importieren, kann auch das Skript \textit{import\_river.sh} verwendet werden.
+
+Details zur Verwendung erhalten Sie auf der Kommandozeile mit
+\begin{lstlisting}
+    ./import_river.sh --help
+\end{lstlisting}
+Alternativ können auch in diesem Skript einige Variablen
+(\textit{DEFAULT\_*}) angepasst werden.
+Das Logging kann in diesem Fall nicht wie oben beschrieben
+über \textit{conf/log4j2.xml} angepasst werden, da hier
+mehrere Log-Dateien geschrieben werden müssen.

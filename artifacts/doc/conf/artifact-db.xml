@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<database>
+    <!-- This Section configures the Settings for connecting to the
+         Artifact-Database instance. e.g. SQLite -->
+    <user>SA</user>
+    <password></password>
+    <!-- For use with a postgresql database use the appropriate driver-->
+    <!--driver>org.postgresql.Driver</driver-->
+    <url>jdbc:h2:${artifacts.config.dir}/../artifacts-data/artifactsdb/artifacts</url>
+</database>

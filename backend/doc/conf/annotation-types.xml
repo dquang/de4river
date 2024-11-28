@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<annotation>
+    <types>
+        <type name="Abzweigung"/>
+        <type name="Berechnungsstrecke"/>
+        <type name="Brücke"/>
+        <type name="Bundesland"/>
+        <type name="Deich"/>
+        <type name="Einmündung"/>
+        <type name="Fähre"/>
+        <type name="Gemeinde"/>
+        <type name="Grenze"/>
+        <type name="Hafen"/>
+        <type name="HW-Schutz"/>
+        <type name="Landkreis"/>
+        <type name="Meldestelle"/>
+        <type name="Messstelle"/>
+        <type name="Geschiebemessstelle"/>
+        <type name="Schwebstoffmessstelle"/>
+        <type name="Pegel"/>
+        <type name="Stauwehr"/>
+        <type name="Staatsgrenze"/>
+        <type name="Staat"/>
+        <type name="WSA"/>
+        <type name="Zufluss"/>
+        <type name="Quelle [t/a]"/>
+        <type name="Senke [t/a]"/>
+        <type name="Quelle [m³/a]"/>
+        <type name="Senke [m³/a]"/>
+        <type name="Sonstige" default="true"/>
+    </types>
+
+    <patterns>
+        <file pattern="^Brücken$" type="Brücke"/>
+        <file pattern="^Deich.*$" type="Deich"/>
+        <file pattern="^Hafen$" type="Hafen"/>
+        <file pattern="^Pegel-alle$" type="Pegel"/>
+        <file pattern="^Pegel$" type="Pegel"/>
+        <file pattern="^Wehr$" type="Stauwehr"/>
+        <file pattern="^Stauwehr$" type="Stauwehr"/>
+        <file pattern="^Zufluß$" type="Zufluss"/>
+        <file pattern="^Zufluss$" type="Zufluss"/>
+
+        <line pattern="^Deich.*$" type="Deich"/>
+        <line pattern="^Abz.?[:\s].*$" type="Abzweigung"/>
+        <line pattern="^Berechnungsstrecke.*$" type="Berechnungsstrecke"/>
+        <line pattern="^Brücke[:\s].*$" type="Brücke"/>
+        <line pattern="^Bundesland[:\s].*$" type="Bundesland"/>
+        <line pattern="^Einmündung[:\s].*$" type="Einmündung"/>
+        <line pattern="^Mündung[:\s].*$" type="Einmündung"/>
+        <line pattern="^Fähre[:\s].*$" type="Abzweigung"/>
+        <line pattern="^Gemeinde[:\s].*$" type="Gemeinde"/>
+        <line pattern="^Grenze[:\s].*$" type="Grenze"/>
+        <line pattern="^Hafen[:\s].*$" type="Hafen"/>
+        <line pattern="^HW-Schutz[:\s].*$" type="HW-Schutz"/>
+        <line pattern="^Landkreis[:\s].*$" type="Landkreis"/>
+        <line pattern="^Meldestelle[:\s].*$" type="Meldestelle"/>
+        <line pattern="^Messstelle[:\s].*$" type="Messstelle"/>
+        <line pattern="^Geschiebemessstelle[:\s].*$"
+              type="Geschiebemessstelle"/>
+        <line pattern="^Schwebstoffmessstelle[:\s].*$"
+              type="Schwebstoffmessstelle"/>
+        <line pattern="^Pegel[:\s].*$" type="Pegel"/>
+        <line pattern="^Staatsgrenze[:\s].*$" type="Staatsgrenze"/>
+        <line pattern="^Staat[:\s].*$" type="Staat"/>
+        <line pattern="^Wehr[:\s].*$" type="Stauwehr"/>
+        <line pattern="^WSA[:\s].*$" type="WSA"/>
+        <line pattern="^Zufluß[:\s].*$" type="Zufluss"/>
+        <line pattern="^Zufluss[:\s].*$" type="Zufluss"/>
+        <line pattern="^Quelle[:\s].*t/a.*$" type="Quelle [t/a]"/>
+        <line pattern="^Senke[:\s].*t/a.*$" type="Senke [t/a]"/>
+        <line pattern="^Quelle[:\s].*m3/a.*$" type="Quelle [m³/a]"/>
+        <line pattern="^Senke[:\s].*m3/a.*$" type="Senke [m³/a]"/>
+    </patterns>
+</annotation>

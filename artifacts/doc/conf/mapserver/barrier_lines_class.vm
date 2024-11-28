@@ -1,0 +1,40 @@
+CLASS
+    NAME "Damm"
+    EXPRESSION /damm/i
+    STYLE
+        SIZE 5
+        OUTLINECOLOR "#008000"
+    END
+END
+CLASS
+    NAME "Rohr 1"
+    EXPRESSION /rohr.1/i
+    STYLE
+        SIZE 5
+        OUTLINECOLOR "#800080"
+    END
+END
+CLASS
+    NAME "Rohr 2"
+    EXPRESSION /rohr.2/i
+    STYLE
+        SIZE 5
+        OUTLINECOLOR "#808080"
+    END
+END
+CLASS
+    NAME "Graben"
+    EXPRESSION /graben/i
+    STYLE
+        SIZE 5
+        OUTLINECOLOR "#800000"
+    END
+END
+CLASS
+    NAME "Ringdeich"
+    EXPRESSION /ringdeich/i
+    STYLE
+        SIZE 5
+        OUTLINECOLOR "#800000"
+    END
+END

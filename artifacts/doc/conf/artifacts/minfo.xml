@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="minfo">
+
+    <states>
+        <state id="state.minfo.river" description="state.minfo.river" state="org.dive4elements.river.artifacts.states.RiverSelect" helpText="help.state.minfo.river">
+            <data name="river" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+                <from state="state.minfo.river"/>
+                <to state="state.minfo.calculation_mode"/>
+        </transition>
+
+        <state id="state.minfo.calculation_mode" description="state.minfo.calculation_mode" state="org.dive4elements.river.artifacts.states.CalculationSelectMinfo" helpText="help.state.minfo.calculation_mode">
+            <data name="calculation_mode" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.calculation_mode"/>
+            <to state="state.minfo.distance_only"/>
+            <condition data="calculation_mode" value="calc.flow.velocity" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.calculation_mode"/>
+            <to state="state.minfo.distance_only"/>
+            <condition data="calculation_mode" value="calc.bed.middle" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.calculation_mode"/>
+            <to state="state.minfo.sq.location"/>
+            <condition data="calculation_mode" value="calc.sq.relation" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.calculation_mode"/>
+            <to state="state.minfo.distance_only"/>
+            <condition data="calculation_mode" value="calc.bed.diff" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.calculation_mode"/>
+            <to state="state.minfo.bed.distance"/>
+            <condition data="calculation_mode" value="calc.bed.quality" operator="equal"/>
+        </transition>
+
+        <state id="state.minfo.distance_only" description="state.minfo.distance_only" state="org.dive4elements.river.artifacts.states.DistanceOnlySelect" helpText="help.state.minfo.distance_only">
+            <data name="ld_from" type="Double" />
+            <data name="ld_to"   type="Double" />
+        </state>
+
+        <state id="state.minfo.distance" description="state.minfo.distance" state="org.dive4elements.river.artifacts.states.DistanceSelect" helpText="help.state.minfo.distance">
+            <data name="ld_from" type="Double" />
+            <data name="ld_to"   type="Double" />
+            <data name="ld_step" type="Double" />
+        </state>
+
+        <state id="state.minfo.sq.location" description="state.minfo.sq.location" state="org.dive4elements.river.artifacts.states.LocationSelect" helpText="help.state.minfo.sq.location">
+            <data name="ld_locations" type="double"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.distance_only"/>
+            <to state="state.minfo.dischargestate"/>
+            <condition data="calculation_mode" value="calc.flow.velocity" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.distance_only"/>
+            <to state="state.minfo.soundings"/>
+            <condition data="calculation_mode" value="calc.bed.middle" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.distance_only"/>
+            <to state="state.minfo.bed.difference_select"/>
+            <condition data="calculation_mode" value="calc.bed.diff" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sq.location"/>
+            <to state="state.minfo.sq.period"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.bed.distance"/>
+            <to state="state.minfo.bed.periods"/>
+            <condition data="calculation_mode" value="calc.bed.quality" operator="equal"/>
+        </transition>
+
+        <state id="state.minfo.dischargestate" description="state.minfo.dischargestate" state="org.dive4elements.river.artifacts.states.DischargeState" helpText="help.state.minfo.dischargestate">
+            <data name="total_channel" type="intoptions"/>
+            <data name="main_channel"  type="intoptions"/>
+        </state>
+
+        <state id="state.minfo.soundings" description="state.minfo.soundingsstate" state="org.dive4elements.river.artifacts.states.SoundingsSelect" helpText="help.state.minfo.soundings">
+            <data name="soundings" type="multiattribute"/>
+        </state>
+
+        <state id="state.minfo.sq.period" description="state.minfo.sq.period" state="org.dive4elements.river.artifacts.states.sq.SQPeriodSelect"
+				helpText="help.state.minfo.sq.period">
+            <data name="start" type="Long"/>
+            <data name="end"   type="Long"/>
+        </state>
+
+        <state id="state.minfo.bed.difference_select" description="state.minfo.bed.difference_select" state="org.dive4elements.river.artifacts.states.minfo.DifferenceSelect" helpText="help.state.minfo.bed.difference_select">
+            <data name="diffids" type="String" />
+        </state>
+
+        <state id="state.minfo.bed.periods" description="state.minfo.bed.periods" state="org.dive4elements.river.artifacts.states.minfo.BedQualityPeriodsSelect"
+				helpText="help.state.minfo.bed.periods">
+            <data name="periods" type="String"/>
+        </state>
+
+        <state id="state.minfo.bed.distance" description="state.minfo.distance" state="org.dive4elements.river.artifacts.states.minfo.BedQualityDistanceSelect" helpText="help.state.minfo.distance">
+            <data name="ld_from" type="Double" />
+            <data name="ld_to"   type="Double" />
+            <data name="ld_step" type="Double" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.dischargestate"/>
+            <to state="state.minfo.flow_velocity"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.soundings"/>
+            <to state="state.minfo.bedheight_middle"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sq.period"/>
+            <to state="state.minfo.sq.outlier-method"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.bed.difference_select"/>
+            <to state="state.minfo.bed.differences"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.bed.periods"/>
+            <to state="state.minfo.bed.char_diameter"/>
+        </transition>
+
+        <state id="state.minfo.flow_velocity" description="state.minfo.flow_velocity" state="org.dive4elements.river.artifacts.states.FlowVelocityState" helpText="help.state.minfo.flow_velocity">
+            <outputmodes>
+                <outputmode name="flow_velocity" description="output.flow_velocity" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="flow_velocity.totalchannel" description="A facet for total channels"/>
+                        <facet name="flow_velocity.mainchannel" description="A facet for main channels"/>
+                        <facet name="flow_velocity.tau" description="A facet for tau"/>
+                        <facet name="flow_velocity.totalchannel.filtered" description="A facet for total channels"/>
+                        <facet name="flow_velocity.mainchannel.filtered" description="A facet for main channels"/>
+                        <facet name="flow_velocity.tau.filtered" description="A facet for tau"/>
+                        <facet name="flow_velocity.discharge" description="A facet for discharges"/>
+                        <facet name="flow_velocity.measurement" description="A facet for measured flow velocities"/>
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                        <facet name="flow_velocity.manualpoints"/>
+                        <facet name="bed_longitudinal_section.diameter.toplayer"/>
+                        <facet name="bed_longitudinal_section.diameter.sublayer"/>
+                        <facet name="bed_longitudinal_section.diameter.bedload"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="flow_velocity_export" description="output.flow_velocity_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.flow_velocity_export.csv" />
+                        <!--
+                        <facet name="pdf" description="facet.historical_discharge.pdf" />
+                        -->
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.minfo.bedheight_middle" description="state.minfo.bedheight_middle" state="org.dive4elements.river.artifacts.states.MiddleBedHeight" helpText="help.state.minfo.bedheight_middle">
+            <outputmodes>
+                <outputmode name="bedheight_middle" description="output.bedheight_middle" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="bedheight_middle.single" description="A facet for total channels"/>
+                        <facet name="longitudinal_section.w"  description="Datacage facet"/>
+                        <facet name="bedheight_middle.manualpoints" description="points"/>
+                        <facet name="bedheight" description="Datacage facet"/>
+                        <facet name="discharge_longitudinal_section.w"/>
+                        <facet name="other.wqkms.w"/>
+                        <facet name="other.wq"/>
+                        <facet name="other.wqkms.q"/>
+                        <facet name="other.wqkms"/>
+                        <facet name="other.wkms"/>
+                        <facet name="heightmarks_points"/>
+                        <facet name="longitudinal_section.annotations"/>
+                        <facet name="longitudinal_section.w"/>
+                        <facet name="longitudinal_section.q"/>
+                        <facet name="other.wkms.interpol" description="Height over km, like flood protections."/>
+                    </facets>
+                </outputmode>
+                <outputmode name="bedheight_middle_export" description="output.bedheight_middle_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.bedheight_middle_export.csv" />
+                        <!--
+                        <facet name="pdf" description="facet.historical_discharge.pdf" />
+                        -->
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.minfo.bed.differences" description="state.minfo.bed.differences" state="org.dive4elements.river.artifacts.states.minfo.DifferencesState" helpText="help.state.minfo.bed.differences">
+            <outputmodes>
+                <outputmode name="bed_difference_height_year" description="output.absolute_height" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="bedheight_difference.height_year" description="A facet for absolute heights"/>
+                        <facet name="bedheight_difference.height_year.filtered" description="A facet for absolute heights"/>
+                        <facet name="bedheight_difference.manualpoints" />
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                        <facet name="fix_sector_average_ls_0" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_1" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_2" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_3" description="Datacage facet"/>
+                        <facet name="fix_analysis_events_ls" description="Datacage facet"/>
+                        <facet name="fix_reference_events_ls" description="Datacage facet"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="bed_difference_year" description="output.difference_year" mime-type="img/png" type="chart">
+                    <facets>
+                        <facet name="bedheight_difference.year" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.year.filtered" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.manualpoints" />
+                        <facet name="bedheight_difference.sounding_width" description="A facet for morphologic width"/>
+                        <facet name="bedheight_difference.morph_width1" description="A facet for morphologic width"/>
+                        <facet name="bedheight_difference.morph_width2" description="A facet for morphologic width"/>
+                        <facet name="bedheight_difference.year.height1" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height1.filtered" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2.filtered" description="A facet for raw heights."/>
+                        <facet name="fix_sector_average_ls_0" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_1" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_2" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_3" description="Datacage facet"/>
+                        <facet name="fix_analysis_events_ls" description="Datacage facet"/>
+                        <facet name="fix_reference_events_ls" description="Datacage facet"/>
+                        <facet name="discharge_longitudinal_section.w"/>
+                        <facet name="other.wqkms.w"/>
+                        <facet name="other.wq"/>
+                        <facet name="other.wqkms.q"/>
+                        <facet name="other.wqkms"/>
+                        <facet name="other.wkms"/>
+                        <facet name="heightmarks_points"/>
+                        <facet name="longitudinal_section.annotations"/>
+                        <facet name="longitudinal_section.w"/>
+                        <facet name="longitudinal_section.q"/>
+                        <facet name="w_differences" description="facet.w_differences"/>
+                        <facet name="w_differences.filtered" description="facet.w_differences"/>
+                        <facet name="other.wkms.interpol" description="Height over km, like flood protections."/>
+                        <facet name="morph-width" description="morphologic width, not sounding width!"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="bed_difference_epoch" description="output.difference_epoch" mime-type="img/png" type="chart">
+                    <facets>
+                        <facet name="bedheight_difference.epoch" description="A facet for bed height differences"/>
+                        <facet name="bed_difference_epoch.manualpoints" />
+                        <facet name="bedheight_difference.epoch.height1" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.epoch.height2" description="A facet for raw heights."/>
+                        <facet name="fix_sector_average_ls_0" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_1" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_2" description="Datacage facet"/>
+                        <facet name="fix_sector_average_ls_3" description="Datacage facet"/>
+                        <facet name="fix_analysis_events_ls" description="Datacage facet"/>
+                        <facet name="fix_reference_events_ls" description="Datacage facet"/>
+                        <facet name="discharge_longitudinal_section.w"/>
+                        <facet name="other.wqkms.w"/>
+                        <facet name="other.wq"/>
+                        <facet name="other.wqkms.q"/>
+                        <facet name="other.wqkms"/>
+                        <facet name="other.wkms"/>
+                        <facet name="heightmarks_points"/>
+                        <facet name="longitudinal_section.annotations"/>
+                        <facet name="longitudinal_section.w"/>
+                        <facet name="longitudinal_section.q"/>
+                        <facet name="w_differences" description="facet.w_differences"/>
+                        <facet name="w_differences.filtered" description="facet.w_differences"/>
+                        <facet name="other.wkms.interpol" description="Height over km, like flood protections."/>
+                        <facet name="morph-width" description="morphologic width, not sounding width!"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="bedheight_difference_export" description="output.bedheight_differenceexport" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.bedheight_difference_export.csv" />
+                        <facet name="pdf" description="facet.bedheight_difference_export.pdf" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.minfo.bed.char_diameter" description="state.minfo.bed.char_diameter" state="org.dive4elements.river.artifacts.states.minfo.CharDiameter"
+				helpText="help.state.minfo.bed.char_diameter">
+            <data name="bed_diameter" type="options"/>
+            <data name="load_diameter" type="options"/>
+        </state>
+
+        <state id="state.minfo.sq.outlier-method" description="state.minfo.sq.outlier-method" state="org.dive4elements.river.artifacts.states.sq.OutlierMethod" helpText="help.state.minfo.sq.outliermethod">
+            <data name="outlier-method" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sq.outlier-method"/>
+            <to state="state.minfo.sq.outliers"/>
+        </transition>
+
+        <state id="state.minfo.sq.outliers" description="state.minfo.sq.outliers" state="org.dive4elements.river.artifacts.states.OutliersInput" helpText="help.state.minfo.sq.outliers">
+            <data name="outliers" type="Double"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.bed.char_diameter"/>
+            <to state="state.minfo.bed.bed_quality"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sq.outliers"/>
+            <to state="state.minfo.sq.relation"/>
+        </transition>
+
+        <state id="state.minfo.sq.relation" description="state.minfo.sq.relation" state="org.dive4elements.river.artifacts.states.SQRelation">
+            <outputmodes>
+                <outputmode name="sq_overview" description="output.sq_overview" type="chart">
+                    <facets>
+                        <facet name="sq_a_measurement_overview" description="A facet for sq measurements"/>
+                        <facet name="sq_a_outlier_overview" description="A facet fo sq outliers"/>
+                        <facet name="sq_a_curve_overview" description="A facet for sq curve"/>
+                        <facet name="sq_a_outlier_curve_overview" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_a.manualpoints" />
+                        <facet name="sq_a_outlier_measurement_overview" description="A facet for sq outlier measurement"/>
+                        <facet name="sq_b_measurement_overview" description="A facet for sq measurements"/>
+                        <facet name="sq_b_outlier_overview" description="A facet fo sq outliers"/>
+                        <facet name="sq_b_curve_overview" description="A facet for sq curve"/>
+                        <facet name="sq_b_outlier_curve_overview" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_b.manualpoints" />
+                        <facet name="sq_b_outlier_measurement_overview" description="A facet for sq outlier measurement"/>
+                        <facet name="sq_c_measurement_overview" description="A facet for sq measurements"/>
+                        <facet name="sq_c_outlier_overview" description="A facet fo sq outliers"/>
+                        <facet name="sq_c_curve_overview" description="A facet for sq curve"/>
+                        <facet name="sq_c_outlier_curve_overview" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_c.manualpoints" />
+                        <facet name="sq_c_outlier_measurement_overview" description="A facet for sq outlier measurement"/>
+                        <facet name="sq_d_measurement_overview" description="A facet for sq measurements"/>
+                        <facet name="sq_d_outlier_overview" description="A facet fo sq outliers"/>
+                        <facet name="sq_d_curve_overview" description="A facet for sq curve"/>
+                        <facet name="sq_relation_d.manualpoints" />
+                        <facet name="sq_d_outlier_curve_overview" description="A facet for sq outlier curve"/>
+                        <facet name="sq_d_outlier_measurement_overview" description="A facet for sq outlier measurement"/>
+                        <facet name="sq_e_measurement_overview" description="A facet for sq measurements"/>
+                        <facet name="sq_e_outlier_overview" description="A facet fo sq outliers"/>
+                        <facet name="sq_e_curve_overview" description="A facet for sq curve"/>
+                        <facet name="sq_e_outlier_curve_overview" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_e.manualpoints" />
+                        <facet name="sq_e_outlier_measurement_overview" description="A facet for sq outlier measurement"/>
+                        <facet name="sq_f_measurement_overview" description="A facet for sq measurements"/>
+                        <facet name="sq_relation_f.manualpoints" />
+                        <facet name="sq_f_outlier_overview" description="A facet fo sq outliers"/>
+                        <facet name="sq_f_curve_overview" description="A facet for sq curve"/>
+                        <facet name="sq_f_outlier_curve_overview" description="A facet for sq outlier curve"/>
+                        <facet name="sq_f_outlier_measurement_overview" description="A facet for sq outlier measurement"/>
+                        <facet name="sq_g_measurement_overview" description="A facet for sq measurements"/>
+                        <facet name="sq_relation_g.manualpoints" />
+                        <facet name="sq_g_outlier_overview" description="A facet fo sq outliers"/>
+                        <facet name="sq_g_curve_overview" description="A facet for sq curve"/>
+                        <facet name="sq_g_outlier_curve_overview" description="A facet for sq outlier curve"/>
+                        <facet name="sq_g_outlier_measurement_overview" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_a" description="output.sq_relation" type="chart">
+                    <facets>
+                        <facet name="sq_a_measurement" description="A facet for sq measurements"/>
+                        <facet name="sq_a_outlier" description="A facet fo sq outliers"/>
+                        <facet name="sq_a_curve" description="A facet for sq curve"/>
+                        <facet name="sq_a_outlier_curve" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_a.manualpoints" />
+                        <facet name="sq_a_outlier_measurement" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_b" description="output.sq_relation" type="chart">
+                    <facets>
+                        <facet name="sq_b_measurement" description="A facet for sq measurements"/>
+                        <facet name="sq_b_outlier" description="A facet fo sq outliers"/>
+                        <facet name="sq_b_curve" description="A facet for sq curve"/>
+                        <facet name="sq_b_outlier_curve" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_b.manualpoints" />
+                        <facet name="sq_b_outlier_measurement" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_c" description="output.sq_relation" type="chart">
+                    <facets>
+                        <facet name="sq_c_measurement" description="A facet for sq measurements"/>
+                        <facet name="sq_c_outlier" description="A facet fo sq outliers"/>
+                        <facet name="sq_c_curve" description="A facet for sq curve"/>
+                        <facet name="sq_c_outlier_curve" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_c.manualpoints" />
+                        <facet name="sq_c_outlier_measurement" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_d" description="output.sq_relation" type="chart">
+                    <facets>
+                        <facet name="sq_d_measurement" description="A facet for sq measurements"/>
+                        <facet name="sq_d_outlier" description="A facet fo sq outliers"/>
+                        <facet name="sq_d_curve" description="A facet for sq curve"/>
+                        <facet name="sq_relation_d.manualpoints" />
+                        <facet name="sq_d_outlier_curve" description="A facet for sq outlier curve"/>
+                        <facet name="sq_d_outlier_measurement" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_e" description="output.sq_relation" type="chart">
+                    <facets>
+                        <facet name="sq_e_measurement" description="A facet for sq measurements"/>
+                        <facet name="sq_e_outlier" description="A facet fo sq outliers"/>
+                        <facet name="sq_e_curve" description="A facet for sq curve"/>
+                        <facet name="sq_e_outlier_curve" description="A facet for sq outlier curve"/>
+                        <facet name="sq_relation_e.manualpoints" />
+                        <facet name="sq_e_outlier_measurement" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_f" description="output.sq_relation" type="chart">
+                    <facets>
+                        <facet name="sq_f_measurement" description="A facet for sq measurements"/>
+                        <facet name="sq_relation_f.manualpoints" />
+                        <facet name="sq_f_outlier" description="A facet fo sq outliers"/>
+                        <facet name="sq_f_curve" description="A facet for sq curve"/>
+                        <facet name="sq_f_outlier_curve" description="A facet for sq outlier curve"/>
+                        <facet name="sq_f_outlier_measurement" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_g" description="output.sq_relation" type="chart">
+                    <facets>
+                        <facet name="sq_g_measurement" description="A facet for sq measurements"/>
+                        <facet name="sq_relation_g.manualpoints" />
+                        <facet name="sq_g_outlier" description="A facet fo sq outliers"/>
+                        <facet name="sq_g_curve" description="A facet for sq curve"/>
+                        <facet name="sq_g_outlier_curve" description="A facet for sq outlier curve"/>
+                        <facet name="sq_g_outlier_measurement" description="A facet for sq outlier measurement"/>
+                        <facet name="mainvalues.q" />
+                        <facet name="mainvalues.w" />
+                    </facets>
+                </outputmode>
+                <outputmode name="sq_relation_export" description="output.sq_relation_export" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.sq_export.csv" />
+                        <facet name="pdf" description="facet.sq_export.pdf" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.minfo.bed.bed_quality" description="state.minfo.bed.bed_quality" state="org.dive4elements.river.artifacts.states.minfo.BedQualityState" helpText="help.state.minfo.bed.bed_quality">
+            <outputmodes>
+                <outputmode name="bed_longitudinal_section" description="output.bed_longitudinal_section" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="bed_longitudinal_section.porosity.toplayer.interpol"/>
+                        <facet name="bed_longitudinal_section.porosity.sublayer.interpol"/>
+                        <facet name="bed_longitudinal_section.density.toplayer.interpol"/>
+                        <facet name="bed_longitudinal_section.density.sublayer.interpol"/>
+                        <facet name="bed_longitudinal_section.diameter.toplayer.interpol"/>
+                        <facet name="bed_longitudinal_section.diameter.sublayer.interpol"/>
+                        <facet name="bed_longitudinal_section.diameter.bedload.interpol"/>
+                        <facet name="bed_longitudinal_section.diameter.bedload"/>
+                        <facet name="bed_longitudinal_section.porosity.toplayer"/>
+                        <facet name="bed_longitudinal_section.porosity.sublayer"/>
+                        <facet name="bed_longitudinal_section.density.toplayer"/>
+                        <facet name="bed_longitudinal_section.density.sublayer"/>
+                        <facet name="bed_longitudinal_section.diameter.toplayer"/>
+                        <facet name="bed_longitudinal_section.diameter.sublayer"/>
+                        <facet name="bed_longitudinal_section.diameter.toplayer.data"/>
+                        <facet name="bed_longitudinal_section.diameter.sublayer.data"/>
+                        <facet name="bed_longitudinal_section.diameter.bedload.data"/>
+                        <facet name="bed_longitudinal_section.manualpoints" />
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                        <facet name="porosity" description="facet.porosity"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="bed_quality_export" description="output.bed_quality_export" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.bed_quality_export.csv" />
+                    </facets>
+                </outputmode>
+                <outputmode name="bed_quality_report" description="output.bed_quality_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.bed_quality.report" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <!-- sediment load config-->
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.calculation_mode"/>
+            <to state="state.minfo.sediment.load.year_epoch"/>
+            <condition data="calculation_mode" value="calc.sediment.load" operator="equal"/>
+        </transition>
+
+        <state id="state.minfo.sediment.load.year_epoch" description="state.minfo.sediment.load.year_epoch" state="org.dive4elements.river.artifacts.states.minfo.YearEpochSelect" helpText="help.state.minfo.sediment.load.year_epoch">
+            <data name="ye_select" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sediment.load.year_epoch"/>
+            <to state="state.minfo.sediment.load.location"/>
+        </transition>
+
+        <state id="state.minfo.sediment.load.location" description="state.minfo.distance_only" state="org.dive4elements.river.artifacts.states.minfo.SedimentLoadDistanceSelect" helpText="help.state.minfo.sediment.load.location">
+            <data name="ld_from" type="Double" />
+            <data name="ld_to"   type="Double" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.sediment.load.location"/>
+            <to state="state.minfo.sediment.load.sq_interval"/>
+            <condition data="ye_select" value="year" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.sediment.load.location"/>
+            <to state="state.minfo.sediment.load.sq_interval"/>
+            <condition data="ye_select" value="epoch" operator="equal"/>
+        </transition>
+
+        <state id="state.minfo.sediment.load.sq_interval" description="state.minfo.sediment.load.sq_interval"
+            state="org.dive4elements.river.artifacts.states.minfo.SedimentLoadSQTiSelect"
+            helpText="help.state.minfo.sediment.load.sq_interval">
+            <data name="sq_ti_id" type="Integer" />
+            <data name="sq_ti_date" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.sediment.load.sq_interval"/>
+            <to state="state.minfo.sediment.load.epochs"/>
+            <condition data="ye_select" value="epoch" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.sediment.load.sq_interval"/>
+            <to state="state.minfo.sediment.load.period"/>
+            <condition data="ye_select" value="year" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.minfo.sediment.load.location"/>
+            <to state="state.minfo.sediment.load.epochs"/>
+            <condition data="ye_select" value="epoch" operator="equal"/>
+        </transition>
+
+        <state id="state.minfo.sediment.load.period" description="state.minfo.bed.period" state="org.dive4elements.river.artifacts.states.minfo.SedimentLoadYearSelect"
+				helpText="help.state.minfo.sediment.load.period">
+            <data name="years" type="String"/>
+        </state>
+
+        <state id="state.minfo.sediment.load.epochs" description="state.minfo.bed.epochs" state="org.dive4elements.river.artifacts.states.minfo.SedimentLoadEpochSelect"
+				helpText="help.state.minfo.sediment.load.epochs">
+            <data name="epochs" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sediment.load.period"/>
+            <to state="state.minfo.sediment.load.unit"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sediment.load.epochs"/>
+            <to state="state.minfo.sediment.load.unit"/>
+        </transition>
+
+        <state id="state.minfo.sediment.load.unit" description="state.minfo.sediment.load.unit" state="org.dive4elements.river.artifacts.states.minfo.SedimentLoadUnit"
+				helpText="help.state.minfo.sediment.load.unit">
+            <data name="unit" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.minfo.sediment.load.unit"/>
+            <to state="state.minfo.sediment.load.calculate"/>
+        </transition>
+
+        <state id="state.minfo.sediment.load.calculate" description="state.minfo.sediment.load.calculate" state="org.dive4elements.river.artifacts.states.minfo.SedimentLoadDataCalculate">
+            <outputmodes>
+                <outputmode name="sedimentload_ls" description="output.sedimentload.ls" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="sedimentload.ta.coarse"/>
+                        <facet name="sedimentload.ta.sand"/>
+                        <facet name="sedimentload.ta.fine_middle"/>
+                        <facet name="sedimentload.ta.susp_sand"/>
+                        <facet name="sedimentload.ta.susp_sand_bed"/>
+                        <facet name="sedimentload.ta.suspended_sediment"/>
+                        <facet name="sedimentload.ta.total"/>
+                        <facet name="sedimentload.ta.bed_load"/>
+                        <facet name="sedimentload.ta.bed_load_susp_sand"/>
+                        <facet name="sedimentload.m3a.coarse"/>
+                        <facet name="sedimentload.m3a.sand"/>
+                        <facet name="sedimentload.m3a.fine_middle"/>
+                        <facet name="sedimentload.m3a.susp_sand"/>
+                        <facet name="sedimentload.m3a.susp_sand_bed"/>
+                        <facet name="sedimentload.m3a.suspended_sediment"/>
+                        <facet name="sedimentload.m3a.total"/>
+                        <facet name="sedimentload.m3a.bed_load"/>
+                        <facet name="sedimentload.m3a.bed_load_susp_sand"/>
+                        <facet name="sedimentload_ls.manualpoints"/>
+                        <facet name="flow_velocity.totalchannel" description="A facet for total channels"/>
+                        <facet name="flow_velocity.mainchannel" description="A facet for main channels"/>
+                        <facet name="flow_velocity.totalchannel.filtered" description="A facet for total channels"/>
+                        <facet name="flow_velocity.mainchannel.filtered" description="A facet for main channels"/>
+                        <facet name="bedheight_difference.height_year" description="A facet for absolute heights"/>
+                        <facet name="bedheight_difference.height_year.filtered" description="A facet for absolute heights"/>
+                        <facet name="bedheight_difference.year" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.year.filtered" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.epoch" description="A facet for bed height differences"/>
+                        <facet name="w_differences" description="facet.w_differences"/>
+                        <facet name="w_differences.filtered" description="facet.w_differences"/>
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="sedimentload_ls_export" description="output.sedimentload_ls_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.sedimentload_ls_export.csv" />
+                        <!--
+                        <facet name="pdf" description=".pdf" />
+                        -->
+                    </facets>
+                </outputmode>
+                <outputmode name="sedimentload_ls_report" description="output.sedimentload_ls_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.sedimentload_ls_export.report" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+    </states>
+
+</artifact>

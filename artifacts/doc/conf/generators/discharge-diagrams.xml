@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<discharge-diagrams>
+
+  <output-generator names="historical_discharge_wq,historical_discharge_wq_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      converter="org.dive4elements.river.exports.DiagramAttributes"
+      injectors="org.dive4elements.river.exports.injector.KmFromGaugeNumberInjector,org.dive4elements.river.exports.injector.PNPInjector">
+    <title key="chart.historical.discharge.title" default="chart.historical.discharge.title"/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &discharge-defaults;
+  </output-generator>
+
+  <output-generator names="computed_discharge_curve_chartinfo,computed_discharge_curve"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      converter="org.dive4elements.river.exports.DiagramAttributes"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector">
+    <title key="chart.computed.discharge.curve.title" default="chart.computed.discharge.curve.title"/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &discharge-defaults;
+  </output-generator>
+
+  <output-generator names="discharge_curve_chartinfo,discharge_curve"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      converter="org.dive4elements.river.exports.DiagramAttributes"
+      injectors="org.dive4elements.river.exports.injector.KmFromGaugeNameInjector,org.dive4elements.river.exports.injector.PNPInjector">
+    <title key="chart.discharge.curve.title" default="chart.discharge.curve.title"/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &discharge-defaults;
+  </output-generator>
+
+  <output-generator names="fix_wq_curve,fix_wq_curve_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      converter="org.dive4elements.river.exports.DiagramAttributes"
+      injectors="org.dive4elements.river.exports.injector.KmFromRequestInjector,org.dive4elements.river.exports.injector.PNPInjector">
+      <title key="chart.fixings.discharge.curve.title" default="Fixierungsanalyse W/Q"/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &discharge-defaults;
+  </output-generator>
+
+  <output-generator names="fix_derivate_curve,fix_derivate_curve_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromRequestInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.fixings.derivedcurve.title" default="-"/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &discharge-defaults;
+  </output-generator>
+
+  <output-generator names="fix_vollmer_wq_curve,fix_vollmer_wq_curve_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.vollmer.discharge.curve.title" default="chart.vollmer.discharge.curve.title"/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &discharge-defaults;
+  </output-generator>
+
+  <output-generator names="sq_relation_a,sq_relation_a_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_a.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+
+  <output-generator names="sq_relation_b,sq_relation_b_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_b.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+
+  <output-generator names="sq_relation_c,sq_relation_c_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_c.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+
+  <output-generator names="sq_relation_d,sq_relation_d_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_d.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+
+  <output-generator names="sq_relation_e,sq_relation_e_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_e.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+
+  <output-generator names="sq_relation_f,sq_relation_f_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_f.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+
+  <output-generator names="sq_relation_g,sq_relation_g_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_f.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+
+  <output-generator names="sq_overview,sq_overview_chartinfo"
+      class="org.dive4elements.river.exports.DischargeGenerator"
+      injectors="org.dive4elements.river.exports.injector.KmFromLocationInjector,org.dive4elements.river.exports.injector.PNPInjector"
+      converter="org.dive4elements.river.exports.DiagramAttributes">
+    <title key="chart.sq_relation_f.title" default=""/>
+    <subtitle key="chart.discharge.curve.subtitle" default="-">
+        <arg expr="artifact.river"/>
+    </subtitle>
+    &sqrelation-defaults;
+  </output-generator>
+</discharge-diagrams>

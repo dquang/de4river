@@ -1,0 +1,28 @@
+Howto add a wmsartifact for the maps:
+
+- Add artifact similar to the existing ones in:
+    flys-artifacts/src/main/java/de/intevation/flys/artifacts/
+- Define facet name in:
+    flys-artifacts/src/main/java/de/intevation/flys/artifacts/model/FacetTypes.java
+- Modify datacage configuration (there is documentation in flys-artifacts/doc):
+    flys-artifacts/doc/conf/meta-data.xml
+- Define the Factory used in the datacage configuration in:
+    flys-artifacts/doc/conf/conf.xml
+- Define the facet for the Map:
+    flys-artifacts/doc/conf/artifacts/map.xml
+- You might also want to add it to the floodmap in winfo:
+    flys-artifacts/doc/conf/artifacts/winfo.xml
+- Add translations for the datacage elements in:
+    flys-client/src/main/java/de/intevation/flys/client/client/FLYSConstants.java
+- English localization:
+    flys-client/src/main/java/de/intevation/flys/client/client/FLYSConstants.properties
+- German localization:
+    flys-client/src/main/java/de/intevation/flys/client/client/FLYSConstants_de.properties
+
+You might also want a theme:
+- Add a mapping from your Facet to the theme in:
+    flys-artifacts/doc/conf/themes.xml
+- Define the theme in:
+    flys-artifacts/doc/conf/themes/default/floodmap.xml
+    flys-artifacts/doc/conf/themes/second/floodmap.xml
+

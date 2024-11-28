@@ -1,0 +1,329 @@
+===============================================================================
+Installation Dive4Elements-river
+===============================================================================
+
+Diese Anleitung geht davon aus, dass ein Benutzer 'd4euser' existiert, der
+angemeldet ist und mit dem die Installation begonnen werden kann.
+Kommandos, die mit dem Prefix '#' angegeben sind, müssen als Nutzer 'root'
+ausgeführt werden, solche mit dem Prefix '$' als Nutzer 'd4euser' oder 'd4e'.
+
+Die Installationsanleitung wurde mit Debian jessie getestet.
+
+Erforderliche Pakete zum Installieren von D4E-river
+===================================================
+    $ su root
+    # apt-get install tomcat7 postgresql-9.4-postgis-2.1 postgis \
+        apache2 cgi-mapserver ttf-freefont libapache2-mod-jk
+
+
+Benutzer und Verzeichnis für die Serverkomponente anlegen
+=========================================================
+    # useradd -d /home/d4e d4e
+    # cd /opt/
+    # mkdir d4e-river
+    # chown d4e d4e-river/
+
+
+Benutzer und Gruppe für das Logging anlegen
+===========================================
+    # groupadd d4e_log
+    # usermod -a -G d4e_log d4e
+    # usermod -a -G d4e_log tomcat7
+    # usermod -a -G d4e_log www-data
+
+
+Anlegen des Logging Verzeichnisses
+==================================
+    # mkdir /var/log/d4e-river
+    # chgrp d4e_log /var/log/d4e-river
+    # chmod 775 /var/log/d4e-river
+    # exit
+
+
+Installation von D4E-river aus Binärpaket
+=========================================
+
+Installation der Intevationszertifikate für den Download von Wald
+-----------------------------------------------------------------
+Installation der Serverzertifikate von Intevation
+(siehe auch https://ssl.intevation.de)
+
+    # apt-get install gnutls-bin
+    # wget -O - https://ssl.intevation.de/Intevation-Root-CA-2010.crt | \
+        certtool -i |   awk '/^-----BEGIN CERTIFICATE-----$/ , 0' > \
+        /usr/local/share/ca-certificates/Intevation-Root-CA-2010.crt
+    # update-ca-certificates
+
+    Als Nutzer 'd4e' herunterladen von
+    - d4e-river-VERSION.tar.bz2
+    - d4eriver-VERSION.war
+    VERSION ist hier und im Folgenden durch die entsprechende
+    Versionsbezeichnung im Paketnamen zu ersetzen.
+
+    $ cd /opt/d4e-river
+    $ tar xvjf d4e-river-VERSION.tar.bz2
+
+    In das Verzeichnis /opt/d4e-river/dgm/ müssen noch die DGMs der
+    Demo-Daten kopiert werden. (s.u.)
+
+    # mv d4eriver-VERSION.war /var/lib/tomcat7/webapps/d4e-river.war
+
+    Der Tomcat muss wie unten dokumentiert konfiguriert werden.
+    Gleiches gilt für die MapServer-Installation.
+
+Erfolgt die Installation von D4E-river aus den Binärpaketen, können die
+folgenden Schritte übersprungen werden.
+Die weiteren Schritte sind ab dem Abschnitt 'Backenddatenbanken'
+beschrieben.
+
+
+Installation von D4E-river aus den Quellen
+==========================================
+
+Pakete zum Bauen von D4E-river
+------------------------------
+    $ su root
+    # apt-get install openjdk-7-jdk maven2 mercurial
+
+
+Installation der Intevationszertifikate für den Checkout von Wald
+-----------------------------------------------------------------
+Installation der Serverzertifikate von Intevation
+(siehe auch https://ssl.intevation.de)
+
+    # apt-get install gnutls-bin
+    # wget -O - https://ssl.intevation.de/Intevation-Root-CA-2010.crt | \
+        certtool -i |   awk '/^-----BEGIN CERTIFICATE-----$/ , 0' > \
+        /usr/local/share/ca-certificates/Intevation-Root-CA-2010.crt
+    # update-ca-certificates
+
+#. Mercurial beibringen die Zertifikate zu nutzen:
+    # hierzu kann beispielsweise die Systemweite mercurial Konfiguration
+    # editiert werden, z.B. mit dem Editor nano:
+    $ nano /etc/mercurial/hgrc
+
+    # Folgendes einfügen (siehe https://intranet.intevation.de/Mercurial#https)
+    [web]
+    cacerts = /etc/ssl/certs/ca-certificates.crt
+
+    # exit # d4euser werden
+
+
+Checkout der D4E-Quellen
+------------------------
+    $ mkdir d4e-river
+    $ cd d4e-river
+    $ hg clone https://scm.wald.intevation.org/hg/dive4elements/framework/
+    $ hg clone https://scm.wald.intevation.org/hg/dive4elements/http-client/
+    $ hg clone https://scm.wald.intevation.org/hg/dive4elements/river/
+
+
+Anpassen der Clientkonfiguration
+--------------------------------
+    $ cd river/gwt-client/src/main/webapp/WEB-INF/
+
+#. Mapfishprint config.yaml anpassen
+
+    $ nano config.yaml
+
+    Folgenden Eintrag im Abschnitt 'the list of allowed hosts' hinzufügen
+    (darauf achten, dass die Einrückung mit den bestehenden Einträgen übereinstimmt):
+
+    - !dnsMatch
+      host: localhost # Hier den Hostnamen verwenden auf dem der MapServer läuft.
+      port: 8081 # Den entsprechenden Port eintragen.
+
+
+Konfigurieren des Logging
+-------------------------
+    # Anpassungen des Loggings können für den Client in
+    # river/gwt-client/src/main/webapp/WEB-INF/classes/log4j.properties
+    # und für den Server in river/artifacts/doc/conf/log4j.properties
+    # vorgenommen werden
+
+
+Bauen der Server- und Clientkomponenten
+---------------------------------------
+    $ cd ~/d4e-river/framework
+    $ mvn install
+    $ cd ../http-client/
+    $ mvn install
+    $ cd ../river/backend/
+    $ mvn install
+    $ cd ../artifacts/
+    $ mvn package dependency:copy-dependencies
+    $ cd ../gwt-client/
+    $ curl -O http://openlayers.org/download/OpenLayers-2.11.tar.gz
+    $ tar xvfz OpenLayers-2.11.tar.gz
+    $ mv OpenLayers-2.11 src/main/webapp/
+    $ mvn package
+
+
+Kopieren der Serverkomponenten
+------------------------------
+    $ su root
+    # su d4e
+    $ cd /opt/d4e-river/
+    $ mkdir -p bin/lib
+    $ cp /home/d4euser/d4e-river/river/artifacts/target/river-artifacts-1.0-SNAPSHOT.jar bin/lib/
+    $ cp /home/d4euser/d4e-river/river/artifacts/target/dependency/* bin/lib/
+    $ mkdir conf
+    $ cp -R /home/d4euser/d4e-river/river/artifacts/doc/conf/* conf/
+
+
+Artefaktdatenbank erstellen
+===========================
+    $ /home/d4euser/d4e-river/river/contrib/make_flys_release/h2/createArtifacts.sh \
+      /home/d4euser/d4e-river/framework/artifact-database/doc/schema-h2.sql
+
+
+Datenkorbdatenbank erstellen
+============================
+    $ /home/d4euser/d4e-river/river/contrib/make_flys_release/h2/createDatacage.sh \
+      /home/d4euser/d4e-river/river/artifacts/doc/conf/datacage.sql
+    $ exit
+
+
+Client in Tomcat Servlet-Container ablegen
+==========================================
+    # mv /home/d4euser/d4e-river/river/gwt-client/target/gwt-client-1.0-SNAPSHOT.war \
+      /var/lib/tomcat7/webapps/d4e-river.war
+
+
+Backenddatenbanken (Fachdatenbank und Seddb)
+============================================
+
+Anlegen und befüllen der Datenbanken
+------------------------------------
+#. Einspielen des Schemas für die Backenddatenbank
+    # su postgres
+    $ cd /home/d4euser/d4e-river/river/backend/doc/schema/
+    $ ./postgresql-setup.sh
+
+#. bzw. bei Installation aus den Binaries:
+    # su postgres
+    $ cd /opt/d4e-river/schema
+    $ ./postgresql-setup.sh
+
+#. Einspielen der Daten in die erstellte DB
+    # Demodaten von www.dive4elements.org herunterladen und entpacken
+    $ psql -d d4e -f /home/d4euser/d4e-river/demodaten/d4e_demodata.dump.sql
+
+#. Erstellen der SedDB
+    $ createuser -S -D -R seddb
+    $ createdb seddb
+    $ psql -c "ALTER USER seddb WITH PASSWORD 'seddb'"
+    $ psql -U seddb -h localhost -f /home/d4euser/d4e-river/demodaten/seddb_demodata.dump.sql
+
+
+Kopieren der DGMs
+=================
+    # su d4e
+    $ mkdir /opt/d4e-river/dgm
+    $ cp /home/d4euser/d4e-river/demodaten/dem* /opt/d4e-river/dgm
+
+
+Einrichten von WSPLGEN
+======================
+WSPLGEN kann als ausführbare Datei heruntergeladen werden
+(https://wald.intevation.org/projects/wsplgen/). Die Datei muss
+dann nur noch in das 'bin' Verzeichnis des D4E-river Servers kopiert werden.
+
+    # su d4euser
+    $ cd ~/d4e-river
+
+  Für 64bit Systeme:
+
+    $ wget https://wald.intevation.org/frs/download.php/1496/wsplgen-linux-64bit-static.gz
+    $ gunzip wsplgen-linux-64bit-static.gz
+    $ echo "16d60047aa114d69e9435dbbe56b6981b4e1c445  wsplgen-linux-64bit-static" | \
+      sha1sum -c
+    $ su root
+    # su d4e
+    $ cp /home/d4euser/d4e-river/wsplgen-linux-64bit-static \
+         /opt/d4e-river/bin/wsplgen
+    $ chmod +x /opt/d4e-river/bin/wsplgen
+    $ exit
+
+  Für 32bit Systeme:
+
+    $ wget https://wald.intevation.org/frs/download.php/1498/wsplgen-linux-32bit-static.gz
+    $ gunzip wsplgen-linux-32bit-static.gz
+    $ echo "aafd2b770ff8293d452ad3eb3321f2ed04f3f371  wsplgen-linux-32bit-static" | \
+      sha1sum -c
+    $ su root
+    # su d4e
+    $ cp /home/d4euser/d4e-river/wsplgen-linux-32bit-static \
+         /opt/d4e-river/bin/wsplgen
+    $ chmod +x /opt/d4e-river/bin/wsplgen
+    $ exit
+
+
+Einrichten des Mapserver und Apache
+===================================
+#. Anlegen der cgi-Skripte für die WMS-Dienste
+
+    # cd /usr/lib/cgi-bin/
+    # cat > user-wms <<EOF
+#!/bin/sh
+export MS_MAPFILE=/opt/d4e-river/flys.map
+exec ./mapserv
+EOF
+    # cat > river-wms <<EOF
+#!/bin/sh
+export MS_MAPFILE=/opt/d4e-river/rivers.map
+exec ./mapserv
+EOF
+    # chmod 755 user-wms
+    # chmod 755 river-wms
+
+Der Apache wird für den Mapserver, sowie als Proxy für den im Tomcat
+laufenden d4e-river Client eingerichtet. Eine Beispielkonfiguration befindet
+sich in doc/d4e-apache.conf. Folgende Schritte sind notwendig:
+
+    # cp /home/d4euser/d4e-river/river/doc/d4e-apache.conf \
+         /etc/apache2/sites-available/
+    # a2ensite d4e-apache.conf
+    # a2enmod proxy_ajp
+    # a2enmod cgi
+    # sed -i s/80/8081/ /etc/apache2/ports.conf
+    # service apache2 restart
+
+In der Datei
+/var/lib/tomcat7/conf/server.xml
+muss die Zeile
+
+    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+
+einkommentiert bzw. aktiviert werden.
+
+   # /etc/init.d/tomcat7 restart
+
+Einrichtung der D4E-Benutzer und -Rollen
+========================================
+#. Authentifizierung über lokale Datei
+# Die Datei enthält durch Leerzeichen getrennt je Zeile
+# Benutzer, Passwort und Gruppe
+    # cd /usr/share/tomcat7/
+    # cat > flys_user_file <<EOF
+d4e_demo demo d4e_demo_all
+d4e_demo1 demo
+d4e_demo_extern demo d4e_demo_extern
+EOF
+
+# Die Konfiguration der je Gruppe freigeschalteten Module und Gewässer
+# befindet sich in river/gwt-client/src/main/webapp/WEB-INF/features.xml
+
+
+Starten der Serverkomponente
+============================
+    # apt-get install tmux
+    # su d4e
+    $ cd /opt/d4e-river
+    $ tmux new -s SERVER bin/run.sh
+
+Die Anwendung ist dann im Browser unter
+
+    http://yourhost:8081/d4e-river
+
+erreichbar.

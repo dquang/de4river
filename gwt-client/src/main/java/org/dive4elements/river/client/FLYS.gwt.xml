@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='flys'>
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.user.User'/>
+
+  <!-- Inherit the i18n google stuff.                             -->
+  <inherits name="com.google.gwt.i18n.I18N"/>
+
+  <!-- Inherit the XML stuff of GWT                               -->
+  <inherits name="com.google.gwt.xml.XML"/>
+
+  <!-- Inherit the Resource module of GWT                         -->
+  <inherits name="com.google.gwt.resources.Resources"/>
+
+  <inherits name="org.dive4elements.artifacts.common.Common"/>
+
+  <!-- Inherit the smartgwt Enterprise Theme.                -->
+  <inherits name="com.smartgwt.SmartGwtNoTheme" />
+  <!--inherits name="com.smartclient.theme.enterprise.Enterprise"/>
+  <inherits name="com.smartclient.theme.enterprise.EnterpriseResources"/-->
+
+  <!-- Works again with smart-gwt2.5 patch from maven repository-->
+  <inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>
+  <inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlueResources"/>
+
+  <!-- Works:
+  <inherits name="com.smartclient.theme.graphite.Graphite"/>
+  <inherits name="com.smartclient.theme.graphite.GraphiteResources"/>
+  -->
+
+  <!-- Inherit the gwtopenlayers stuff -->
+  <inherits name="org.gwtopenmaps.openlayers.OpenLayers"/>
+
+  <!-- Other module inherits                                      -->
+
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='org.dive4elements.river.client.client.FLYS'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
+  <source path='shared'/>
+
+  <extend-property name="locale" values="de,en"/>
+</module>

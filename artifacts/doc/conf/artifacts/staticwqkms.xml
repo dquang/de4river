@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="staticwqkms">
+  <states>
+    <state id="state.staticwqkms.static"
+               description="state.staticwqkms.state"
+               state="org.dive4elements.river.artifacts.states.StaticWQKmsState">
+      <outputmodes>
+        <outputmode name="longitudinal_section" description="output.longitudinal_section" mime-type="image/png" type="chart">
+          <facets>
+            <facet name="other.wqkms.w" description="W-type data" />
+            <facet name="other.wqkms.q" description="Q-type data" />
+            <facet name="relativepoint" description="Point data" />
+            <facet name="cross_section_water_line" description="Waterline for cross sections" />
+          </facets>
+        </outputmode>
+      </outputmodes>
+    </state>
+  </states>
+</artifact>

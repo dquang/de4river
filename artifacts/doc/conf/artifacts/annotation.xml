@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="annotation">
+  <states>
+    <state id="state.annotation.river"
+               description="state.annotation.river"
+               state="org.dive4elements.river.artifacts.states.AnnotationRiverState">
+      <outputmodes>
+        <outputmode name="longitudinal_section" description="output.longitudinal_section" mime-type="image/png" type="chart">
+          <facets>
+            <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations" />
+          </facets>
+        </outputmode>
+      </outputmodes>
+    </state>
+  </states>
+</artifact>

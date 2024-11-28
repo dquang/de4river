@@ -1,0 +1,266 @@
+#===========================================================================
+# allowed DPIs
+#===========================================================================
+dpis: [254, 190, 127, 72, 56]
+
+#===========================================================================
+# allowed Formats
+#===========================================================================
+formats: ['*']
+
+#===========================================================================
+# the allowed scales
+#===========================================================================
+scales:
+  - 500
+  - 750
+  - 1000
+  - 1250
+  - 1500
+  - 1750
+  - 2000
+  - 2250
+  - 2500
+  - 2750
+  - 3000
+  - 3250
+  - 3500
+  - 3750
+  - 4000
+  - 4250
+  - 4500
+  - 4750
+  - 5000
+  - 5500
+  - 6000
+  - 6500
+  - 7000
+  - 7500
+  - 8000
+  - 8500
+  - 9000
+  - 9500
+  - 10000
+  - 12500
+  - 15000
+  - 17500
+  - 20000
+  - 22500
+  - 25000
+  - 30000
+  - 35000
+  - 40000
+  - 45000
+  - 50000
+  - 75000
+  - 100000
+  - 200000
+  - 500000
+  - 1000000
+  - 2000000
+  - 4000000
+
+outputFilename: 'd4e-${date}.pdf'
+
+#===========================================================================
+# the list of allowed hosts
+#===========================================================================
+hosts:
+  - !localMatch
+    dummy: true
+  - !dnsMatch
+    host: www.pegelonline.wsv.de
+    port: 80
+  - !dnsMatch
+    host: tile.openstreetmap.org
+    port: 80
+  # Catch all
+  #- !dnsMatch
+  #  host: #regex that catches host plus path
+  #  port: 80
+  - !dnsMatch
+    host: osm.intevation.de
+    port: 80
+
+# We need a font with unicode support the defaults only
+# have latin1
+fonts:
+  - /usr/share/fonts/gnu-free/FreeSans.ttf
+
+layouts:
+  #===========================================================================
+  A4 landscape:
+  #===========================================================================
+    metaData:
+      title: '${mapTitle}'
+      author: 'Dive4Elements River'
+      subject: 'Kartendruck'
+      keywords: 'map,print'
+      creator: 'd4e-river'
+
+    #-------------------------------------------------------------------------
+    mainPage:
+       # 842 * 595
+      pageSize: A4
+      landscape: true
+      marginLeft: 20
+      marginRight: 20
+      marginTop: 20
+      marginBottom: 20
+      items:
+        - !map
+          absoluteX: 20
+          align: left
+          absoluteY: 575
+          width: 587
+          height: 555
+          spacingAfter: 0
+        # The north arrow
+        - !columns
+          absoluteX: 627
+          absoluteY: 65
+          width: 32
+          items:
+            - !image
+              maxWidth: 20
+              maxHeight: 40
+              url: '${configDir}/images/north.png'
+        # The scale text
+        - !columns
+          absoluteX: 615
+          absoluteY: 30
+          width: 45
+          items:
+            - !text
+              fontSize: 8
+              text: '1:${scale}'
+              align: center
+              fontEncoding: Identity-H
+              font: FreeSans
+              backgroundColor: #FFFFFF
+        #Flys and BFG Logo
+        - !columns
+          absoluteX: 760
+          absoluteY: 70
+          width: 50
+          items:
+            - !image
+              maxWidth: 50
+              maxHeight: 50
+              url: '${configDir}/images/FLYS_Logo.png'
+        - !columns
+          absoluteX: 665
+          absoluteY: 70
+          width: 75
+          items:
+            - !image
+              maxWidth: 75
+              maxHeight: 50
+              url: '${configDir}/${logo}'
+        # Scalebar
+        - !columns
+          absoluteX: 455
+          absoluteY: 40
+          width: 150
+          items:
+            - !scalebar
+              type: bar
+              maxSize: 150
+              barSize: 5
+              barBgColor: white
+              fontSize: 8
+              backgroundColor: #FFFFFF
+        # The legend
+        - !columns
+          absoluteX: 612
+          absoluteY: 385
+          width: 200
+          items:
+            - !legends
+              maxHeight: 350
+              maxWidth: 0
+              maxIconHeight: 0
+              inline: true
+              classIndentation: 10
+              layerSpace: 0
+              classSpace: 5
+              layerFontSize: 0
+              classFontSize: 10
+              fontEncoding: Identity-H
+              classFont: FreeSans
+              layerFont: FreeSans
+              defaultScale: 0.7
+          config:
+            borderWidthLeft: 1
+            borderWidthRight: 1
+            borderWidthTop: 1
+            borderWidthBottom: 1
+        # The stamp background
+        - !columns
+          absoluteX: 557
+          absoluteY: 575
+          width: 260
+          items:
+            - !image
+              maxWidth: 260
+              maxHeight: 190
+              url: '${configDir}/images/white.png'
+
+        # Title of the map
+        - !columns
+          absoluteX: 562
+          absoluteY: 575
+          width: 250
+          condition: mapTitle
+          items:
+            - !text
+              fontSize: 18
+              text: '${mapTitle}'
+
+        # The Stamp
+        - !columns
+          absoluteX: 562
+          absoluteY: 550
+          width: 250
+          config:
+            borderWidth: 1
+          items:
+            - !attributes
+              source: data
+              spacingAfter: 0
+              columnDefs:
+                info:
+                  columnWeight: 7
+                  header: !text
+                    text: info
+                    fontSize: 0
+                  cell: !columns
+                    config:
+                      cells:
+                        - borderWidth: 0.5
+                          padding: 5
+                    items:
+                      - !text
+                        text: '${info}'
+                        fontSize: 10
+                        fontEncoding: Identity-H
+                        font: FreeSans
+                        fontSize: 10
+                    backgroundColor: #FFFFFF
+                value:
+                  columnWeight: 15
+                  header: !text
+                    text: value
+                    fontSize: 0
+                  cell: !columns
+                    config:
+                      cells:
+                        - borderWidth: 0.5
+                          padding: 5
+                    items:
+                      - !text
+                        text: '${value}'
+                        fontEncoding: Identity-H
+                        font: FreeSans
+                        fontSize: 10
+                    backgroundColor: #FFFFFF

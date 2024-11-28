@@ -1,0 +1,5 @@
+#!/bin/sh
+export LC_ALL="de_DE.UTF-8"
+export NLS_LANG=".AL32UTF8"
+export MS_MAPFILE=/opt/d4e/bin/artifacts-data/mapserver/rivers.map
+/opt/mapserver/mapserv

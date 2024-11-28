@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sync>
+  <!-- The path to the DiPs file -->
+  <dips>
+    <file>/path/to/the/DiPs_FLYS_7_1_7_5.xml</file>
+    <repair>/path/to/the/doc/repair.xsl</repair>
+  </dips>
+  <!-- The FLYS side -->
+  <side name="flys">
+    <db>
+      <driver>oracle.jdbc.OracleDriver</driver>
+      <user>flys</user>
+      <password>flys</password>
+      <url>jdbc:oracle:thin:@//localhost:1521/XE</url>
+    </db>
+  </side>
+  <!-- The AFT side -->
+  <side name="aft">
+    <db>
+      <driver>oracle.jdbc.OracleDriver</driver>
+      <user>aft</user>
+      <password>aft</password>
+      <url>jdbc:oracle:thin:@//localhost:1521/XE</url>
+      <execute-login>
+        <statement>ALTER SESSION SET CURRENT_SCHEMA=AFT</statement>
+      </execute-login>
+    </db>
+  </side>
+</sync>

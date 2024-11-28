@@ -1,0 +1,50 @@
+# Docker file for D4E River MapServer
+# with support for PostgreSQL and Oracle databases
+
+FROM centos:7
+MAINTAINER tom@intevation.de
+
+# Necessary to run further yum-installs inside Docker container,
+# if not already part of the base image:
+RUN yum -q -y install yum-plugin-ovl && rpm --rebuilddb
+
+# Install prerequisites
+RUN yum -q -y install curl ca-certificates epel-release \
+        gnu-free-sans-fonts httpd
+RUN yum -q -y install gcc-c++ postgresql-devel gd-devel giflib-devel proj-devel \
+        proj-epsg prelink make
+
+# Install Oracle client
+RUN curl -s https://yum.oracle.com/RPM-GPG-KEY-oracle-ol7 \
+        -o /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+ADD ol7-temp.repo /etc/yum.repos.d/
+RUN yum -q -y install oraclelinux-release-el7
+RUN mv /etc/yum.repos.d/ol7-temp.repo /etc/yum.repos.d/ol7-temp.repo.disabled
+RUN yum -q -y install oracle-release-el7
+RUN yum -q -y install oracle-instantclient19.9-basic \
+        oracle-instantclient19.9-devel
+RUN yum-config-manager --disable oracle*,ol7*
+
+# Install MapServer
+WORKDIR /opt/mapserver
+RUN curl -s https://download.osgeo.org/mapserver/mapserver-6.0.6.tar.gz | tar xz
+WORKDIR mapserver-6.0.6
+RUN sed -i "s@oracle/10\*/client@oracle/19.9/client64@g" configure
+RUN ./configure -q --with-proj --with-postgis --with-oraclespatial=/usr \
+        CFLAGS=-w CXXFLAGS=-w
+RUN make -s
+WORKDIR /opt/mapserver
+RUN ln -s mapserver-6.0.6/mapserv
+
+# Volume to share mapfiles with artifact server.
+# Has to be the same path as in artifact server container because mapfiles
+# contain absolute paths.
+VOLUME /opt/d4e/bin
+
+# CGI scripts
+ADD mapserver/cgi-bin /var/www/cgi-bin
+
+# httpd config
+ADD httpd-mapserver.conf /etc/httpd/conf.d/
+
+CMD ["/usr/sbin/httpd", "-DFOREGROUND"]

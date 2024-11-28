@@ -1,0 +1,4 @@
+#!/bin/bash
+cd $FLYSDIR
+/usr/bin/java -classpath $CLASSPATH $ARGS $MAINCLASS >> $LOGFILE 2>&1&
+echo $! > $D4E_PID

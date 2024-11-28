@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="waterlevel">
+    <states>
+        <state id="state.waterlevel.done"
+               description="state.waterlevel.done"
+               state="org.dive4elements.river.artifacts.states.WaterlevelInfoState">
+           <outputmodes>
+             <outputmode name="w_differences" description="output.w_differences" mime-type="image/png" type="chart">
+                  <facets>
+                     <facet name="longitudinal_section.w" description="facet.longitudinal_section.w" />
+                     <facet name="longitudinal_section.q" description="facet.longitudinal_section.q" />
+                  </facets>
+              </outputmode>
+           </outputmodes>
+        </state>
+    </states>
+</artifact>

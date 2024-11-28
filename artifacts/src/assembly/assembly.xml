@@ -1,0 +1,43 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>bin</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>tar</format>
+    <!--<format>tar.bz2</format>-->
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}/bin</directory>
+      <outputDirectory>/bin</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.basedir}/doc/conf</directory>
+      <outputDirectory>/conf</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <!-- Include prepared artifact-DB if existant -->
+      <directory>${project.basedir}/artifactsdb</directory>
+      <outputDirectory>/artifacts-data/artifactsdb</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <!-- Include prepared datacage-DB if existant -->
+      <directory>${project.basedir}/datacagedb</directory>
+      <outputDirectory>/artifacts-data/datacagedb</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.basedir}/../backend/doc/schema</directory>
+      <outputDirectory>/schema</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.basedir}/../contrib/init.d</directory>
+      <outputDirectory>/init.d</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>bin/lib</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+</assembly>

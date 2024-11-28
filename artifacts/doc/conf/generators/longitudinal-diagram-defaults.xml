@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<longitudinal-defaults>
+    <axis name="W"/>
+    <axis name="diffW"/>
+    <axis name="deltaW"/>
+    <axis name="diffBed"/>
+    <axis name="diffBed/Y"/>
+    <axis name="Width"/>
+    <axis name="Diameter"/>
+    <axis name="Density"/>
+    <axis name="Porosity"/>
+    <axis name="SedimentLoadM3A"/>
+    <axis name="SedimentLoadTA"/>
+    <axis name="Velocity"/>
+    <axis name="Tau"/>
+    <axis name="Q" include-zero="true"/>
+    <domain-axis key="chart.longitudinal.section.xaxis.label" default="Fluss-Km"
+            inverted="org.dive4elements.river.exports.IsKmUpEvaluator()">
+        <arg expr="artifact.river"/>
+    </domain-axis>
+    <!-- Default longitudinal section Processors -->
+    <processor class="org.dive4elements.river.exports.process.DeltaWProcessor" axis="deltaW"/>
+    <processor class="org.dive4elements.river.exports.process.AnnotationProcessor" axis="none"/>
+    <processor class="org.dive4elements.river.exports.process.AreaProcessor"  axis="none"/>
+    <processor class="org.dive4elements.river.exports.process.WDiffProcessor" axis="diffW"/>
+    <processor class="org.dive4elements.river.exports.process.WOutProcessor"  axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.QOutProcessor"  axis="Q"/>
+    <processor class="org.dive4elements.river.exports.process.BedWidthProcessor"           axis="Width"/>
+    <processor class="org.dive4elements.river.exports.process.FixDeltaWProcessor"          axis="diffBed"/>
+    <processor class="org.dive4elements.river.exports.process.BedDiffYearProcessor"        axis="diffBed"/>
+    <processor class="org.dive4elements.river.exports.process.FixDeltaWAProcessor"         axis="diffBed/Y"/>
+    <processor class="org.dive4elements.river.exports.process.BedDiffHeightYearProcessor"  axis="diffBed/Y"/>
+    <processor class="org.dive4elements.river.exports.process.MiddleBedHeightProcessor"    axis="W"/>
+    <processor class="org.dive4elements.river.exports.process.BedQualityDiameterProcessor" axis="Diameter"/>
+    <processor class="org.dive4elements.river.exports.process.BedQualityPorosityProcessor" axis="Porosity"/>
+    <processor class="org.dive4elements.river.exports.process.BedQualityDensityProcessor"  axis="Density"/>
+    <processor class="org.dive4elements.river.exports.process.SedimentLoadTAProcessor"     axis="SedimentLoadTA"/>
+    <processor class="org.dive4elements.river.exports.process.SedimentLoadM3AProcessor"    axis="SedimentLoadM3A"/>
+    <processor class="org.dive4elements.river.exports.process.SedimentLoadLSTAProcessor"     axis="SedimentLoadTA"/>
+    <processor class="org.dive4elements.river.exports.process.SedimentLoadLSM3AProcessor"    axis="SedimentLoadM3A"/>
+    <processor class="org.dive4elements.river.exports.process.FlowVelocityProcessor"       axis="Velocity"/>
+    <processor class="org.dive4elements.river.exports.process.ShearStressProcessor"        axis="Tau"/>
+    <processor class="org.dive4elements.river.exports.process.SedimentDensityProcessor"    axis="Density"/>
+    <processor class="org.dive4elements.river.exports.process.BedHeightProcessor"          axis="W"/>
+</longitudinal-defaults>

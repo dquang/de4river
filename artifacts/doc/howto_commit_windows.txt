@@ -1,0 +1,89 @@
+Diese Anleitung erklärt wie man Änderungen an der Codebasis von
+D4E-River unter Windows durchführen kann. In dieser Anleitung
+wird dazu TortoiseHg und Putty verwendet.
+
+Hintergrund:
+D4E-River wird mit dem Versionskontrollsystem Mercurial
+( http://de.wikipedia.org/wiki/Mercurial ) verwaltet und ist auf
+der Plattform "Wald" ( http://wald.intevation.org/ ) gehostet.
+TortoiseHg ist eine Windows Explorer Erweiterung um ein graphisches
+Frontend für Mercurial zu bieten.
+
+
+Schritte 1-3 sind einmalig auszuführen. Schritt 4 muss immer wenn
+man eine Änderung durchführen möchte geschehen.
+
+Schritt 1: Registrieren eines Benutzerkontos auf wald.intevation.de
+
+* Browser öffnen auf Seite https://www.wald.intevation.org/account/register.php
+  Das zugehörige Wurzelzertifikat kann unter https://ssl.intevation.de
+  (Root CA 2010) beschafft werden.
+* Accountdetails eintragen (Nur Felder mit * müssen beachtet werden)
+* Registrieren drücken.
+-> Ihnen wird eine E-Mail mit einem Link zur Bestätigung gesendet.
+* Link aus der E-Mail öffnen.
+* Unter: https://wald.intevation.org/projects/dive4elements/ einen Beitrittsgesuch
+  (Link dafür ist Rechts unten auf der Seite unter den Mitgliedern)
+  Knappen Kommentar einfügen: "Beitrittsgesuch Frau Mustermann" o.Ä.
+-> Ein Admin in diesem Projekt muss Sie nun manuell freischalten.
+
+Schritt 2: SSH Schlüssel erstellen und in Wald hinterlegen
+
+(Dieser Teil geht davon aus das Putty bereits installiert ist)
+* Puttygen starten
+* "Generate a public/private key pair" Ausführen
+* ggf. Einen Key Comment z.B. "Wald Schluessel" angeben.
+* ggf. Eine passphrase angeben
+* Save private key -> Schlüssel abspeichern z.B: c:\Benutzer\name\wald-schluessel.ppk
+* Save public key -> Öffentlichen Schlüssel abspeichern z.B: c:\Benutzer\name\wald-schluessel-pub.txt
+* Kopieren Sie den Inhalt des Bereichs "Public key for pasting into OpenSSH authorized_keys file:"
+* Fügen Sie den öffentlichen Schlüssel in dem Eingabefeld unter:
+  http://wald.intevation.org/account/editsshkeys.php
+  ein.
+* Speichern des Schlüssels durch drücken auf den Button "Aktualisierung".
+
+! Achtung: Es kann bis zu einer Stunde dauern bis der Schlüssel im System
+  synchronisiert ist.
+
+
+Schritt 3: TortoiseHg (Software zur Versionskontrolle) installieren
+* Unter: http://tortoisehg.bitbucket.org/ TortoiseHg herunterladen
+  Die passende Version hängt von der Architektur ihres Systems (32/64-Bit ab)
+* TortoiseHg installieren. Die Standardoptionen sind ausreichend.
+* Fügen Sie nun den Privaten Schlüssel den Sie in Schritt 2 generiert haben
+  in Pageant ein.
+  (Wenn Pageant noch nicht installiert ist kann auch der Pageant aus TortoiseHg
+  verwendet werden. z.B. Installiert in (C:\Programme\TortoiseHg\Pageant.exe)
+* Navigieren Sie im Windows Explorer in ein Verzeichnis in welchem
+  das D4E-River Repository angelegt werden soll.
+* Rechtsklick im Windows Explorer zeigt nun neue Kontext Optionen für TortoiseHg.
+  TortoiseHg -> clone
+* Tragen Sie als Quelle ssh://<ihrbenutzername>@scm.wald.intevation.org/hg/dive4elements/river/
+  ein. Als Ziel einen Ordnernamen für ihr Lokales Repository.
+-> Bei der ersten Verbindung werden Sie darauf hingewiesen das der Host Key des Servers
+   noch unbekannt ist. Der RSA Fingerprint von Wald ist:
+   24:d2:13:1f:fa:02:54:f1:79:4f:5d:a0:aa:d3:ed
+
+Tritt kein Fehler auf haben Sie nun einen Authentifizierten Klon des D4E-River
+Repositories.
+
+
+Schritt 4: Änderungen durchführen.
+* Sicherstellen das Pageant gestartet ist und den Key enthält.
+* Aktualisieren der lokalen Kopie im Ordner des Repositories
+  - Rechtsklick -> TortoiseHg -> Synchronize
+  - Auswählen "Nach dem Abfurfen" -> Update
+  - Eingehende Änderungen von der ausgewählten URL abrufen
+* Änderungen an den Dateien durchführen.
+* Rechtsklick auf die geänderte Datei -> Hg Commit...
+* Eine Versionsmeldung im Fenster die knapp zusammenfasst was / warum
+  Sie etwas geändert haben. (Am liebsten in Englisch)
+  z.B.: "Corrected usage of the word 'fixation' in english translations"
+* Änderungen zum Server übertragen
+ - Rechtsklick -> TortoiseHg -> Synchronize
+ - Ausgehende Änderungen an die ausgewählte URL übertragen
+
+Hinweis: Beim ersten "Commit" werden Sie gebeten sich zu Identifizieren.
+Im darauffolgenden Einstellungs Fenster müssen Sie dann einen Benutzernamen
+Angeben. Dieser sollte das Format vorname nachname <email> haben.
+z.B.: Andre Heinecke <aheinecke@intevation.de>

@@ -1,0 +1,8 @@
+CLASS
+    NAME "Ringdeich"
+    EXPRESSION /ringdeich/i
+    STYLE
+        SIZE 5
+        OUTLINECOLOR "#FF8000"
+    END
+END

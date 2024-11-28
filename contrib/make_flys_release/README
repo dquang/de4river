@@ -1,0 +1,115 @@
+Konfiguration:
+==============
+Zur konfiguration des make_release scripts können umgebungsvariablen
+verwendet werden oder man ändert die entsprechenden Variablen im Script.
+
+Wichtige variablen sind:
+FLYS_SOURCE_DIR: Pfad ohne Leerzeichen zu existierendem Verzeichnis mit
+                 Repository-Checkouts oder neu anzulegendem Verzeichnis
+                 in das die Quellen ausgecheckt werden.
+                 Wenn nicht gesetzt wird ein temporäres Verzeichnis angelegt.
+DEFAULT_WD
+
+Artefakt-Server-Konfiguration:
+SERVER_CONF: Pfad zu einem Verzeichnis, dessen Inhalt in das 'conf'-Verzeichnis
+             des Artefakt-Servers kopiert wird um Default-Konfigurations-
+             Dateien zu überschreiben. Die Zeichenkette 'D4E_VERSION' wird in
+             den so gegebenen Konfigurationsdateien durch die beim Aufruf des
+             Skriptes angegebene Version ersetzt.
+
+Mit folgenden Umgebungsvariablen können auch einzelne Teile der Artefakt-
+Server-Konfiguration angepasst werden (dies geschieht bevor die Default-
+Konfigurations-Dateien überschrieben werden!):
+DGM_PATH:    Prefix für die in der Backend-Datenbank gespeicherten Pfade zu
+             den digitalen Gelände-Modellen.
+WIKI_URL:    URL für die Online-Hilfe (auch für Client-Konfiguration)
+
+WEBINF:      Pfad zu einem Verzeichnis, dessen Inhalt in das
+             'WEB-INF'-Verzeichnis des GWT-Clients kopiert wird um
+             Default-Konfigurations-Dateien zu überschreiben. Die Zeichenkette
+             'D4E_VERSION' wird in den so gegebenen Konfigurationsdateien durch
+             die beim Aufruf des Skriptes angegebene Version ersetzt.
+CLIENT_CONF  Pfad zu einer Datei, mit der
+             gwt-client/src/main/java/org/dive4elements/river/client/client/config.xml
+             ersetzt wird.
+
+Prozess:
+========
+Als erstes muss man eine halbwegs aktuelle version von artifacts-common
+und artifacts-database in dem h2 verzeichnis verlinken.
+
+Beispiel:
+cd h2
+ln -s ~/.m2/repository/org/dive4elements/artifacts-common/1.0-SNAPSHOT/artifacts-common-1.0-SNAPSHOT.jar
+ln -s ~/.m2/repository/org/dive4elements/artifact-database/1.0-SNAPSHOT/artifact-database-1.0-SNAPSHOT.jar
+
+Nachdem die Konfigurationen angepasst wurden, kann das Skript mittels
+  sh make_release.sh VERSION
+von der Konsole gestartet werden. VERSION kann dabei ein Tag oder der Name
+eines Branches sein. Anschließend werden die Quellen des
+dive4elements, des HTTP-Clients und von dive4elements-river
+über HTTPS aus dem HG Repository
+ausgecheckt und in FLYS_SOURCE_DIR abgelegt.
+
+
+Wenn mit der option -t zusätzlich ausgewählt wird diese Version zu taggen
+muss die Umgebungsvariable USER den entsprechenden Account-Namen zum pushen
+des Tags enthalten.
+
+Für den Client wird OpenLayers-2.11 heruntergeladen und in den Client
+verschoben. Zurzeit wird das komplette OpenLayers-2.11 Verzeichnis in den Client
+verschoben. Dies ist jedoch nur für die Entwicklung sinnvoll.
+
+Das Resultat des Skripts ist ein tar.gz, welches zwei Verzeichnisses beinhaltet:
+`server` und `client`. Im Server sind alle Konfigurationen sowie notwendige
+Bibliotheken zum Starten des FLYS Servers enthalten. Im Client ist lediglich das
+WAR Archiv für einen Servlet Container (z.B. Tomcat) enthalten.
+
+Importer:
+=========
+Das script um den Importer zu bauen und zu paketieren liegt unter
+bin/make-importer-package.sh
+Dieses muss man anpassen und ein paar pfade setzen
+
+Deployment:
+===========
+Der tarball kann auf ein Zielsystem übertragen werden und dort entpackt werden.
+Bei den Testsystemen der Intevation ist der Ort der Installationen
+üblicherweise /opt/flys/flys-version
+
+Anschließend deployt man den flys-client im webapps verzeichnis von tomcat
+(z.b. /usr/share/tomcat6/webapps )
+ggf. in WEB-INF die web.xml überprüfen / anpassen.
+
+Bei einer konfiguration mit apache vhosts ist nun noch ein entsprechender
+vhost in der apache konfiguration einzurichten.
+
+Anschließend muss man noch sicher stellen das passende wms scripte im
+mapserver verfügbar sind. In /srv/www/cgi-bin müssen entsprechende
+river-wms und user-wms dateien liegen die auf die korrekte aktuelle version verweisen.
+Hinweis:
+Für Oracle muss in diesen scripten die NLS_LANG umgebungsvariable auf UTF-8 gesetzt werden.
+Beispiel für ein user-wms script:
+
+    #!/bin/sh
+    export LC_ALL="de_DE.UTF-8"
+    export NLS_LANG=".AL32UTF8"
+    export MS_MAPFILE=/opt/flys/current/server/flys.map
+    /srv/www/cgi-bin/mapserv
+
+Die WMS urls sind in server/conf/floodmap.xml und server/conf/rivermap.xml konfiguriert.
+
+In server/conf/conf.xml muss dgm-path angepasst werden um an die richtige stelle
+zu zeigen an der im dateisystem die dgm's liegen.
+Wichtig: Der Pfad muss mit einem / enden
+
+Die bis hierhin beschriebenen Tätigkeiten nach dem Entpacken des Tarballs
+können auch mittels eines Skriptes automatisiert bzw. für bestimmte Systeme
+angepasst werden.
+Über die Umgebungsvariable INSTALL kann ein Pfad zu einem solchen Skript
+angegeben werden, dass dann mit in den Tarball gepackt wird.
+
+Nun kann man den server starten. Dazu in das entsprechende server verzeichnis wechseln
+und ./bin/run ausführen. Der server muss mit diesem arbeitsverzeichnis gestartet werden.
+
+'<,'>s/void \(.*\)(\(.*\));/void \1(\2) {\r    d->\1(\2);\r}\r

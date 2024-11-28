@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<datacage>
+    <user>SA</user>
+    <password/>
+    <driver>org.h2.Driver</driver>
+    <url>jdbc:h2:${artifacts.config.dir}/../artifacts-data/datacagedb/datacage</url>
+</datacage>

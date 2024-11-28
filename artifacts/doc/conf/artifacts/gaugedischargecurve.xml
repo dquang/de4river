@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="gaugedischargecurve">
+    <states>
+        <state id="state.gaugedischargecurve.init" description="state.gaugedischargecurve.init" state="org.dive4elements.river.artifacts.states.GaugeDischargeInitState">
+            <data name="river" type="String"/>
+            <data name="reference_gauge" type="Long"/>
+            <data name="ld_locations" type="Double"/>
+            <data name="gauge_name" type="String"/>
+        </state>
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.gaugedischargecurve.init"/>
+            <to state="state.gaugedischargecurve.static"/>
+        </transition>
+        <state id="state.gaugedischargecurve.static" description="state.gaugedischargecurve.static" state="org.dive4elements.river.artifacts.states.GaugeDischargeCurveState">
+           <outputmodes>
+               <outputmode name="discharge_curve" description="output.discharge_curve" mime-type="image/png" type="chart">
+                   <facets>
+                       <facet name="gauge_discharge_curve"/>
+                       <facet name="mainvalues.q"/>
+                       <facet name="mainvalues.w"/>
+                       <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+                       <facet name="heightmarks_points" description="facet.other.wqkms"/>
+                       <facet name="other.wqkms" description="facet.other.wqkms"/>
+                       <facet name="other.wq"    description="Point-like data like fixations"/>
+                       <facet name="other.wkms"  description="Point-like data like fixations"/>
+                       <facet name="other.wkms.interpol" description="Height over km, like flood protections."/>
+                       <facet name="computed_discharge_curve.manualpoints" description="Manuelle Punkte"/>
+                       <facet name="other.w.interpol" description="Interpolated (likely single) W Values"/>
+                       <facet name="other.wqkms.w" description="facet.other.wqkms"/>
+                   </facets>
+               </outputmode>
+               <outputmode name="computed_dischargecurve_at_export" description="output.computed_dischargecurve_at_export" mime-type="text/plain" type="export">
+                   <facets>
+                       <facet name="at" description="facet.gauge_discharge_curve_export.at"/>
+                   </facets>
+               </outputmode>
+               <outputmode name="computed_dischargecurve_export" description="output.computed_dischargecurve_export" mime-type="text/plain" type="export">
+                   <facets>
+                       <facet name="csv" description="facet.computed_dischargecurve_export.csv" />
+                       <facet name="pdf" description="facet.computed_dischargecurve_export.pdf" />
+                   </facets>
+               </outputmode>
+           </outputmodes>
+        </state>
+    </states>
+</artifact>

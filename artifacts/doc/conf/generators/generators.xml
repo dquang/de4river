@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<output-generators>
+    &longitudinal-diagrams;
+    &discharge-diagrams;
+
+    <output-generator names="cross_section" class="org.dive4elements.river.exports.CrossSectionGenerator"/>
+    <output-generator names="cross_section_chartinfo" class="org.dive4elements.river.exports.CrossSectionInfoGenerator"/>
+    <output-generator names="duration_curve" class="org.dive4elements.river.exports.DurationCurveGenerator"/>
+    <output-generator names="duration_curve_chartinfo" class="org.dive4elements.river.exports.DurationCurveInfoGenerator"/>
+    <output-generator names="waterlevel_export" class="org.dive4elements.river.exports.WaterlevelExporter"/>
+
+    <output-generator names="historical_discharge_chartinfo" class="org.dive4elements.river.exports.HistoricalDischargeCurveInfoGenerator"/>
+    <output-generator names="historical_discharge" class="org.dive4elements.river.exports.HistoricalDischargeCurveGenerator"/>
+
+    <!-- This is deactivated.
+    <output-generator names="extreme_wq_curve" class="org.dive4elements.river.exports.extreme.ExtremeWQCurveGenerator"/>
+    <output-generator names="extreme_curve_export" class="org.dive4elements.river.exports.WaterlevelExporter"/>
+    <output-generator names="extreme_wq_curve_chartinfo" class="org.dive4elements.river.exports.extreme.ExtremeWQCurveInfoGenerator"/>
+    -->
+
+    <output-generator names="durationcurve_export" class="org.dive4elements.river.exports.DurationCurveExporter"/>
+    <output-generator names="computed_dischargecurve_export" class="org.dive4elements.river.exports.ComputedDischargeCurveExporter"/>
+    <output-generator names="discharge_longitudinal_section_export" class="org.dive4elements.river.exports.DischargeLongitudinalSectionExporter"/>
+    <output-generator names="w_differences_export" class="org.dive4elements.river.exports.WDifferencesExporter"/>
+    <output-generator names="floodmap" class="org.dive4elements.river.exports.MapGenerator"/>
+    <output-generator names="map" class="org.dive4elements.river.exports.MapGenerator"/>
+    <output-generator names="reference_curve" class="org.dive4elements.river.exports.ReferenceCurveGenerator"/>
+    <output-generator names="reference_curve_normalized" class="org.dive4elements.river.exports.NormalizedReferenceCurveGenerator"/>
+    <output-generator names="reference_curve_normalized_chartinfo" class="org.dive4elements.river.exports.NormalizedReferenceCurveInfoGenerator"/>
+    <output-generator names="reference_curve_chartinfo" class="org.dive4elements.river.exports.ReferenceCurveInfoGenerator"/>
+    <output-generator names="reference_curve_export" class="org.dive4elements.river.exports.ReferenceCurveExporter"/>
+    <output-generator names="historical_discharge_export" class="org.dive4elements.river.exports.HistoricalDischargeCurveExporter"/>
+    <output-generator names="flow_velocity_export" class="org.dive4elements.river.exports.FlowVelocityExporter"/>
+    <output-generator names="bedheight_middle_export" class="org.dive4elements.river.exports.MiddleBedHeightExporter"/>
+    <output-generator names="bed_quality_export" class="org.dive4elements.river.exports.minfo.BedQualityExporter"/>
+    <output-generator names="bedheight_difference_export" class="org.dive4elements.river.exports.minfo.BedDifferenceExporter"/>
+    <output-generator names="sq_relation_export" class="org.dive4elements.river.exports.sq.SQRelationExporter"/>
+    <output-generator names="fix_parameters_export" class="org.dive4elements.river.exports.fixings.ParametersExporter"/>
+    <output-generator names="fix_deltawt_export" class="org.dive4elements.river.exports.fixings.DeltaWtExporter"/>
+    <output-generator names="fix_deltawt_curve" class="org.dive4elements.river.exports.fixings.FixDeltaWtGenerator"/>
+    <output-generator names="fix_deltawt_curve_chartinfo" class="org.dive4elements.river.exports.fixings.FixDeltaWtInfoGenerator"/>
+    <output-generator names="fix_waterlevel_export" class="org.dive4elements.river.exports.WaterlevelExporter"/>
+    <output-generator names="sedimentload_ls_export" class="org.dive4elements.river.exports.minfo.SedimentLoadExporter"/>
+    <!-- Error report generators. -->
+    <output-generator names="discharge_longitudinal_section_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="waterlevel_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="computed_dischargecurve_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="durationcurve_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="wsplgen_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="historical_discharge_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="reference_curve_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="fix_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="extreme_curve_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="sedimentload_ls_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <output-generator names="bed_quality_report" class="org.dive4elements.river.exports.ReportGenerator"/>
+    <!-- AT exporter. -->
+    <output-generator names="computed_dischargecurve_at_export" class="org.dive4elements.river.exports.ATExporter"/>
+    <output-generator names="gauge_discharge_curve_at_export" class="org.dive4elements.river.exports.ATExporter"/>
+    <output-generator names="fix_wq_curve_at_export" class="org.dive4elements.river.exports.fixings.FixATExport"/>
+    <output-generator names="wsplgen" class="org.dive4elements.river.exports.ShapeExporter"/>
+</output-generators>
+

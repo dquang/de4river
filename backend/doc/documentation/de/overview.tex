@@ -1,0 +1,135 @@
+\section{Übersicht}
+
+Diese Dokumentation beschreibt die von Intevation entwickelten Werkzeuge zum
+Importieren der hydrologischen, morphologischen und geodätischen Daten der BfG.
+Die im Folgenden beschriebenen Werkzeuge zum Importieren der Daten sind speziell auf das Verzeichnissystem der BfG ausgerichtet.
+Dabei wird angenommen, dass sich das Verzeichnis eines Gewässers auf oberster
+Ebene in drei Unterverzeichnisse aufgliedert:
+
+\begin{itemize}
+    \item Geodaesie
+    \item Hydrologie
+    \item Morphologie
+\end{itemize}
+
+Desweiteren beziehen sich die Befehle, die auf der Kommandozeile abgesetzt
+werden, auf ein SuSE-Linux-Enterprise-Server Version 11. Bitte beachten Sie
+auch, dass einige der Befehle \textit{root}-Rechte benötigen.
+
+\subsection{Vorbereitungen}
+
+\subsubsection{Entpacken des Datenimporters}
+
+Damit die Software performant und korrekt ausgeführt werden kann, ist es
+erforderlich, dass sie auf dem selben System wie die Datenbank installiert
+und ausgeführt wird.
+Sollten Sie das Paket nicht auf dem
+Zielsystem selbst heruntergeladen haben, sind ggf. weitere Werkzeuge notwendig.
+Wenn Sie von einem Windows System auf das Zielsystem zugreifen
+wollen, können Sie beispielsweise folgende Werkzeuge verwenden:
+
+\begin{itemize}
+\item WinSCP \\
+WinSCP ist ein Open Source Werkzeug zum Transferieren von Dateien zwischen zwei
+Systemen. Um das heruntergeladene Paket auf das Zielsystem zu transferieren,
+können Sie WinSCP benutzen. Für weitere Informationen und den Gebrauch von
+WinSCP lesen Sie bitte unter folgender Adresse nach:
+\href{http://winscp.net/}{http://winscp.net/}.
+
+\item Putty \\
+Putty ist ein Open Source Werkzeug, mit dem Sie sich von einem Windows System
+per SSH auf das Zielsystem verbinden können. Anschließend können Sie über die
+Kommandozeile auf dem Zielsystem die Befehle, die in diesem Dokument beschrieben
+sind, ausführen. Für weitere Informationen zu Putty und dessen Gebrauch lesen
+Sie bitte unter folgender Adresse nach: \href{http://www.putty.org/}
+{http://www.putty.org/}.
+\end{itemize}
+
+Bitte beachten Sie, dass diese Werkzeuge nicht zur Installtion und zum Betrieb
+der Software selbst notwendig sind!
+
+\subsection{Systemanforderungen}
+\label{Systemanforderungen}
+\begin{itemize}
+  \item Oracle- oder PosgreSQL-Datenbank bzw. entsprechende Client-Bibliotheken
+    inkl. Schema für FLYS
+  \item Java, Python, GDAL 1.11 (mit GDAL-Python-API)
+\end{itemize}
+
+\subsection{Installationsanleitung}
+\label{Installationsanleitung}
+
+Nachdem Sie das Paket nun in das Heimatverzeichnis des Nutzers auf das
+Zielsystem kopiert haben, entpacken Sie es mit folgenden Befehlen:
+
+\begin{lstlisting}
+    cd ~
+    tar xvfz flys-importer.tar.gz
+    cd flys-importer
+\end{lstlisting}
+
+
+\subsubsection{Vorbereiten einer Oracle-Datenbank}
+Bevor die Importer verwendet werden können, ist es notwendig, dass eine leere
+Oracle Datenbank vorhanden ist. Anschließend müssen folgende SQL-Skripte in
+diese Datenbank eingespielt werden:
+
+\begin{enumerate}
+\item oracle.sql \\
+In diesem SQL Skript befindet sich das Schema zum Speichern der hydrologischen
+Daten.
+
+\item oracle-minfo.sql \\
+In diesem SQL Skript befindet sich das Schema zum Speichern der morphologischen
+Daten.
+
+\item oracle-spatial.sql \\
+In diesem SQL Skript befindet sich das Schema zum Speichern der geodätischen
+Daten.
+
+\item oracle-spatial\_idx.sql \\
+Mittels diesem SQL Skript werden die Indizes zum geodätischen Datenbankschema\\
+hinzugefügt.
+
+\end{enumerate}
+
+Zum Einspielen dieser Schemata setzen Sie folgende Befehle auf der Kommandozeile
+ab. Beachten Sie, dass $sqlplus$ im Pfad liegen muss, und der Linux-Nutzer
+dieses Kommando ausführen können muss. Außerdem sind $benutzername$ und $passwort$
+entsprechend Ihres Datenbank-Zugangs anzupassen.
+
+Damit alle in den UTF8-codierten SQL-Skripten vorhandenen Zeichen (also z.B.\
+auch Umlaute) korrekt in die Datenbank eingelesen werden können, führen
+Sie folgenden Befehl aus:
+
+\begin{lstlisting}
+export NLS_LANG=.AL32UTF8
+\end{lstlisting}
+
+Nun verbinden Sie sich mit der Datenbank
+\begin{lstlisting}
+    sqlplus user/password@connect_identifier
+\end{lstlisting}
+
+und erstellen das Schema:
+
+\begin{lstlisting}
+    @schema/oracle.sql
+    @schema/oracle-minfo.sql
+    @schema/oracle-spatial.sql
+    @schema/oracle-spatial_idx.sql
+\end{lstlisting}
+
+Hierbei ist
+\begin{lstlisting}
+user/password@connect_identifier
+\end{lstlisting}
+so etwas wie
+\begin{lstlisting}
+ICH/geheim@127.0.0.1:1234/DB.TEST.FIRMA.DE
+\end{lstlisting}
+
+Um sqlplus zu verlassen verwenden Sie
+\begin{lstlisting}
+exit
+\end{lstlisting}

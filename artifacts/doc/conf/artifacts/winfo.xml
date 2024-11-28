@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="winfo">
+    <states>
+
+        <state id="state.winfo.river" description="state.winfo.river" state="org.dive4elements.river.artifacts.states.RiverSelect" helpText="help.state.winfo.river">
+            <data name="river" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.river"/>
+            <to state="state.winfo.calculation_mode"/>
+        </transition>
+
+        <state id="state.winfo.calculation_mode" description="state.winfo.calculation_mode" state="org.dive4elements.river.artifacts.states.CalculationSelect" helpText="help.state.winfo.calculation_mode">
+            <data name="calculation_mode" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.location_distance"/>
+            <condition data="calculation_mode" value="calc.surface.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.distance_only"/>
+            <condition data="calculation_mode" value="calc.flood.map" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.location"/>
+            <condition data="calculation_mode" value="calc.discharge.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.location"/>
+            <condition data="calculation_mode" value="calc.duration.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.distance"/>
+            <condition data="calculation_mode" value="calc.discharge.longitudinal.section" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.distance_only"/>
+            <condition data="calculation_mode" value="calc.w.differences" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.historicalq.reference_gauge"/>
+            <condition data="calculation_mode" value="calc.historical.discharge.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.location_distance"/>
+            <condition data="calculation_mode" value="calc.extreme.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.distance_only"/>
+            <to state="state.winfo.waterlevel_pair_select"/>
+            <condition data="calculation_mode" value="calc.w.differences" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.waterlevel_pair_select"/>
+            <to state="state.winfo.w_differences"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.calculation_mode"/>
+            <to state="state.winfo.reference.curve.input.start"/>
+            <condition data="calculation_mode" value="calc.reference.curve" operator="equal"/>
+        </transition>
+
+        <state id="state.winfo.location" description="state.winfo.location" state="org.dive4elements.river.artifacts.states.LocationSelect" helpText="help.state.winfo.location">
+            <data name="ld_locations" type="Double[]" />
+
+            <!--
+            <outputmodes>
+                <outputmode name="discharge_curve" description="output.discharge_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+                        <facet name="mainvalues.q" description="facet.computed_discharge_curve.mainvalues.q"/>
+                        <facet name="discharge_curve.manualpoints" description="Manuelle Punkte"/>
+                        <facet name="mainvalues.w" description="facet.computed_discharge_curve.mainvalues.w"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+            -->
+        </state>
+
+        <state id="state.winfo.distance_only" description="state.winfo.distance_only" state="org.dive4elements.river.artifacts.states.DistanceOnlySelect" helpText="help.state.winfo.distance_only">
+            <data name="ld_from" type="Double" />
+            <data name="ld_to"   type="Double" />
+        </state>
+
+        <state id="state.winfo.distance" description="state.winfo.distance" state="org.dive4elements.river.artifacts.states.DistanceSelect" helpText="help.state.winfo.distance">
+            <data name="ld_from" type="Double" />
+            <data name="ld_to"   type="Double" />
+            <data name="ld_step" type="Double" />
+
+            <!--
+            <outputmodes>
+                <outputmode name="discharge_curve" description="output.discharge_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+                        <facet name="mainvalues.q" description="facet.computed_discharge_curve.mainvalues.q"/>
+                        <facet name="discharge_curve.manualpoints" description="Manuelle Punkte"/>
+                        <facet name="mainvalues.w" description="facet.computed_discharge_curve.mainvalues.w"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+            -->
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.distance_only"/>
+            <to state="state.winfo.uesk.wsp"/>
+        </transition>
+
+        <state id="state.winfo.location_distance" description="state.winfo.location_distance" state="org.dive4elements.river.artifacts.states.LocationDistanceSelect" helpText="help.state.winfo.location_distance">
+            <data name="ld_mode" type="String" />
+            <data name="ld_locations" type="Double[]" />
+            <data name="ld_from" type="Double" />
+            <data name="ld_to" type="Double" />
+            <data name="ld_step" type="Double" />
+
+            <!--
+            <outputmodes>
+                <outputmode name="discharge_curve" description="output.discharge_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+                        <facet name="mainvalues.q" description="facet.computed_discharge_curve.mainvalues.q"/>
+                        <facet name="discharge_curve.manualpoints" description="Manuelle Punkte"/>
+                        <facet name="mainvalues.w" description="facet.computed_discharge_curve.mainvalues.w"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+            -->
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.distance"/>
+            <to state="state.winfo.wq_adapted"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.location_distance"/>
+            <to state="state.winfo.function_select"/>
+            <condition data="calculation_mode" value="calc.extreme.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.location_distance"/>
+            <to state="state.winfo.wq"/>
+            <condition data="calculation_mode" value="calc.extreme.curve" operator="notequal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.location"/>
+            <to state="state.winfo.durationcurve"/>
+            <condition data="calculation_mode" value="calc.duration.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.location"/>
+            <to state="state.winfo.computeddischargecurve"/>
+            <condition data="calculation_mode" value="calc.discharge.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.function_select"/>
+            <to state="state.winfo.extreme.percent"/>
+            <condition data="calculation_mode" value="calc.extreme.curve" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.extreme.percent"/>
+            <to state="state.winfo.extreme.qinput"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.extreme.qinput"/>
+            <to state="state.winfo.extreme.curve"/>
+        </transition>
+
+
+        <state id="state.winfo.wq" description="state.winfo.wq" state="org.dive4elements.river.artifacts.states.WQSelect" helpText="help.state.winfo.wq">
+            <data name="wq_isq" type="Boolean" />
+            <data name="wq_isfree" type="Boolean" />
+            <data name="wq_isrange" type="Boolean" />
+            <data name="wq_from" type="Double" />
+            <data name="wq_to" type="Double" />
+            <data name="wq_step" type="Double" />
+            <data name="wq_single" type="Double[]" />
+        </state>
+
+        <state id="state.winfo.wq_adapted" description="state.winfo.wq_adapted"
+               state="org.dive4elements.river.artifacts.states.WQAdapted" helpText="help.state.winfo.wq_adapted">
+            <!-- TODO Add data objects -->
+            <data name="wq_isq"   type="String" />
+            <data name="wq_values" type="WQTriple" />
+        </state>
+
+        <state id="state.winfo.waterlevel_pair_select" description="state.winfo.waterlevel_pair_select" state="org.dive4elements.river.artifacts.states.WaterlevelPairSelectState" helpText="help.state.winfo.waterlevel_pair_select">
+            <data name="diffids" type="String" />
+        </state>
+
+        <state id="state.winfo.reference.curve.input.start" description="state.winfo.reference.curve.input (start)" state="org.dive4elements.river.artifacts.states.EnterLocationState" helpText="help.state.winfo.reference.curve.input.start">
+            <data name="reference_startpoint" type="Double[]"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.reference.curve.input.start"/>
+            <to   state="state.winfo.reference.curve.input.end"/>
+        </transition>
+
+        <state id="state.winfo.reference.curve.input.end" description="state.winfo.reference.curve.input (end)" state="org.dive4elements.river.artifacts.states.EnterMultipleLocationsState" helpText="help.state.winfo.reference.curve.input.end">
+            <data name="reference_endpoint" type="Double[]"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.reference.curve.input.end"/>
+            <to state="state.winfo.reference.curve"/>
+        </transition>
+
+        <state id="state.winfo.reference.curve" description="state.winfo.reference.curve" state="org.dive4elements.river.artifacts.states.ReferenceCurveState" helpText="help.state.winfo.reference.curve">
+            <outputmodes>
+                <outputmode name="reference_curve_normalized" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="reference_curve_normalized" description="A normalized reference curve!"/>
+                        <facet name="reference_curve_normalized.manualpoints" description="points"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="reference_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="reference_curve" description="A ... reference curve!"/>
+                        <facet name="reference_curve.manualpoints" description="points"/>
+                        <facet name="relativepoint"    description="Points at curve"/>
+                        <facet name="mainvalues.w" description="facet.computed_discharge_curve.mainvalues.w"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="reference_curve_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.reference_curve_export.csv" />
+                        <facet name="pdf" description="facet.reference_curve_export.pdf" />
+                    </facets>
+                </outputmode>
+                <outputmode name="reference_curve_report" description="output.reference_curve_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.reference_curve_export.report" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.winfo.w_differences" description="state.winfo.w_differences" state="org.dive4elements.river.artifacts.states.WDifferencesState" helpText="help.state.winfo.w_differences">
+
+            <outputmodes>
+                <outputmode name="w_differences" description="output.w_differences" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="longitudinal_section.q" description="facet.longitudinal_section.q"/>
+                        <facet name="longitudinal_section.w" description="facet.longitudinal_section.w"/>
+                        <facet name="w_differences" description="facet.w_differences"/>
+                        <facet name="w_differences.filtered" description="facet.w_differences"/>
+                        <facet name="other.wkms" description="facet.other.wkms"/>
+                        <facet name="other.wqkms" description="facet.other.wqkms"/>
+                        <facet name="other.wqkms.w"          description="W-Type of data" />
+                        <facet name="other.wqkms.q"          description="Q-Type of data" />
+                        <facet name="heightmarks_points" description="facet.other.wkms.heightmarks_points"/>
+                        <facet name="w_differences.manualpoints" description="Manuelle Punkte"/>
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                        <facet name="bedheight_difference.year" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.year.filtered" description="A facet for bed height differences"/>
+                        <facet name="bedheight_difference.morph_width" description="A facet for morphologic width"/>
+                        <facet name="bedheight_difference.year.height1" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height1.filtered" description="A facet for raw heights."/>
+                        <facet name="bedheight_difference.year.height2.filtered" description="A facet for raw heights."/>
+                        <facet name="morph-width" description="morphologic width, not sounding width!"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="w_differences_export" description="output.w_differences.export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.w_differences.csv" />
+                        <facet name="pdf" description="facet.w_differences.pdf" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.winfo.durationcurve" description="state.winfo.durationcurve" state="org.dive4elements.river.artifacts.states.DurationCurveState" helpText="help.state.winfo.durationcurve">
+            <outputmodes>
+                <outputmode name="duration_curve" description="output.duration_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="duration_curve.w" description="facet.duration_curve.w"/>
+                        <facet name="duration_curve.q" description="facet.duration_curve.q"/>
+                        <facet name="other.wq"         description="Point-like data like fixations"/>
+                        <facet name="mainvalues.q" description="Q Main Values at optional second axis"/>
+                        <facet name="mainvalues.w" description="W Main Values"/>
+                        <facet name="duration_curve.manualpoints" description="Manuelle Punkte"/>
+                        <facet name="relativepoint"    description="Points at curve"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="durationcurve_export" description="output.durationcurve_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.durationcurve_export.csv" />
+                        <facet name="pdf" description="facet.durationcurve_export.pdf" />
+                    </facets>
+                </outputmode>
+                <outputmode name="durationcurve_report" description="output.durationcurve_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.durationcurve_export.report" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.winfo.computeddischargecurve" description="state.winfo.computeddischargecurve" state="org.dive4elements.river.artifacts.states.ComputedDischargeCurveState" helpText="help.state.winfo.computeddischargecurve">
+            <outputmodes>
+                <outputmode name="computed_discharge_curve" description="output.computed_discharge_curve" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="computed_discharge_curve.q" description="facet.computed_discharge_curve.q"/>
+                        <facet name="mainvalues.q" description="facet.computed_discharge_curve.mainvalues.q"/>
+                        <facet name="mainvalues.w" description="facet.computed_discharge_curve.mainvalues.w"/>
+                        <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+                        <facet name="heightmarks_points" description="facet.other.wqkms"/>
+                        <facet name="other.wqkms.w" description="facet.other.wqkms"/>
+                        <facet name="other.wqkms.q" description="facet.other.wqkms"/>
+                        <facet name="other.wqkms" description="facet.other.wqkms"/>
+                        <facet name="other.wq"    description="Point-like data like fixations"/>
+                        <facet name="other.wkms"  description="Point-like data like fixations"/>
+                        <facet name="other.wkms.interpol" description="Height over km, like flood protections."/>
+                        <facet name="computed_discharge_curve.manualpoints" description="Manuelle Punkte"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="computed_dischargecurve_export" description="output.computed_dischargecurve_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.computed_dischargecurve_export.csv" />
+                        <facet name="pdf" description="facet.computed_dischargecurve_export.pdf" />
+                    </facets>
+                </outputmode>
+                <outputmode name="computed_dischargecurve_report" description="output.computed_dischargecurve_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.computed_dischargecurve_export.report"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="computed_dischargecurve_at_export" description="output.computed_dischargecurve_at_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="at" description="facet.computed_dischargecurve_export.at"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.wq"/>
+            <to state="state.winfo.waterlevel"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.wq_adapted"/>
+            <to state="state.winfo.discharge_longitudinal_section"/>
+        </transition>
+
+        <state id="state.winfo.waterlevel" description="state.winfo.waterlevel" state="org.dive4elements.river.artifacts.states.WaterlevelState" helpText="help.state.winfo.waterlevel">
+            <outputmodes>
+                <outputmode name="longitudinal_section" description="output.longitudinal_section" mime-type="image/png" type="chart">
+                  <facets>
+                    <facet name="longitudinal_section.w" description="facet.longitudinal_section.w"/>
+                    <facet name="longitudinal_section.q" description="facet.longitudinal_section.q"/>
+                    <facet name="w_differences"          description="facet.w_differences"/>
+                    <facet name="w_differences.filtered" description="facet.w_differences"/>
+                    <facet name="other.wqkms.w"          description="W-Type of data" />
+                    <facet name="other.wq"               description="WQ-Type of data" />
+                    <facet name="other.wqkms.q"          description="Q-Type of data" />
+                    <facet name="other.wkms"             description="facet.other.wkms"/>
+                    <facet name="longitudinal_section.manualpoints" description="Manuelle Punkte"/>
+                    <facet name="other.wqkms"            description="facet.other.wqkms"/>
+                    <facet name="heightmarks_points"     description="facet.other.wkms.heightmarks_points"/>
+                    <facet name="longitudinal_section.area"        description="an area"/>
+                    <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                  </facets>
+                </outputmode>
+                <outputmode name="waterlevel_export" description="output.waterlevel_export" mime-type="text/plain" type="export">
+                  <facets>
+                    <!-- include other.wqkms.w to be able to include official lines (issue1384) -->
+                    <facet name="other.wqkms.w" description="W-Type of data" />
+                    <facet name="csv" description="facet.waterlevel_export.csv" />
+                    <facet name="wst" description="facet.waterlevel_export.wst" />
+                    <facet name="pdf" description="facet.waterlevel_export.pdf" />
+                  </facets>
+                </outputmode>
+                <outputmode name="waterlevel_report" description="output.waterlevel_report" mime-type="text/xml" type="report">
+                  <facets>
+                    <facet name="report" description="facet.waterlevel_export.report"/>
+                  </facets>
+                </outputmode>
+                <outputmode name="cross_section" description="output.cross_section" mime-type="image/png" type="chart">
+                  <facets>
+                    <facet name="cross_section_water_line"   description="facet.cross_section_water_line"/>
+                    <facet name="cross_section"              description="facet.cross_section"/>
+                    <facet name="area"                       description="an area"/>
+                    <facet name="cross_section.area"         description="an area"/>
+                    <facet name="cross_section.manualpoints" description="points"/>
+                    <facet name="cross_section.manualline"   description="line"/>
+                    <facet name="hyk"                        description="hyks"/>
+                  </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.winfo.discharge_longitudinal_section" description="state.winfo.discharge_longitudinal_section" state="org.dive4elements.river.artifacts.states.DischargeLongitudinalSection" helpText="help.state.winfo.discharge_longitudinal_section">
+            <outputmodes>
+                <outputmode name="discharge_longitudinal_section" description="output.discharge_longitudinal_section" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="discharge_longitudinal_section.w"/>
+                        <facet name="discharge_longitudinal_section.q"/>
+                        <facet name="discharge_longitudinal_section.q.infolding"/>
+                        <facet name="discharge_longitudinal_section.q.cutting"/>
+                        <facet name="discharge_longitudinal_section.c"/>
+                        <facet name="discharge_longitudinal_section.manualpoints" description="Manuelle Punkte"/>
+                        <facet name="other.wqkms.w"/>
+                        <facet name="other.wq"/>
+                        <facet name="other.wqkms.q"/>
+                        <facet name="other.wqkms"/>
+                        <facet name="other.wkms"/>
+                        <facet name="heightmarks_points"/>
+                        <facet name="longitudinal_section.annotations"/>
+                        <facet name="longitudinal_section.w"/>
+                        <facet name="longitudinal_section.q"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="discharge_longitudinal_section_export" description="output.discharge_longitudinal_section_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.discharge_longitudinal_section_export.csv" />
+                        <facet name="wst" description="facet.discharge_longitudinal_section_export.wst" />
+                    </facets>
+                </outputmode>
+                <outputmode name="discharge_longitudinal_section_report" description="output.discharge_longitudinal_section_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.discharge_longitudinal_section_export.report"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="cross_section" description="output.cross_section" mime-type="image/png" type="chart">
+                  <facets>
+                    <facet name="cross_section_water_line" description="facet.cross_section_water_line"/>
+                    <facet name="cross_section"            description="facet.cross_section"/>
+                    <facet name="area"                     description="an area"/>
+                    <facet name="cross_section.area"                     description="an area"/>
+                    <facet name="cross_section.manualpoints" description="points"/>
+                    <facet name="cross_section.manualline" description="line"/>
+                    <facet name="hyk"                      description="hyks"/>
+                  </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <!-- The brigde to UeSF
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.waterlevel"/>
+            <to state="state.winfo.uesk.dgm"/>
+        </transition>
+        -->
+
+        <state id="state.winfo.uesk.wsp" description="state.winfo.uesk.wsp" state="org.dive4elements.river.artifacts.states.WaterlevelSelectState" helpText="help.state.winfo.uesk.wsp">
+            <data name="wsp" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.wsp"/>
+            <to state="state.winfo.uesk.dgm"/>
+        </transition>
+
+        <state id="state.winfo.uesk.dgm" description="state.winfo.uesk.dgm" state="org.dive4elements.river.artifacts.states.DGMSelect" helpText="help.state.winfo.uesk.dgm">
+            <data name="dgm" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.dgm"/>
+            <to state="state.winfo.uesk.profiles"/>
+        </transition>
+
+        <state id="state.winfo.uesk.profiles" description="state.winfo.uesk.profiles" state="org.dive4elements.river.artifacts.states.ProfileDistanceSelect" helpText="help.state.winfo.uesk.profiles">
+            <data name="profile_distance" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.profiles"/>
+            <to state="state.winfo.uesk.floodplain"/>
+        </transition>
+
+        <state id="state.winfo.uesk.floodplain" description="state.winfo.uesk.floodplain.description" state="org.dive4elements.river.artifacts.states.FloodplainChoice" helpText="help.state.winfo.uesk.floodplain">
+            <data name="use_floodplain" type="Boolean" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.floodplain"/>
+            <to state="state.winfo.uesk.differences"/>
+        </transition>
+
+        <state id="state.winfo.uesk.differences" description="state.winfo.uesk.differences" state="org.dive4elements.river.artifacts.states.WaterlevelGroundDifferences" helpText="help.state.winfo.uesk.differences">
+            <data name="diff_from" type="Double" />
+            <data name="diff_to"   type="Double" />
+            <data name="diff_diff" type="Double" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.differences"/>
+            <to state="state.winfo.uesk.scenario"/>
+        </transition>
+
+        <state id="state.winfo.uesk.scenario" description="state.winfo.uesk.scenario" state="org.dive4elements.river.artifacts.states.ScenarioSelect" helpText="help.state.winfo.uesk.scenario">
+            <data name="scenario" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.uesk.scenario"/>
+            <to state="state.winfo.uesk.uesk"/>
+            <condition data="scenario" value="scenario.current" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.uesk.scenario"/>
+            <to state="state.winfo.uesk.uesk"/>
+            <condition data="scenario" value="scenario.potentiel" operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.winfo.uesk.scenario"/>
+            <to state="state.winfo.uesk.dc-hws"/>
+            <condition data="scenario" value="scenario.scenario" operator="equal"/>
+        </transition>
+
+        <state id="state.winfo.uesk.dc-hws" description="state.winfo.uesk.dc-hws" state="org.dive4elements.river.artifacts.states.HWSDatacageState" helpText="help.state.winfo.uesk.dc-hws">
+            <data name="uesk.hws" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.dc-hws" />
+            <to state="state.winfo.uesk.user-rgd" />
+        </transition>
+
+        <state id="state.winfo.uesk.user-rgd" description="state.winfo.uesk.user-rgd" state="org.dive4elements.river.artifacts.states.UserRGDState" helpText="help.state.winfo.uesk.user-rgd">
+            <data name="uesk.user-rgd" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.user-rgd" />
+            <to state="state.winfo.uesk.barriers" />
+        </transition>
+
+        <state id="state.winfo.uesk.barriers" description="state.winfo.uesk.barriers" state="org.dive4elements.river.artifacts.states.HWSBarriersState" helpText="help.state.winfo.uesk.barriers">
+            <data name="uesk.barriers" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.uesk.barriers" />
+            <to state="state.winfo.uesk.uesk" />
+        </transition>
+
+        <state id="state.winfo.uesk.uesk" description="state.winfo.uesk.uesk" state="org.dive4elements.river.artifacts.states.FloodMapState" helpText="help.state.winfo.uesk.uesk">
+            <outputmodes>
+                <outputmode name="floodmap" description="output.uesk.map.description" type="map">
+                    <facets>
+                        <facet name="floodmap.wsplgen"/>
+                        <facet name="floodmap.barriers"/>
+                        <facet name="floodmap.usershape"/>
+                        <facet name="floodmap.riveraxis"/>
+                        <facet name="floodmap.wmsbackground"/>
+                        <facet name="floodmap.kms"/>
+                        <facet name="floodmap.qps"/>
+                        <facet name="floodmap.hws_lines"/>
+                        <facet name="floodmap.hws_points"/>
+                        <facet name="floodmap.hydr_boundaries"/>
+                        <facet name="floodmap.hydr_boundaries_poly"/>
+                        <facet name="floodmap.catchment"/>
+                        <facet name="floodmap.floodplain"/>
+                        <facet name="floodmap.lines"/>
+                        <facet name="floodmap.buildings"/>
+                        <facet name="floodmap.fixpoints"/>
+                        <facet name="floodmap.floodmarks"/>
+                        <facet name="floodmap.floodmaps"/>
+                        <facet name="floodmap.gauge_location"/>
+                        <facet name="floodmap.externalwms"/>
+                        <facet name="floodmap.jetties"/>
+                    </facets>
+                </outputmode>
+		<outputmode name="wsplgen" description="output.wsplgen_export" mime-type="application/zip" type="export">
+                    <facets>
+                        <facet name="zip" description="facet.wsplgen_export.zip"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="wsplgen_report" description="output.wsplgen_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.wsplgen_export.report"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+
+        <!-- path for historical discharge curves -->
+        <state id="state.winfo.historicalq.reference_gauge" description="state.winfo.historicalq.reference_gauge" state="org.dive4elements.river.artifacts.states.ReferenceGaugeState" helpText="help.state.winfo.historicalq.reference_gauge">
+            <data name="reference_gauge" type="Integer" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.historicalq.reference_gauge"/>
+            <to state="state.winfo.historicalq.timerange"/>
+        </transition>
+
+        <state id="state.winfo.historicalq.timerange" description="state.winfo.historicalq.timerange" state="org.dive4elements.river.artifacts.states.GaugeTimerangeState" helpText="help.state.winfo.historicalq.timerange">
+            <data name="year_range" type="longrange"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.historicalq.timerange"/>
+            <to state="state.winfo.historicalq.mode"/>
+        </transition>
+
+        <state id="state.winfo.historicalq.mode" description="state.winfo.historicalq.mode" state="org.dive4elements.river.artifacts.states.HistoricalDischargeState" helpText="help.state.winfo.historicalq.mode">
+            <data name="historical_mode" type="intoptions" />
+            <data name="historical_values" type="doublearray" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.winfo.historicalq.mode"/>
+            <to state="state.winfo.historicalq.compute"/>
+        </transition>
+
+        <state id="state.winfo.historicalq.compute" description="state.winfo.historicalq.compute" state="org.dive4elements.river.artifacts.states.HistoricalDischargeComputeState" helpText="help.state.winfo.historicalq.compute">
+            <outputmodes>
+                <outputmode name="historical_discharge" description="output.historical_discharge.description" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="historical_discharge.historicalq"/>
+                        <facet name="historical_discharge.historicalq.diff"/>
+                        <facet name="historical_discharge.historicalw"/>
+                        <facet name="historical_discharge.historicalw.diff"/>
+                        <facet name="historical_discharge.manualpoints"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="historical_discharge_wq" description="output.historical_discharge_wq.description" mime-type="image/png" type="chart">
+                    <facets>
+                        <facet name="discharge_curve.curve"/>
+                        <facet name="historical_discharge.wq.q"/>
+                        <facet name="historical_discharge.wq.w"/>
+                        <facet name="historical_discharge.wq.curve"/>
+                        <facet name="mainvalues.q"/>
+                        <facet name="mainvalues.w"/>
+                        <facet name="historical_discharge_wq.manualpoints"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="historical_discharge_export" description="output.historical_discharge.export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.historical_discharge.csv" />
+                        <facet name="pdf" description="facet.historical_discharge.pdf" />
+                    </facets>
+                </outputmode>
+                <outputmode name="historical_discharge_report" description="output.historical_discharge_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.historical_discharge.report"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.winfo.function_select"
+            description="state.winfo.function_select"
+            state="org.dive4elements.river.artifacts.states.fixation.FunctionSelect"
+			helpText="help.state.winfo.function_select">
+            <data name="function" type="String"/>
+        </state>
+
+        <state id="state.winfo.extreme.percent"
+            description="state.winfo.extreme.percent"
+            state="org.dive4elements.river.artifacts.states.extreme.PercentInput"
+			helpText="help.state.winfo.extreme.percent">
+            <data name="percent" type="Double"/>
+        </state>
+
+        <state id="state.winfo.extreme.qinput"
+            description="state.winfo.extreme.qinput"
+            state="org.dive4elements.river.artifacts.states.extreme.ExtremeQInput"
+			helpText="help.state.winfo.extreme.qinput">
+            <data name="ranges" type="Double[]"/>
+        </state>
+
+        <state id="state.winfo.extreme.curve" description="state.winfo.extreme.curve" state="org.dive4elements.river.artifacts.states.extreme.ExtremeCompute" helpText="help.state.winfo.extreme.curve">
+            <outputmodes>
+                <outputmode name="longitudinal_section" description="output.longitudinal_section" mime-type="image/png" type="chart">
+                  <facets>
+                    <facet name="longitudinal_section.w" description="facet.longitudinal_section.w"/>
+                    <facet name="longitudinal_section.q" description="facet.longitudinal_section.q"/>
+                    <facet name="w_differences"          description="facet.w_differences"/>
+                    <facet name="w_differences.filtered" description="facet.w_differences"/>
+                    <facet name="other.wqkms.w"          description="W-Type of data" />
+                    <facet name="other.wq"               description="WQ-Type of data" />
+                    <facet name="other.wqkms.q"          description="Q-Type of data" />
+                    <facet name="other.wkms"             description="facet.other.wkms"/>
+                    <facet name="longitudinal_section.manualpoints" description="Manuelle Punkte"/>
+                    <facet name="other.wqkms"            description="facet.other.wqkms"/>
+                    <facet name="heightmarks_points"     description="facet.other.wkms.heightmarks_points"/>
+                    <facet name="longitudinal_section.area"        description="an area"/>
+                    <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                  </facets>
+                </outputmode>
+                <outputmode name="cross_section" description="output.cross_section" mime-type="image/png" type="chart">
+                  <facets>
+                    <facet name="cross_section_water_line"   description="facet.cross_section_water_line"/>
+                    <facet name="cross_section"              description="facet.cross_section"/>
+                    <facet name="area"                       description="an area"/>
+                    <facet name="cross_section.area"         description="an area"/>
+                    <facet name="cross_section.manualpoints" description="points"/>
+                    <facet name="cross_section.manualline"   description="line"/>
+                    <facet name="hyk"                        description="hyks"/>
+                  </facets>
+                </outputmode>
+                <outputmode name="extreme_wq_curve" description="output.extreme_wq_curve" mine-type="image/png" type="chart">
+                    <facets>
+                        <facet name="extreme_wq_curve" description="Extreme WQ curve"/>
+                        <facet name="extreme_wq_curve_base" description="Extreme WQ curve base points"/>
+                        <facet name="extreme_wq_curve.manualpoints" description="Manuelle Punkte"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="extreme_curve_report" description="output.extreme_reference_curve_report" mime-type="text/xml" type="report">
+                    <facets>
+                        <facet name="report" description="facet.extreme_curve.report" />
+                    </facets>
+                </outputmode>
+                <outputmode name="extreme_curve_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.reference_curve_export.csv" />
+                        <facet name="pdf" description="facet.waterlevel_export.pdf" />
+                        <facet name="wst" description="facet.waterlevel_export.wst" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+    </states>
+</artifact>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="sedimentload">
+    <load-facets>
+        <facet name="sedimentload" class="org.dive4elements.river.artifacts.model.minfo.SedimentLoadFacet"/>
+    </load-facets>
+    <states>
+        <state id="state.sedimentload.datacage"
+               description="state.sedimentload.datacage"
+               state="org.dive4elements.river.artifacts.states.DefaultState">
+        </state>
+    </states>
+</artifact>
+

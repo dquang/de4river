@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ftr:features xmlns:ftr="http://www.intevation.de/2012/flys/features">
+    <ftr:role name="d4e_demo_all">
+        <ftr:feature>module:winfo</ftr:feature>
+        <ftr:feature>module:minfo</ftr:feature>
+        <ftr:feature>module:new_map</ftr:feature>
+        <ftr:feature>module:new_chart</ftr:feature>
+        <ftr:feature>module:fixanalysis</ftr:feature>
+        <ftr:feature>river:Beispielfluss</ftr:feature>
+    </ftr:role>
+    <ftr:role name="d4e_demo_extern">
+        <ftr:feature>module:winfo</ftr:feature>
+        <ftr:feature>module:minfo</ftr:feature>
+        <ftr:feature>river:Beispielfluss</ftr:feature>
+    </ftr:role>
+</ftr:features>

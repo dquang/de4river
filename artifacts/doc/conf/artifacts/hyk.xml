@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="hyk">
+  <states>
+    <state id="state.hyk.static"
+               description="state.hyk.static"
+               state="org.dive4elements.river.artifacts.states.StaticHYKState">
+      <outputmodes>
+        <outputmode name="cross_section" description="output.cross_section" mime-type="image/png" type="chart">
+          <facets>
+            <facet name="hyk" description="hyk data" />
+          </facets>
+        </outputmode>
+      </outputmodes>
+    </state>
+  </states>
+</artifact>

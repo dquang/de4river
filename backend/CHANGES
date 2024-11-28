@@ -1,0 +1,109 @@
+2011-09-19      RELEASE 2.5
+
+    NEW:
+
+        * Improved the data model to support:
+          - cross sections
+          - hyks ("Hydraulische Kenngroessen")
+
+        * Improved the importer to read:
+          - PRF files
+          - HYK files
+
+        * Added a central Config to configure the Importer. There are several
+          system properties to adjust what to import (see ChangeLog for
+          details).
+
+        * Added a Postgis and Oracle models for spatial flys data:
+          - catchments
+          - river axes
+          - buildings
+          - fixpoints
+          - cross section tracks
+          - hws ("HW-Schutzanlagen")
+          - floodplains
+
+        * Bumped Hibernate up to 3.6.5.
+
+        * Bumped Apache DBCP up to 1.4.
+
+
+
+2011-06-27      RELEASE 2.4
+
+    New:
+
+        * Improved the data model to support:
+          - edges ("Oberkante", "Unterkante")
+          - annotations
+
+        * Improved the importer to read:
+          - edges
+          - annotations
+
+        * Made search for gauges in River independent of from/to
+          kilometer order.
+
+
+    Fixes:
+
+        * flys/issue76 Close gaps between q ranges
+
+        * flys/issue110 Fixed import of ATs that skipped the first value.
+
+
+
+2011-05-13      RELEASE 2.3
+
+    New:
+
+        * Import of:
+          - "zusätzliche Längsschnitte"
+          - "Fixierungen"
+          - "amtliche Linien"
+          - "Hochwassermarken"
+          - "Historische Abflusskurven"
+          - "HW-Schutzanlagen"
+
+        * Improvements in the SQL schema:
+          - Added a 'kind' column to WSTs
+          - Added a 'position' column to WST columns to enable sorting WST columns.
+          - Added a 'km_up' column to rivers to determine the flow direction of rivers.
+
+        * Rivers are now able to:
+          - determine their min/max kilometer range
+          - determine the selected gauge(s) based on a kilometer range
+
+        * WSTs are able to determine their min/max Q range.
+
+        * Gauges are able to determine their min/max W range.
+
+        * Added a view 'wst_value_table' that aggregates the data to build w/q
+          value tables.
+
+        * Added one-to-many relation Wst -> WstColumn
+
+        * Speedup of the importer by using an internal caching mechanism.
+
+        * Sta-Parse just accepts the following main value types: 'Q', 'W', 'D' and 'T'
+
+
+    Fixes:
+
+        * Fixed import of Q ranges in wst files.
+
+        * Fixed flys/issue19: Do not take km column in wst file as a water level.
+
+        * Fixed flys/issue11 (Diagramm: Fehlerhafte Werte in Abflusskurven)
+
+        * Fixed flys/issue51 (WINFO: Fachdaten am Pegel Perl enthält Sprünge)
+
+
+    !!!
+
+    The version number of this release depends on an existing desktop variant of
+    this software that is in version 2.1.
+
+    !!!
+
+2011-03-30      RELEASE 0.1

@@ -1,0 +1,2 @@
+FreeSans /usr/share/fonts/gnu-free/FreeSans.ttf
+DefaultFont /usr/share/fonts/gnu-free/FreeSans.ttf

@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="flysreport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="60" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1"/>
+	<parameter name="MEASUREMENT_PAGE_NUM" class="java.lang.Integer"/>
+	<field name="river" class="java.lang.String"/>
+	<field name="periods" class="java.lang.String"/>
+	<field name="outliertest" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="outliers" class="java.lang.String"/>
+	<field name="calculation" class="java.lang.String"/>
+	<field name="total" class="java.lang.String"/>
+	<field name="out" class="java.lang.String"/>
+	<field name="location" class="java.lang.String"/>
+	<field name="sd" class="java.lang.String"/>
+	<field name="a" class="java.lang.String"/>
+	<field name="b" class="java.lang.String"/>
+	<field name="km" class="java.lang.String"/>
+	<field name="param" class="java.lang.String"/>
+	<field name="r2" class="java.lang.String"/>
+	<field name="qmax" class="java.lang.String"/>
+	<field name="cferg" class="java.lang.String"/>
+	<field name="cduan" class="java.lang.String"/>
+	<field name="msName" class="java.lang.String"/>
+	<field name="msGauge" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="562" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="177" height="30"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Ergebnisausgabe]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="177" y="0" width="338" height="31"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{river}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="31" width="515" height="26"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{calculation}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="211" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Gewässer:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="211" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{river}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="231" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Ort:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="231" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{location}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="291" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Datum der Erstellung:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="291" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="311" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Zeitraum:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="311" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{periods}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="331" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Ausreißertest:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="331" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{outliertest}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="351" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Ausreißer:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="351" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{outliers}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="57" width="346" height="20"/>
+				<textElement markup="styled">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[in der Funktion S = aQ<sup>b</sup>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="81" width="67" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[PARAMETER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="81" width="400" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[FESTSTOFFFRAKTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="101" width="67" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="116" width="67" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[B]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="146" width="67" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[D]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="161" width="67" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[E]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="176" width="67" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[F]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="191" width="67" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[G]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="131" width="67" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[C]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="146" width="426" height="15"/>
+				<textElement/>
+				<text><![CDATA[Sedimenttransport von Fein- und Mittelkies (Geschiebetransport) (2-16 mm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="176" width="442" height="15"/>
+				<textElement/>
+				<text><![CDATA[Sedimenttransport von Geschiebe-gesamt (0,000-125 mm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="161" width="461" height="15"/>
+				<textElement/>
+				<text><![CDATA[Sedimenttransport von Grobkornanteil (Geschiebetransport) (> Mittelkies 16-125 mm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="131" width="426" height="15"/>
+				<textElement/>
+				<text><![CDATA[Sedimenttransport von Sand (Geschiebetransport) (0,063-2 mm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="101" width="431" height="15"/>
+				<textElement/>
+				<text><![CDATA[Sedimenttransport von Feinkornanteil (Suspensionstransport) (< 0,063 mm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="191" width="426" height="15"/>
+				<textElement/>
+				<text><![CDATA[Sedimenttransport von Geschiebe-gesamt-Sohlhöhenrelevant (0,063-125 mm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="116" width="426" height="15"/>
+				<textElement/>
+				<text><![CDATA[Sedimenttransport von Sand (Suspensionstransort) (0,063-2 mm)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="210" width="515" height="1"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="251" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{msName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="251" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Messstellenname:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="123" y="271" width="392" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{msGauge}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="271" width="123" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[hdyr. Bezugspegel:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="371" width="515" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="383" width="76" height="18"/>
+				<textElement verticalAlignment="Top" markup="none"/>
+				<text><![CDATA[a]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="383" width="176" height="18"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Transportkurvenkoeffizient]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="401" width="76" height="18"/>
+				<textElement verticalAlignment="Top" markup="none"/>
+				<text><![CDATA[b]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="401" width="143" height="18"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Transportkurvenexponent]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="419" width="76" height="18"/>
+				<textElement verticalAlignment="Top" markup="none"/>
+				<text><![CDATA[Standardfehler]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="437" width="76" height="18" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Q<sub>max</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="419" width="265" height="18"/>
+				<textElement markup="none"/>
+				<text><![CDATA[natürlicher Logarithmus der Standardabweichung]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="109" y="437" width="285" height="18" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[maximal gemessener Abfluss [m³/s]]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="455" width="76" height="18"/>
+				<textElement verticalAlignment="Top" markup="none"/>
+				<text><![CDATA[r²]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="455" width="100" height="18"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Bestimmtheitsmaß]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="473" width="76" height="18" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[n<sub>gesamt</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="491" width="76" height="18" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[n<sub>Ausreißer</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="473" width="100" height="18"/>
+				<textElement/>
+				<text><![CDATA[Anzahl Messwerte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="491" width="100" height="18"/>
+				<textElement/>
+				<text><![CDATA[Anzahl Ausreißer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="509" width="76" height="18" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[C<sub>Duan</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="509" width="181" height="18"/>
+				<textElement/>
+				<text><![CDATA[Bias Korrektur nach Duan 1983]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="527" width="76" height="18" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[C <sub>Ferguson</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="527" width="181" height="18"/>
+				<textElement/>
+				<text><![CDATA[Bias Korrektur nach Ferguson 1986]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="19" width="515" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="39" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Fl-km	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="39" y="0" width="55" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Parameter]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="94" y="0" width="60" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[a]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="0" width="76" height="20"/>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<text><![CDATA[Standardfehler]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="154" y="0" width="35" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[b]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="0" width="60" height="20"/>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<text><![CDATA[Q<sub>max</sub> [m³/s]]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="0" width="44" height="20"/>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<text><![CDATA[n <sub>Ausreißer</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="0" width="35" height="20"/>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<text><![CDATA[C<sub>Duan</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="45" height="20"/>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<text><![CDATA[C <sub>Ferguson</sub>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="325" y="0" width="26" height="20"/>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<text><![CDATA[r²]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<text><![CDATA[n<sub>gesamt</sub>]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="39" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{km}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="154" y="0" width="35" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{b}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="351" y="0" width="40" height="14" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="39" y="0" width="55" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{param}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="94" y="0" width="60" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="391" y="0" width="44" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{out}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="189" y="0" width="76" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{sd}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="325" y="0" width="26" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{r2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="265" y="0" width="60" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{qmax}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="435" y="0" width="35" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cduan}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="470" y="0" width="45" height="14"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cferg}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="458" y="9" width="57" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" / " + ($V{PAGE_NUMBER} + $P{MEASUREMENT_PAGE_NUM})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="403" y="9" width="55" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

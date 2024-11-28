@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<longitudinal-diagrams>
+    <output-generator
+        names="longitudinal_section,longitudinal_section_chartinfo,discharge_longitudinal_section,discharge_longitudinal_section_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.longitudinal.section.title" default="W-Längsschnitt"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor" axis="W"/>
+    </output-generator>
+    <output-generator
+        names="w_differences,w_differences_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.w_differences.title" default="Differences"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor" axis="W"/>
+        <subtitle key="chart.w_differences.subtitle" default="-">
+            <arg expr="artifact.river"/>
+        </subtitle>
+    </output-generator>
+    <output-generator
+        names="fix_longitudinal_section_curve,fix_longitudinal_section_curve_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.fixings.longitudinalsection.title" default="Fixierungsanalyse"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor" axis="deltaW"/>
+    </output-generator>
+    <output-generator
+        names="bedheight_middle,bedheight_middle_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.bedheight_middle.section.title" default="Mittlere Sohlhöhe"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor" axis="W"/>
+    </output-generator>
+    <output-generator
+        names="bed_difference_height_year,bed_difference_height_year_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.beddifference.height.title" default="Sohlenhöhen Differenz"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor"
+            axis="diffBed/Y"/>
+        <subtitle key="chart.w_differences.subtitle" default="-">
+            <arg expr="artifact.river"/>
+        </subtitle>
+    </output-generator>
+    <output-generator names="bed_difference_year,bed_difference_year_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.beddifference.year.title" default="Sohlenhöhen Differenz"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor"
+            axis="diffBed"/>
+        <subtitle key="chart.w_differences.subtitle" default="-">
+            <arg expr="artifact.river"/>
+        </subtitle>
+    </output-generator>
+    <output-generator names="bed_longitudinal_section,bed_longitudinal_section_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.bedquality.title" default="Sohlen Längsschnitt"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor"
+            axis="diffBed"/>
+    </output-generator>
+    <output-generator
+        names="sedimentload_ls,sedimentload_ls_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.sedimentload.ls.title" default="Sedimentfracht"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor"
+            axis="SedimentLoad"/>
+    </output-generator>
+    <output-generator
+        names="flow_velocity,flow_velocity_chartinfo"
+        class="org.dive4elements.river.exports.LongitudinalSectionGenerator2"
+        converter="org.dive4elements.river.exports.DiagramAttributes">
+        <title key="chart.flow_velocity.section.title" default="Geschwindigkeit- und Schubspannung"/>
+        &longitudinal-defaults;
+        <processor class="org.dive4elements.river.exports.process.ManualPointsProcessor"
+            axis="Velocity"/>
+        <subtitle key="chart.w_differences.subtitle" default="-">
+            <arg expr="artifact.river"/>
+        </subtitle>
+    </output-generator>
+</longitudinal-diagrams>
+

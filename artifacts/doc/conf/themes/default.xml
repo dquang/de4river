@@ -1,0 +1,2875 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themegroup name="default">
+    <theme name="MainValuesQ">
+        <inherits>
+            <inherit from="Lines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Farbe"
+                default="200, 0, 15" />
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+            <field name="showlinelabel" type="boolean"
+                display="Linienbeschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="MainValuesW">
+        <inherits>
+            <inherit from="Lines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Farbe"
+                default="0, 215, 0" />
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+            <field name="showlinelabel" type="boolean"
+                display="Linienbeschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="RelativePoint">
+        <inherits>
+            <inherit from="Points" />
+        </inherits>
+    </theme>
+
+    <theme name="Annotations">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Text" />
+        </inherits>
+        <fields>
+        </fields>
+    </theme>
+
+    <theme name="ManualPoints">
+        <inherits>
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="3" hints="hidden" />
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+        </fields>
+    </theme>
+
+    <theme name="WKms">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+        </fields>
+    </theme>
+
+    <theme name="WKmsAnnotation">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="3" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="WQKms">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="WQKmsHorizontal">
+        <inherits>
+            <inherit from="WQKms" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+        </fields>
+    </theme>
+
+
+    <theme name="WQPoints">
+        <inherits>
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Linienfarbe"
+                default="204, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="heightmarks_points">
+        <inherits>
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="Area">
+        <inherits>
+            <inherit from="Areas" />
+        </inherits>
+        <fields>
+            <field name="areashowbg" type="boolean" display="Hintergrund anzeigen"
+                default="true" hints="hidden" />
+            <field name="areashowborder" type="boolean" display="Begrenzung"
+                default="false" hints="hidden" />
+            <field name="areabordercolor" type="Color" default="0, 0, 0"
+                display="Begrenzungslinienfarbe" hints="hidden" />
+            <field name="showarea" type="boolean" display="Flaeche anzeigen"
+              default="true" hints="hidden" />
+            <field name="showarealabel" type="boolean"
+                display="Flächenbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+    <!-- top level classes defining additional attributes-->
+    <theme name="LongitudinalSection">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="MinMaxPoints" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="bandwidth" type="double" display="Bandbreite"
+                default="0"/>
+            <field name="bandwidthcolor" type="Color" display="Bandbreitenfarbe"
+                default="104, 104, 104"/>
+            <field name="transparency" type="int" default="20" display="Transparenz"/>
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionPoints">
+        <inherits>
+            <inherit from="Points" />
+        </inherits>
+        <fields>
+        </fields>
+    </theme>
+
+    <theme name="Differences">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+        </fields>
+    </theme>
+
+
+    <!-- Classes defining special values -->
+    <theme name="LongitudinalSectionW_HQ1">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ2">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ5">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 153, 51" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ10">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ20">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 153, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ25">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 51, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ50">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 153, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ100">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ200">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 100, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ300">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 100" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ500">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ1000">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQRZ">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HSQ">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="253, 153, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_MHQ">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 255, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_MNQ">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 255, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_MQ">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 51, 204" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_NQ">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 204, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQExtrem">
+        <inherits>
+            <inherit from="LongitudinalSectionW" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ1_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ2_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ5_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 153, 51" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ10_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ20_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="153, 153, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ25_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="102, 51, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ50_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="255, 153, 153" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ100_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="255, 0, 51" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ200_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ300_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="255, 100, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ500_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="102, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQ1000_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQRZ_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="102, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HSQ_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="253, 153, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_MHQ_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="102, 255, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_MNQ_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 255, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_MQ_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 51, 204" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_NQ_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="153, 204, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionW_HQExtrem_Points">
+        <inherits>
+            <inherit from="LongitudinalSectionPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ1">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ2">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ5">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 153, 51" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ10">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ20">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 153, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ25">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 51, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ50">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 153, 153" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ100">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 51" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ200">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ300">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 100, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ500">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQ1000">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQRZ">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HSQ">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="253, 153, 0" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_MHQ">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 255, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_MNQ">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 255, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_MQ">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 51, 204" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_NQ">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 204, 255" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQ_HQExtrem">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="DischargeLongitudinalSectionW">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+        </fields>
+    </theme>
+
+
+    <theme name="DischargeLongitudinalSectionC">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0 , 0" />
+        </fields>
+    </theme>
+
+    <theme name="DischargeLongitudinalSectionQ">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQInfoldCut">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="102, 102, 102" />
+        </fields>
+    </theme>
+
+    <theme name="LongitudinalSectionQInfolding">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="51, 51, 51" />
+        </fields>
+    </theme>
+
+    <!-- MIDDLE BED HEIGHT -->
+    <theme name="MiddleBedHeightSingle">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="MinMaxPoints" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="showlines" type="boolean" display="Linie anzeigen"
+                default="true" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="1" />
+            <field name="linetype" type="Dash" display="Linienart"
+                default="10" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" />
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <!-- Bed Quality -->
+    <theme name="PorosityTopPoints">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="3" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="PorositySubPoints">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="3" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="DensityTopPoints">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 99, 102" />
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="3" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="153, 99, 102" />
+        </fields>
+    </theme>
+
+    <theme name="DensitySubPoints">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 99, 102" />
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="3" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="153, 99, 102" />
+        </fields>
+    </theme>
+
+    <theme name="BedDiameterTopPoints">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 0" />
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="3" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="BedDiameterSubPoints">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 0" />
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="3" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="BedLoadDiameterPoints">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 255, 0" />
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="3" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="0, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="PorosityTopLines">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="PorositySubLines">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="DensityTopLines">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 99, 102" />
+        </fields>
+    </theme>
+
+    <theme name="DensitySubLines">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="153, 99, 102" />
+        </fields>
+    </theme>
+
+    <theme name="BedDiameterTopLines">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="BedDiameterSubLines">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="BedLoadDiameterLines">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="BedDiameterDataTop">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="2" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="0, 0, 100" />
+        </fields>
+    </theme>
+
+    <theme name="BedDiameterDataSub">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="2" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="0, 0, 100" />
+        </fields>
+    </theme>
+
+    <theme name="BedloadDiameterData">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="showlines" type="boolean" display="Linie anzeigen" default="false"/>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen" default="true"/>
+            <field name="pointsize" type="int" display="Punktdicke" default="2" />
+            <field name="pointcolor" type="Color" display="Punktfarbe" default="100, 0, 0" />
+        </fields>
+    </theme>
+    <!-- Bedheight differences -->
+    <theme name="BedheightDiffYear">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="BedheightDiffMorphWidth">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 0" />
+        </fields>
+    </theme>
+
+    <theme name="BedheightDiffEpoch">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 0, 204" />
+        </fields>
+    </theme>
+
+    <theme name="BedheightDiffAbsHeight1">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 0, 204" />
+        </fields>
+    </theme>
+
+    <theme name="BedheightDiffAbsHeight2">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 100, 100" />
+        </fields>
+    </theme>
+
+    <theme name="BedheightDiffHeightYear">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="MorphologicWidth">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 100, 200" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+    <!-- Flow velocity -->
+    <theme name="FlowVelocityVMainChannel">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="FlowVelocityVTotalChannel">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 102" />
+        </fields>
+    </theme>
+
+    <theme name="FlowVelocityTau">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="FlowVelocityDischarge">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 204, 0" />
+        </fields>
+    </theme>
+
+    <!-- Sediment load longitudinal sections, M^3/A -->
+    <theme name="SedimentLoadLSM3A">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" default="2" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ACoarse">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3AFineMid">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ASand">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ASuspSand">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ASediment">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ASuspSandBed">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 0" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ATotal">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 100, 200" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ABed">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="200, 200, 200" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ABedSusp">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="150, 255, 150" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSM3ASusp">
+        <inherits>
+            <inherit from="SedimentLoadLSM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="85, 255, 0" />
+        </fields>
+    </theme>
+
+    <!-- Sediment load longitudinal sections, T/A -->
+    <theme name="SedimentLoadLSTACoarse">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTAFineMid">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTASand">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTASuspSand">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTASediment">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTASuspSandBed">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 0" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTATotal">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 100, 200" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTABed">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="200, 200, 200" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTABedSusp">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="150, 255, 150" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadLSTASusp">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="85, 255, 0" />
+        </fields>
+    </theme>
+
+    <!-- Sediment load at measurement stations, T/A -->
+    <theme name="SedimentLoad">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linetype" type="Dash" default="10,5" />
+            <field name="showpoints" type="boolean" default="true" />
+            <field name="pointsize" type="int" default="3" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTACoarse">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 255" />
+            <field name="pointcolor" type="Color" default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTAFineMid">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 0" />
+            <field name="pointcolor" type="Color" default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTASand">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 0, 255" />
+            <field name="pointcolor" type="Color" default="0, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTASuspSand">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 255, 0" />
+            <field name="pointcolor" type="Color" default="255, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTASediment">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 255" />
+            <field name="pointcolor" type="Color" default="0, 255, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTASuspSandBed">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 0" />
+            <field name="pointcolor" type="Color" default="0, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTATotal">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 100, 200" />
+            <field name="pointcolor" type="Color" default="0, 100, 200" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTABed">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="200, 200, 200" />
+            <field name="pointcolor" type="Color" default="200, 200, 200" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTABedSusp">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="150, 255, 150" />
+            <field name="pointcolor" type="Color" default="150, 255, 150" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadTASusp">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="85, 255, 0" />
+            <field name="pointcolor" type="Color" default="85, 255, 0" />
+        </fields>
+    </theme>
+
+    <!-- Sediment load at measurement stations, M3/A -->
+    <theme name="SedimentLoadM3A">
+        <inherits>
+            <inherit from="SedimentLoad" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" default="2" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ACoarse">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 255" />
+            <field name="pointcolor" type="Color" default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3AFineMid">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 0" />
+            <field name="pointcolor" type="Color" default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ASand">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 0, 255" />
+            <field name="pointcolor" type="Color" default="0, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ASuspSand">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 255, 0" />
+            <field name="pointcolor" type="Color" default="255, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ASediment">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 255" />
+            <field name="pointcolor" type="Color" default="0, 255, 255" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ASuspSandBed">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 0" />
+            <field name="pointcolor" type="Color" default="0, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ATotal">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 100, 200" />
+            <field name="pointcolor" type="Color" default="0, 100, 200" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ABed">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="200, 200, 200" />
+            <field name="pointcolor" type="Color" default="200, 200, 200" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ABedSusp">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="150, 255, 150" />
+            <field name="pointcolor" type="Color" default="150, 255, 150" />
+        </fields>
+    </theme>
+
+    <theme name="SedimentLoadM3ASusp">
+        <inherits>
+            <inherit from="SedimentLoadM3A" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="85, 255, 0" />
+            <field name="pointcolor" type="Color" default="85, 255, 0" />
+        </fields>
+    </theme>
+
+
+    <theme name="LongitudinalSectionArea">
+        <inherits>
+            <inherit from="Areas" />
+        </inherits>
+        <fields>
+            <field name="areashowbg" type="boolean" display="Hintergrund anzeigen"
+                default="true" hints="hidden" />
+            <field name="areashowborder" type="boolean" display="Begrenzung"
+                default="false" hints="hidden" />
+            <field name="areabordercolor" type="Color" default="0, 0, 0"
+                display="Begrenzungslinienfarbe" hints="hidden" />
+            <field name="showarea" type="boolean" display="Flaeche anzeigen"
+              default="true" hints="hidden" />
+            <field name="showarealabel" type="boolean"
+                display="Flächenbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+
+
+    <theme name="CrossSection">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="Label" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="CrossSectionWaterLine">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0,0,153" />
+            <field name="showwidth" type="boolean" display="Breite anzeigen"
+                default="false" />
+            <field name="showlevel" type="boolean" display="Wasserstand anzeigen"
+                default="true" />
+            <field name="showlinelabel" type="boolean" default="true"
+                display="Beschriftung anzeigen" />
+            <field name="showmiddleheight" type="boolean"
+                display="Wasserstand anzeigen" default="false" />
+        </fields>
+    </theme>
+
+    <theme name="Hyk">
+        <inherits>
+            <inherit from="Text" />
+        </inherits>
+        <fields>
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+        </fields>
+    </theme>
+
+    <theme name="CrossSectionArea">
+        <inherits>
+            <inherit from="Areas" />
+        </inherits>
+        <fields>
+            <field name="areashowbg" type="boolean" display="Hintergrund anzeigen"
+                default="true" hints="hidden" />
+            <field name="areashowborder" type="boolean" display="Begrenzung"
+                default="false" hints="hidden" />
+            <field name="areabordercolor" type="Color" default="0, 0, 0"
+                display="Begrenzungslinienfarbe" hints="hidden" />
+            <field name="showarea" type="boolean" display="Flaeche anzeigen"
+              default="true" hints="hidden" />
+            <field name="showarealabel" type="boolean"
+                display="Flächenbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+
+
+    <theme name="DischargeCurve">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Label" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 153" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="2" />
+        </fields>
+    </theme>
+
+    <theme name="ExtremeWQCurve">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showextramark" type="boolean" display="Linie anzeigen ab wo extrapoliert wurde"
+                default="true" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 153" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="2" />
+            <field name="showlinelabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="ExtremeWQBaseCurve">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="2" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+            <field name="showlinelabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+
+
+    <theme name="DurationCurve">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="Label" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="2" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"
+                hints="hidden"/>
+        </fields>
+    </theme>
+
+    <theme name="DurationCurveW">
+        <inherits>
+            <inherit from="DurationCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0,51,204" />
+        </fields>
+    </theme>
+
+    <theme name="DurationCurveQ">
+        <inherits>
+            <inherit from="DurationCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0,204,0" />
+        </fields>
+    </theme>
+
+
+
+    <theme name="FixPoints">
+        <inherits>
+            <inherit from="ColorfulPoints" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="3" />
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="true" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="FixLines">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+            <field name="showpoints" type="boolean" display="Datenpunkte anzeigen"
+                default="false" hints="hidden" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="3" />
+        </fields>
+    </theme>
+
+    <theme name="FixAreas">
+        <inherits>
+            <inherit from="Areas" />
+        </inherits>
+        <fields>
+            <field name="areashowbg" type="boolean" display="Hintergrund anzeigen"
+                default="true" hints="hidden" />
+            <field name="areashowborder" type="boolean" display="Begrenzung"
+                default="false" hints="hidden" />
+            <field name="areabordercolor" type="Color" default="0, 0, 0"
+                display="Begrenzungslinienfarbe" hints="hidden" />
+            <field name="showarea" type="boolean" display="Flaeche anzeigen"
+              default="true" hints="hidden" />
+            <field name="showarealabel" type="boolean"
+                display="Flächenbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingCalculatedPoint">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 0, 0" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="5"/>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingWQCurve">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="227, 27, 162" />
+        </fields>
+    </theme>
+
+    <theme name="FixingDerivedCurve">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="227, 27, 162" />
+            <field name="showpoints" type="boolean" display="Datenpunkte anzeigen"
+                default="false" hints="hidden" hidden="true" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="5" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="FixingSectorAverageWQ0">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 128, 0" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingSectorAverageWQ1">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 0, 255" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingSectorAverageWQ2">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="255, 0, 255" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingSectorAverageWQ3">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="255, 0, 0" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingAnalysisEventsWQ">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 255, 0" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingReferenceEvents">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 80, 160" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingOutliers">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+        </fields>
+    </theme>
+
+    <theme name="FixingDeltaWtAverage">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden"/>
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="true" />
+        </fields>
+    </theme>
+
+    <theme name="FixingDeltaWtAverage0">
+        <inherits>
+            <inherit from="FixingDeltaWtAverage" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 128, 0" />
+        </fields>
+    </theme>
+
+    <theme name="FixingDeltaWtAverage1">
+        <inherits>
+            <inherit from="FixingDeltaWtAverage" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="FixingDeltaWtAverage2">
+        <inherits>
+            <inherit from="FixingDeltaWtAverage" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="FixingDeltaWtAverage3">
+        <inherits>
+            <inherit from="FixingDeltaWtAverage" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="FixingDeltaWtAnalysis">
+        <inherits>
+            <inherit from="FixPoints" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+            <field name="pointcolor" type="Color" display="Punktfarbe"
+                default="0, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="FixingLSAverage0">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 128, 0" />
+        </fields>
+    </theme>
+
+    <theme name="FixingLSAverage1">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="FixingLSAverage2">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="FixingLSAverage3">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="FixingSectorDeviationLS0">
+        <inherits>
+            <inherit from="FixAreas" />
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" display="Fuellfarbe"
+                default="0, 128, 0" />
+        </fields>
+    </theme>
+    <theme name="FixingSectorDeviationLS1">
+        <inherits>
+            <inherit from="FixAreas" />
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" display="Fuellfarbe"
+                default="0, 0, 255" />
+
+        </fields>
+    </theme>
+
+    <theme name="FixingSectorDeviationLS2">
+        <inherits>
+            <inherit from="FixAreas" />
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" display="Fuellfarbe"
+                default="255, 0, 255" />
+        </fields>
+    </theme>
+
+    <theme name="FixingSectorDeviationLS3">
+        <inherits>
+            <inherit from="FixAreas" />
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" display="Fuellfarbe"
+                default="255, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="FixLSDeviation">
+        <inherits>
+            <inherit from="FixAreas" />
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" display="Fuellfarbe"
+                default="100, 100, 100" />
+        </fields>
+    </theme>
+
+    <theme name="FixLSAnalysis">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 255, 0" />
+        </fields>
+    </theme>
+
+    <theme name="FixLSReference">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" default="0, 80, 160" />
+        </fields>
+    </theme>
+
+    <theme name="FixDeltaWtDeviation">
+        <inherits>
+            <inherit from="FixAreas"/>
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" default="0, 0, 0" display="Füllfarbe"/>
+        </fields>
+    </theme>
+
+    <theme name="FixingDeltaWtAnalysisPeriods">
+        <inherits>
+            <inherit from="FixAreas"/>
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" default="255, 0, 0" display="Füllfarbe" />
+        </fields>
+    </theme>
+
+    <theme name="FixingReferencePeriod">
+        <inherits>
+            <inherit from="FixAreas"/>
+        </inherits>
+        <fields>
+            <field name="areabgcolor" type="Color" default="0, 0, 255" display="Füllfarbe" />
+        </fields>
+    </theme>
+
+    <theme name="QSectors">
+        <inherits>
+            <inherit from="FixLines" />
+        </inherits>
+        <fields>
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="true" hints="hidden" />
+        </fields>
+    </theme>
+
+
+
+    <theme name="MapLines">
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 205" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="3" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="Floodmaps">
+        <inherits>
+            <inherit from="Map" />
+        </inherits>
+    </theme>
+
+    <theme name="Floodplains">
+        <inherits>
+            <inherit from="Map" />
+        </inherits>
+    </theme>
+
+    <theme name="Floodmarks">
+        <inherits>
+            <inherit from="MapLines" />
+            <inherit from="Symbol" />
+        </inherits>
+    </theme>
+
+    <theme name="WSPLGEN">
+        <inherits>
+            <inherit from="Uesk" />
+        </inherits>
+        <fields>
+            <field name="startcolor" type="Color"
+                display="Farbverlauf Startfarbe" default="178, 201, 215" />
+            <field name="endcolor" type="Color"
+                display="Farbverlauf Endfarbe" default="2, 27, 42" />
+            <field name="numclasses" type="int" display="Anzahl Klassen"
+                default="6" />
+        </fields>
+    </theme>
+
+    <theme name="RiverAxis">
+        <inherits>
+            <inherit from="MapLines" />
+        </inherits>
+        <fields>
+       </fields>
+    </theme>
+
+    <theme name="Kms">
+        <inherits>
+            <inherit from="MapLines" />
+            <inherit from="Label" />
+            <inherit from="Symbol" />
+        </inherits>
+    </theme>
+
+
+    <theme name="Fixpoints">
+        <inherits>
+            <inherit from="MapLines" />
+            <inherit from="Symbol" />
+        </inherits>
+    </theme>
+
+    <theme name="Floodmarks">
+        <inherits>
+            <inherit from="MapLines" />
+            <inherit from="Symbol" />
+        </inherits>
+    </theme>
+
+
+    <theme name="GaugeLocation">
+        <inherits>
+            <inherit from="MapLines" />
+            <inherit from="Symbol" />
+        </inherits>
+    </theme>
+
+    <theme name="Qps">
+        <inherits>
+            <inherit from="MapLines" />
+        </inherits>
+    </theme>
+
+    <theme name="Hws">
+        <inherits>
+            <inherit from="MapLines" />
+        </inherits>
+    </theme>
+
+    <theme name="HwsPoints">
+        <inherits>
+            <inherit from="MapLines"/>
+            <inherit from="Label" />
+            <inherit from="Symbol" />
+        </inherits>
+    </theme>
+
+    <theme name="Catchment">
+        <inherits>
+            <inherit from="Map" />
+        </inherits>
+    </theme>
+
+    <theme name="FloodmapLines">
+        <inherits>
+            <inherit from="MapLines" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="140, 200, 130" />
+        </fields>
+    </theme>
+
+    <theme name="Buildings">
+        <inherits>
+            <inherit from="MapLines" />
+        </inherits>
+    </theme>
+
+    <theme name="HydrBoundariesLines">
+        <inherits>
+            <inherit from="MapLines" />
+        </inherits>
+    </theme>
+
+    <theme name="HydrBoundariesPolys">
+        <inherits>
+            <inherit from="Map" />
+        </inherits>
+    </theme>
+
+    <theme name="Jetties">
+        <inherits>
+            <inherit from="MapLines"/>
+            <inherit from="Label" />
+            <inherit from="Symbol" />
+        </inherits>
+    </theme>
+
+
+
+    <theme name="HistoricalDischargeCurve">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 153" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="2" />
+        </fields>
+    </theme>
+
+    <theme name="HistoricalDischargeCurveQ">
+        <inherits>
+            <inherit from="HistoricalDischargeCurve" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="HistoricalDischargeCurveQDiff">
+        <inherits>
+            <inherit from="HistoricalDischargeCurve" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="HistoricalDischargeCurveW">
+        <inherits>
+            <inherit from="HistoricalDischargeCurve" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="100, 100, 153" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="HistoricalDischargeCurveWDiff">
+        <inherits>
+            <inherit from="HistoricalDischargeCurve" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="250, 250, 204" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+    <theme name="HistoricalDischargeWQW">
+        <!-- the facet has no styling...
+        <inherits>
+            <inherit from="HistoricalDischargeCurve" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="0, 0, 255" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="1" />
+            <field name="linetype" type="Dash" display="Linienart"
+                default="10" />
+            <field name="showlines" type="boolean" display="Linie anzeigen"
+                default="true" hints="hidden" />
+            <field name="showpoints" type="boolean" display="Datenpunkte anzeigen"
+                default="false" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="3" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>-->
+    </theme>
+
+    <theme name="HistoricalDischargeWQQ">
+        <inherits>
+            <inherit from="HistoricalDischargeCurve" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+            <field name="linesize" type="int" display="Liniendicke"
+                default="1" />
+            <field name="linetype" type="Dash" display="Linienart"
+                default="10" />
+            <field name="showlines" type="boolean" display="Linie anzeigen"
+                default="true" hints="hidden" />
+            <field name="showpoints" type="boolean" display="Datenpunkte anzeigen"
+                default="false" />
+            <field name="pointsize" type="int" display="Punktdicke"
+                default="3" />
+            <field name="showlinelabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Beschriftung anzeigen" default="false" hints="hidden" />
+        </fields>
+    </theme>
+
+
+
+    <theme name="ReferenceCurve">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="Label" />
+            <inherit from="MinMaxPoints" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+            <field name="linecolor" type="Color" display="Linienfarbe"
+                default="204, 204, 204" />
+        </fields>
+    </theme>
+
+    <theme name="ReferenceCurveNormalized">
+        <inherits>
+            <inherit from="ReferenceCurve" />
+        </inherits>
+        <fields>
+        </fields>
+    </theme>
+
+
+
+    <theme name="SQMeasurements">
+        <inherits>
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="SQMeasurementsOverview">
+        <inherits>
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+    <theme name="SQOutliers">
+        <inherits>
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="textorientation" type="boolean" display="Textausrichtung"
+                default="true" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="true"/>
+        </fields>
+    </theme>
+
+    <theme name="SQCurve">
+        <inherits>
+            <inherit from="Lines" />
+            <inherit from="Points" />
+            <inherit from="Label" />
+        </inherits>
+        <fields>
+            <field name="showpoints" type="boolean" display="Punkte anzeigen"
+                default="false" />
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false" hints="hidden" />
+            <field name="linecolor" type="Color" default="0, 0, 0" />
+            <field name="linesize" type="int" display="Liniendicke" default="2"/>
+        </fields>
+    </theme>
+
+    <theme name="SQMeasurementsA">
+        <inherits>
+            <inherit from="SQMeasurements" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 0, 255" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsB">
+        <inherits>
+            <inherit from="SQMeasurements" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 255, 255" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsC">
+        <inherits>
+            <inherit from="SQMeasurements" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 255, 0" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsD">
+        <inherits>
+            <inherit from="SQMeasurements" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="255, 0, 255" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsE">
+        <inherits>
+            <inherit from="SQMeasurements" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="255, 255, 0" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsF">
+        <inherits>
+            <inherit from="SQMeasurements" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="255, 0, 0" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsG">
+        <inherits>
+            <inherit from="SQMeasurements" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SQMeasurementsOverviewA">
+        <inherits>
+            <inherit from="SQMeasurementsOverview" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 0, 255" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsOverviewB">
+        <inherits>
+            <inherit from="SQMeasurementsOverview" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 255, 255" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsOverviewC">
+        <inherits>
+            <inherit from="SQMeasurementsOverview" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 255, 0" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsOverviewD">
+        <inherits>
+            <inherit from="SQMeasurementsOverview" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="255, 0, 255" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsOverviewE">
+        <inherits>
+            <inherit from="SQMeasurementsOverview" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="255, 255, 0" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsOverviewF">
+        <inherits>
+            <inherit from="SQMeasurementsOverview" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="255, 0, 0" />
+        </fields>
+    </theme>
+    <theme name="SQMeasurementsOverviewG">
+        <inherits>
+            <inherit from="SQMeasurementsOverview" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="4" />
+            <field name="pointcolor" type="color" default="0, 0, 0" />
+        </fields>
+    </theme>
+
+    <theme name="SQOutliersA">
+        <inherits>
+            <inherit from="SQOutliers" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="6" />
+            <field name="pointcolor" type="color" default="100, 100, 255" />
+        </fields>
+    </theme>
+    <theme name="SQOutliersB">
+        <inherits>
+            <inherit from="SQOutliers" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="6" />
+            <field name="pointcolor" type="color" default="100, 255, 255" />
+        </fields>
+    </theme>
+    <theme name="SQOutliersC">
+        <inherits>
+            <inherit from="SQOutliers" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="6" />
+            <field name="pointcolor" type="color" default="100, 255, 100" />
+        </fields>
+    </theme>
+    <theme name="SQOutliersD">
+        <inherits>
+            <inherit from="SQOutliers" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="6" />
+            <field name="pointcolor" type="color" default="255, 100, 255" />
+        </fields>
+    </theme>
+    <theme name="SQOutliersE">
+        <inherits>
+            <inherit from="SQOutliers" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="6" />
+            <field name="pointcolor" type="color" default="255, 255, 100" />
+        </fields>
+    </theme>
+    <theme name="SQOutliersF">
+        <inherits>
+            <inherit from="SQOutliers" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="6" />
+            <field name="pointcolor" type="color" default="255, 100, 100" />
+        </fields>
+    </theme>
+    <theme name="SQOutliersG">
+        <inherits>
+            <inherit from="SQOutliers" />
+        </inherits>
+        <fields>
+            <field name="pointsize" type="int" default="6" />
+            <field name="pointcolor" type="color" default="100, 100, 100" />
+        </fields>
+    </theme>
+
+    <theme name="SQOutliersOverviewA">
+        <inherits>
+            <inherit from="SQOutliersA" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+    <theme name="SQOutliersOverviewB">
+        <inherits>
+            <inherit from="SQOutliersB" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+    <theme name="SQOutliersOverviewC">
+        <inherits>
+            <inherit from="SQOutliersC" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+    <theme name="SQOutliersOverviewD">
+        <inherits>
+            <inherit from="SQOutliersD" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+    <theme name="SQOutliersOverviewE">
+        <inherits>
+            <inherit from="SQOutliersE" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+    <theme name="SQOutliersOverviewF">
+        <inherits>
+            <inherit from="SQOutliersF" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+    <theme name="SQOutliersOverviewG">
+        <inherits>
+            <inherit from="SQOutliersG" />
+        </inherits>
+        <fields>
+            <field name="showpointlabel" type="boolean"
+                display="Punktbeschriftung anzeigen" default="false"/>
+        </fields>
+    </theme>
+
+    <theme name="SQCurveA">
+        <inherits>
+            <inherit from="SQCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="0, 0, 175" />
+        </fields>
+    </theme>
+    <theme name="SQCurveB">
+        <inherits>
+            <inherit from="SQCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="0, 175, 175" />
+        </fields>
+    </theme>
+    <theme name="SQCurveC">
+        <inherits>
+            <inherit from="SQCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="0, 175, 0" />
+        </fields>
+    </theme>
+    <theme name="SQCurveD">
+        <inherits>
+            <inherit from="SQCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="175, 0, 175" />
+        </fields>
+    </theme>
+    <theme name="SQCurveE">
+        <inherits>
+            <inherit from="SQCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="175, 175, 0" />
+        </fields>
+    </theme>
+    <theme name="SQCurveF">
+        <inherits>
+            <inherit from="SQCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="175, 0, 0" />
+        </fields>
+    </theme>
+    <theme name="SQCurveG">
+        <inherits>
+            <inherit from="SQCurve" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="175, 175, 175" />
+        </fields>
+    </theme>
+
+    <theme name="SQOutlierCurveA">
+        <inherits>
+            <inherit from="SQCurveA" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" display="Liniendicke" default="1"/>
+        </fields>
+    </theme>
+    <theme name="SQOutlierCurveB">
+        <inherits>
+            <inherit from="SQCurveB" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" display="Liniendicke" default="1"/>
+        </fields>
+    </theme>
+    <theme name="SQOutlierCurveC">
+        <inherits>
+            <inherit from="SQCurveC" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" display="Liniendicke" default="1"/>
+        </fields>
+    </theme>
+    <theme name="SQOutlierCurveD">
+        <inherits>
+            <inherit from="SQCurveD" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" display="Liniendicke" default="1"/>
+        </fields>
+    </theme>
+    <theme name="SQOutlierCurveE">
+        <inherits>
+            <inherit from="SQCurveE" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" display="Liniendicke" default="1"/>
+        </fields>
+    </theme>
+    <theme name="SQOutlierCurveF">
+        <inherits>
+            <inherit from="SQCurveF" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" display="Liniendicke" default="1"/>
+        </fields>
+    </theme>
+    <theme name="SQOutlierCurveG">
+        <inherits>
+            <inherit from="SQCurveG" />
+        </inherits>
+        <fields>
+            <field name="linesize" type="int" display="Liniendicke" default="1"/>
+        </fields>
+    </theme>
+
+    <theme name="Porosity">
+        <inherits>
+            <inherit from="LongitudinalSection" />
+        </inherits>
+        <fields>
+            <field name="linecolor" type="color" default="175, 175, 175" />
+        </fields>
+    </theme>
+</themegroup>

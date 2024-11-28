@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<floodmap>
+    <mapfile path="artifact.map"/>
+    <map-template path="mapfile.vm"/>
+
+    <velocity>
+        <logfile path="${artifacts.config.dir}/../velocity.log"/>
+    </velocity>
+
+    <river name="Beispielfluss">
+        <srid value="31467"/>
+        <background-wms url="http://osm.intevation.de/bfg/service?" layers="OSM-WMS-Dienst"/>
+    </river>
+</floodmap>

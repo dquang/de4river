@@ -1,0 +1,432 @@
+2012-09-15	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* ../.hgignore: Add ignores for flys-aft, too.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Ignore
+	  tables with unset GUELTIG_VON or GUELTIG_BIS values.
+
+2012-09-11	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* README.txt: Added infos how to build.
+
+	* doc/conf-oracle.xml: Demo config for Oracle.
+
+	* bin/run.sh: New start script.
+	* bin/log4j.properties: Demo log4j config.
+
+	* pom.xml: Added config for Maven assembly plugin.
+	* pom-oracle.xml: New. Has extra dependency to Oracle JDBC.
+
+2012-09-11	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* pom.xml: Java 1.5 -> 1.6
+	* README.txt: Removed new line.
+
+2012-02-16	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* README.txt: Describe configuration and function. TODO:
+	  Write about running.
+
+2012-02-16	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* README.txt: New. Contains error messages by now. TODO: Write
+	  more about the whole process.
+
+	* src/main/java/de/intevation/aft/SyncContext.java,
+	  src/main/java/de/intevation/aft/DischargeTable.java,
+	  src/main/java/de/intevation/aft/Notification.java,
+	  src/main/java/de/intevation/aft/River.java,
+	  src/main/java/de/intevation/aft/Sync.java:
+	  Adjusted and improved error messages.
+	
+2012-02-08	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/resources/sql/flys-common.properties: Insert 
+	  new discharge tables as 'Historische Abflusstafel' kind.
+
+2012-01-11	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/resources/sql/flys-oracle-jdbc-oracledriver.properties:
+	  Added 'FROM DUAL' clause when selecting new ids from sequences.
+	  Sync process between AFT(Oracle) and FLYS(Oracle) is working now!
+
+2012-01-10	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/resources/sql/flys-oracle-jdbc-oracledriver.properties: New.
+	  Statements to make the FLYS database connection Oracle compatible.
+	  Untested!
+
+2012-01-10	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/resources/sql/aft-oracle-jdbc-oracledriver.properties: New.
+	  Statements to make the AFT database connection Oracle compatible.
+
+2012-01-09	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Write
+	  warning if there are discharge tables with same descriptions
+	  in FLYS or AFT and ignore the redundant ones. This led 
+	  to an ever growing FLYS database.
+
+2012-01-09	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/Sync.java: Log if modifications
+	  are found or not.
+
+	* src/main/java/de/intevation/aft/River.java: Commit/rollback
+	  changes on gauge if a gauge is updated.
+	
+2012-01-09	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Store 
+	  the W/Q values in sets to prevent value duplications leading
+	  to unique constraint violations in FLYS. Log a warning
+	  when loading a W/Q value duplication.
+
+	  This have the nice side effect that the W/Q values are
+	  written sorted by Q/W which is of benefit for FLYS.
+
+2012-01-09	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/River.java: Fixed logic bug
+	  when writing discharge tables of an gauge existing in both dbs.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Moved
+	  some SQL code from River here to simplify the persistence.
+
+2012-01-09	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/TimeInterval.java(toString): Added
+	  toString() method.
+
+	* src/main/java/de/intevation/aft/SyncContext.java: Added debug
+	  logging when creating a new time inteval.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Added
+	  warning when start and end of a time interval from AFT
+	  are ordered start > end.
+
+2012-01-07	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/SymbolicStatement.java:
+	  Added setLong() method. Used when setting the official number
+	  of a gauge.
+
+	* src/main/java/de/intevation/aft/River.java: Store the new
+	  discharge tables in FLYS  when gauges exist in both 
+	  FLYS and AFT and there are discharge tables that are only in AFT.
+	  Store official number as long.
+
+2012-01-07	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/River.java: Store
+	  the W/Q differences of existing discharge tables
+	  to the FLYS database.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Added
+	  getter/setter for W/Q values.
+	  
+2012-01-06	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/River.java: Do the pairing
+	  of discharge table of a gauge that needs updates. TODO:
+	  Build the W/Q difference of found FLYS/AFT matches and
+	  create the discharge tables in FLYS that are found in AFT.
+
+2012-01-06	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/resources/sql/flys-common.properties: Added statement
+	  to load all discharge tables of a given gauge.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: 
+
+	* src/main/java/de/intevation/aft/DIPSGauge.java: Store
+	  the official number, too.
+
+	* src/main/java/de/intevation/aft/River.java: In case of
+	  updating a gauge load all discharge tables of that gauge
+	  from FLYS and AFT. TODO: Do pairing based on the descriptions.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Code
+	  to load the discharge table from FLYS and AFT.
+	  
+2012-01-06	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/WQDiff.java: New.
+	  Calculates the difference of two W/Q value table of a
+	  discharge table. This can be used to write an optimized
+	  change set in terms of executed SQL to the FLYS database.
+
+	* src/main/java/de/intevation/aft/WQ.java: Changed the EPS_CMP
+	  comparator to first sort by Q and then by W because the Qs
+	  are more distinct and the dominant component.
+
+	* src/main/resources/sql/flys-common.properties: Added statement
+	  to delete W/Q values.
+
+2012-01-06	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/utils/XML.java: Added code
+	  to send/receive documents from streams.
+
+	* src/main/java/de/intevation/aft/Notification.java: New.
+	  Sends XML documents via HTTP POST to given URLs.
+
+	* src/main/java/de/intevation/aft/Sync.java: Send notifications
+	  if the FLYS database was modified. Useful to invalidate caches
+	  in the artifact server.
+
+2012-01-05	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* doc/conf.xml: Added demo notification url.
+
+	* src/main/java/de/intevation/aft/River.java,
+	  src/main/java/de/intevation/aft/Rivers.java,
+	  src/main/java/de/intevation/aft/Sync.java: Modifications
+	  are bubbled up to main() to send notifactions.
+	  
+2012-01-05	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Store
+	  W/Q values to FLYS.
+
+	* src/main/resources/sql/flys-common.properties: Added statements
+	  to store W/Q values into FLYS database.
+
+2012-01-05	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/WQ.java: New. W/Q model used
+	  for AFT and FLYS.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: Holds
+	  a list of its W/Q values now. Values are loadable from AFT
+	  and FLYS.
+
+	* src/main/resources/sql/aft-common.properties,
+	  src/main/resources/sql/flys-common.properties: Added statements
+	  to load W/Q values for a given discharge table.
+
+2012-01-04	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/SyncContext.java(fetchOrCreateFLYSTimeInterval):
+	  Create FLYS time intervals if they are not in the database.
+
+	* src/main/java/de/intevation/aft/DischargeTable.java: New. Model
+	  for discharge tables.
+
+	* src/main/java/de/intevation/aft/TimeInterval.java: Added
+	  convinience constructors.
+
+	* src/main/java/de/intevation/aft/River.java: Store discharge tables.
+
+	* src/main/java/de/intevation/aft/Sync.java: Exit with errorcode
+	  if syncing fails.
+
+	* src/main/resources/sql/aft-common.properties: Fetch the
+	  description of a discharge table, too.
+
+	* src/main/resources/sql/flys-common.properties: Added statements
+	  to create time intevals and discharge tables.
+
+2012-01-03	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/TimeInterval.java: New.
+	  Model for FLYS time intervals.
+
+	* src/main/java/de/intevation/aft/SyncContext.java: Preload
+	  existing time intervals from FLYS.
+
+	* src/main/java/de/intevation/aft/Sync.java: Call init()
+	  after construction to ensure that the db connections are
+	  closed properly.
+
+	* src/main/resources/sql/flys-common.properties: Added statement
+	  to fetch the time intervals from FLYS.
+
+2012-01-03	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/River.java: Fetch discharge table
+	  infos from AFT.
+
+	* src/main/resources/sql/aft-common.properties: Added statement to fetch
+	  infos from ABFLUSSTAFEL.
+
+2012-01-02	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/resources/sql/flys-common.properties: Added statements
+	  to create gauges in FLYS.
+
+	* src/main/java/de/intevation/aft/DIPSGauge.java: Make more fields
+	  accessible for gauge creation in FLYS.
+
+	* src/main/java/de/intevation/aft/River.java: Store new gauges
+	  in FLYS.
+
+	* src/main/java/de/intevation/db/ConnectedStatements.java:
+	  Added logging, make methods of transaction handling public.
+
+	* src/main/java/de/intevation/db/SymbolicStatement.java(setDouble):
+	  Fixed argument type problem.
+
+2012-01-02	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/ConnectionBuilder.java:
+	  Set auto commit of new connection to false to enable transaction.
+
+	* src/main/java/de/intevation/db/ConnectedStatements.java:
+	  Added methods to begin, commit and rollback transactions.
+	  Relies on savepoint support which is check by database metadata.
+
+2011-12-22	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/River.java: Figure out
+	  which gauges must be updated, which must be created.
+
+	* src/main/java/de/intevation/aft/DIPSGauge.java: Store
+	  info from AFT and FLYS, too.
+
+	* src/main/resources/sql/flys-common.properties: Fetch the
+	  official number, too.
+2011-12-20	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/River.java: Removed
+	  index DIPS gauge number -> DIPS gauge.
+
+	* src/main/java/de/intevation/aft/SyncContext.java: Readded
+	  here, because the index can be shared by all rivers.
+
+2011-12-20	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* doc/repair.xsl: Repair XSL transform which brings the 
+	  DIPS gauge numbers of the 15 FLYS gauges to the same
+	  numbers as they are used in "Pegel Online".
+
+	  !!! The purpose of this script is to do more repairing !!!
+
+	* doc/pegelstationen.xml: Sub document of repair. Used
+	  for lookup the correct pegel numbers.
+
+	* doc/conf.xml: Changed to optionally load the repair XSLT.
+
+	* src/main/java/de/intevation/aft/Sync.java: Load the
+	  repair XSL transformation if configured.
+
+	* src/main/java/de/intevation/utils/XML.java: Added code
+	  to make XSL transforms possible.
+
+	* src/main/java/de/intevation/aft/River.java,
+	  src/main/java/de/intevation/aft/Rivers.java: Fixed logging.
+
+2011-12-20	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/aft/River.java,
+	  src/main/java/de/intevation/aft/DIPSGauge.java: Make DIPS check
+	  more verbose.
+
+2011-12-16	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/SymbolicStatement.java:
+	  Made the setX() methods cascadable.
+
+	* src/main/java/de/intevation/aft/River.java: Fetches
+	  the gauges from the database.
+
+	* src/main/resources/sql/aft-common.properties,
+	  src/main/resources/sql/flys-common.properties: Added gauges
+	  statements.
+
+2011-12-14	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/SymbolicStatement.java:
+	  Added execute(), executeQuery() & Co.
+
+	* src/main/java/de/intevation/aft/IdPair.java: New. Base class
+	  for id pairs to identify same object in both databases.
+
+	* src/main/java/de/intevation/aft/River.java: New. To sync
+	  the objects of one river.
+
+	* src/main/java/de/intevation/aft/Rivers.java: Figure out
+	  only the rivers which are in both databases and sync them.
+
+	* src/main/java/de/intevation/aft/Sync.java: Only pass the
+	  connected statements to the sync.
+
+	* src/main/resources/sql/flys-common.properties: Fixed SQL for
+	  fetching the rivers.
+	
+	* pom.xml: Added dependency to PostgreSQL.
+
+	* doc/conf.xml: SQLite needs a driver class.
+
+2011-12-13	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/ConnectionBuilder.java: Removed 
+	  statements here.
+
+	* src/main/java/de/intevation/db/Statements.java: Added method
+	  to access the hole map of statements.
+
+	* src/main/java/de/intevation/db/ConnectedStatements.java: New.
+	  A cache that binds prepared statements to a connection.
+
+2011-12-13	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/ConnectionBuilder.java: Added
+	  access to Statements.
+
+	* src/main/java/de/intevation/db/SymbolicStatement.java: New.
+	  Made top level from inner class of Statements.
+
+	* src/main/java/de/intevation/db/Statements.java: Moved SymbolicStatement
+	  out to top level class.
+
+	* src/main/java/de/intevation/aft/Rivers.java: Syncing beginns at
+	  river level.
+
+	* src/main/java/de/intevation/aft/Sync.java: Start the syncing with
+	  the rivers of both dbs.
+
+2011-12-13	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* doc/conf.xml: Adjusted structure to be more generic.
+
+	* src/main/java/de/intevation/utils/XML.java: Allow namespace aware
+	  file parsing.
+
+	* src/main/java/de/intevation/db/ConnectionBuilder.java: New. Evaluate
+	  config and builds a new db connection.
+
+	* src/main/java/de/intevation/aft/Sync.java: Load config file.
+
+	* pom.xml: Added dependency to SQLite JDBC driver.
+
+2011-12-13	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* doc/conf.xml: New. Configuration file.
+
+2011-12-13	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* ChangeLog: New. Argh! Forgot to check it in before.
+
+	* src/main/java/de/intevation/utils/XML.java: New. XML/XPath support.
+	  Mainly a stripped down version of
+	  de.intevation.artifacts.common.utils.XMLUtils
+
+2011-12-12	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/Statements.java: Added support
+	  for symbolic prepared statements.
+
+2011-12-12	Sascha L. Teichmann	<sascha.teichmann@inteavtion.de>
+
+	* src/main/java/de/intevation/db/Statements.java: New. Load statements
+	  from ressources.
+
+	* src/main/resources/sql/aft-common.properties: New. Common statements
+	  for the AFT side of the sync.
+
+	* src/main/resources/sql/flys-common.properties: New. Common statements
+	  for the FLYS side of the sync.
+
+	* pom.xml: Added dependency to log4j

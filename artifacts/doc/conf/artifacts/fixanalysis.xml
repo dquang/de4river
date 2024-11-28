@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="fixanalysis">
+    <states>
+        <state id="state.fix.river" description="state.fix.river"
+            helpText="help.state.fix.river"
+            state="org.dive4elements.river.artifacts.states.RiverSelect">
+            <data name="river" type="String" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.river"/>
+            <to state="state.fix.calculation.mode"/>
+        </transition>
+
+        <state id="state.fix.calculation.mode"
+            helpText="help.state.fix.calculation.mode"
+            description="state.fix.calcuation.mode"
+            state="org.dive4elements.river.artifacts.states.fixation.FixationSelect">
+            <data name="calculation.mode" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.calculation.mode"/>
+            <to state="state.fix.location"/>
+        </transition>
+
+        <state id="state.fix.location" description="state.fix.location"
+            helpText="help.state.fix.location"
+            state="org.dive4elements.river.artifacts.states.fixation.LocationSelect">
+            <data name="ld_from" type="Double"/>
+            <data name="ld_to" type="Double"/>
+            <data name="ld_step" type="Double"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.location"/>
+            <to state="state.fix.period"/>
+        </transition>
+
+        <state id="state.fix.period" description="state.fix.period"
+            helpText="help.state.fix.period"
+            state="org.dive4elements.river.artifacts.states.fixation.FixationPeriod">
+            <data name="start" type="Long"/>
+            <data name="end" type="Long"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.period"/>
+            <to state="state.fix.gaugerange"/>
+        </transition>
+
+        <state id="state.fix.gaugerange" description="state.fix.gaugerange"
+            helpText="help.state.fix.gaugerange"
+            state="org.dive4elements.river.artifacts.states.fixation.GaugeRange">
+            <data name="q1" type="Integer"/>
+            <data name="q2" type="Integer"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.gaugerange"/>
+            <to state="state.fix.eventselect"/>
+        </transition>
+
+        <state id="state.fix.eventselect" description="state.fix.eventselect"
+            helpText="help.state.fix.eventselect"
+            state="org.dive4elements.river.artifacts.states.fixation.EventSelect">
+            <data name="events" type="intarray"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.fix.eventselect"/>
+            <to state="state.fix.analysis.referenceperiod"/>
+            <condition data="calculation.mode" value="calculation.analysis"
+                operator="equal"/>
+        </transition>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.ValueCompareTransition">
+            <from state="state.fix.eventselect"/>
+            <to state="state.fix.vollmer.function"/>
+            <condition data="calculation.mode" value="calculation.vollmer"
+                operator="equal"/>
+        </transition>
+
+        <state id="state.fix.analysis.referenceperiod"
+            helpText="help.state.fix.analysis.referenceperiod"
+            description="state.fix.analysis.referenceperiod"
+            state="org.dive4elements.river.artifacts.states.fixation.ReferencePeriod">
+            <data name="ref_start" type="Long"/>
+            <data name="ref_end" type="Long"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.analysis.referenceperiod"/>
+            <to state="state.fix.analysis.analysisperiods"/>
+        </transition>
+
+        <state id="state.fix.analysis.analysisperiods"
+            helpText="help.state.fix.analysis.analysisperiods"
+            description="state.fix.analysis.analysisperiods"
+            state="org.dive4elements.river.artifacts.states.fixation.AnalysisPeriods">
+            <data name="ana_data" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.analysis.analysisperiods"/>
+            <to state="state.fix.analysis.function"/>
+        </transition>
+
+        <state id="state.fix.analysis.function"
+            helpText="help.state.fix.analysis.function"
+            description="state.fix.analysis.function"
+            state="org.dive4elements.river.artifacts.states.fixation.FunctionSelect">
+            <data name="function" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.analysis.function"/>
+            <to state="state.fix.analysis.preprocessing"/>
+        </transition>
+
+        <state id="state.fix.analysis.preprocessing"
+            helpText="help.state.fix.analysis.preprocessing"
+            description="state.fix.analysis.preprocessing"
+            state="org.dive4elements.river.artifacts.states.fixation.PreprocessingSelect">
+            <data name="preprocessing" type="Boolean"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.analysis.preprocessing"/>
+            <to state="state.fix.analysis.compute"/>
+        </transition>
+
+        <state id="state.fix.analysis.compute"
+            helpText="help.state.fix.analysis.compute"
+            description="state.fix.analysis.compute"
+            state="org.dive4elements.river.artifacts.states.fixation.FixAnalysisCompute">
+            <outputmodes>
+                <outputmode name="fix_deltawt_export" description="output.fix_deltawt_export" mine-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.fix_deltawt.csv" />
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_parameters_export" description="output.fix_parameters_export" mine-type="text/plain" type="export">
+                    <facets>
+                        <facet name="fix_parameters" description="facet.fix_parameters.csv" />
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_wq_curve_at_export" description="output.fix_wq_curve_at_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="at" description="facet.fix_wq_curve_export.at"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_wq_curve" description="output.fix_wq_curve" mine-type="image/png" type="chart">
+                    <facets>
+                        <facet name="fix_sector_average_wq_0" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_wq_1" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_wq_2" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_wq_3" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_analysis_events_wq" description="Raw event values used in the calculation"/>
+                        <facet name="fix_reference_events_wq" description="Raw event values used in the calculation"/>
+                        <facet name="fix_wq_curve" description="WQ curve"/>
+                        <facet name="qsectors" description="qsectors."/>
+                        <facet name="fix_outlier" description="The outliers"/>
+                        <facet name="other.wqkms.q"          description="W-Type of data" />
+                        <facet name="other.wqkms.w"          description="W-Type of data" />
+                        <facet name="other.wkms" description="facet.other.wkms"/>
+                        <facet name="other.wkms.marks" description="facet.other.wkms.makrs"/>
+                        <facet name="other.wqkms" description="facet.other.wqkms"/>
+                        <facet name="longitudinal_section.w" description="facet.longitudinal_section.w"/>
+                        <facet name="other.wq"    description="Point-like data like fixations"/>
+                        <facet name="heightmarks_points" description="facet.other.wkms.heightmarks_points"/>
+                        <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+                        <facet name="fix_wq_curve.manualpoints" description="Manual points"/>
+                        <facet name="mainvalues.q" description="mainvalues.q"/>
+                        <facet name="mainvalues.w" description="mainvalues.w"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_deltawt_curve" description="output.fix_deltawt_curve" mine-type="image/png" type="chart">
+                    <facets>
+                        <facet name="fix_sector_average_dwt_0" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_dwt_1" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_dwt_2" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_dwt_3" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_analysis_events_dwt" description="Raw event values used in the calculation"/>
+                        <facet name="fix_reference_events_dwt" description="Raw event values used in the calculation"/>
+                        <facet name="fix_analysis_periods_dwt" description="Dateranges of analysis periods."/>
+                        <facet name="fix_deviation_dwt" description="The standard variance"/>
+                        <facet name="fix_deltawt_curve.manualpoints" description="Manual points"/>
+                        <facet name="fix_reference_period_dwt" description="Reference period"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_longitudinal_section_curve" description="output.fix_longitudinal_section_curve" mine-type="image/png" type="chart">
+                    <facets>
+                        <facet name="fix_sector_average_ls_0" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_ls_1" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_ls_2" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_ls_3" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_ls_deviation_0" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_ls_deviation_1" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_ls_deviation_2" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_ls_deviation_3" description="Average values for Ws in Q sectors."/>
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                        <facet name="fix_deviation_ls" description="The standard variance"/>
+                        <facet name="fix_analysis_events_ls" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_reference_events_ls" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_longitudinal_section_curve.manualpoints" description="Manual points"/>
+                        <facet name="other.wqkms.q"          description="W-Type of data" />
+                        <facet name="other.wqkms.w"          description="W-Type of data" />
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_derivate_curve" description="output.fix_derivate_curve" mine-type="image/png" type="chart">
+                    <facets>
+                        <facet name="fix_derivate_curve" description="Derivate curve"/>
+                        <facet name="fix_derivate_curve.manualpoints" description="Manual points"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_report" description="output.fix_report.report" mime-type="text/plain" type="report">
+                    <facets>
+                        <facet name="report" description="facet.fix.report" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+
+        <state id="state.fix.vollmer.function"
+            helpText="help.state.fix.vollmer.function"
+            description="state.fix.vollmer.function"
+            state="org.dive4elements.river.artifacts.states.fixation.FunctionSelect">
+            <data name="function" type="String"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.vollmer.function"/>
+            <to state="state.fix.vollmer.preprocessing"/>
+        </transition>
+
+        <state id="state.fix.vollmer.preprocessing"
+            helpText="help.state.fix.vollmer.preprocessing"
+            description="state.fix.vollmer.preprocessing"
+            state="org.dive4elements.river.artifacts.states.fixation.PreprocessingSelect">
+            <data name="preprocessing" type="Boolean"/>
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.vollmer.preprocessing"/>
+            <to state="state.fix.vollmer.qs"/>
+        </transition>
+
+        <state id="state.fix.vollmer.qs" description="state.fix.vollmer.qs"
+            helpText="help.state.fix.vollmer.qs"
+            state="org.dive4elements.river.artifacts.states.WQFixing">
+            <data name="wq_isq"   type="String" />
+            <data name="wq_values" type="WQTriple" />
+        </state>
+
+        <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+            <from state="state.fix.vollmer.qs"/>
+            <to state="state.fix.vollmer.compute"/>
+        </transition>
+
+        <state id="state.fix.vollmer.compute"
+            helpText="help.state.fix.vollmer.compute"
+            description="state.fix.vollmer.compute"
+            state="org.dive4elements.river.artifacts.states.fixation.FixRealizingCompute">
+            <outputmodes>
+                <outputmode name="longitudinal_section" description="output.longitudinal_section" mime-type="image/png" type="chart">
+                    <facets>
+                    	<facet name="longitudinal_section.w" description="facet.longitudinal_section.w"/>
+                    	<facet name="longitudinal_section.q" description="facet.longitudinal_section.q"/>
+                        <facet name="w_differences" description="facet.w_differences"/>
+                        <facet name="other.wkms" description="facet.other.wkms"/>
+                        <facet name="other.wq"               description="WQ-Type of data" />
+                        <facet name="other.wqkms" description="facet.other.wqkms"/>
+                        <facet name="other.wqkms.q"          description="W-Type of data" />
+                        <facet name="other.wqkms.w"          description="W-Type of data" />
+                        <facet name="heightmarks_points" description="facet.other.wkms.heightmarks_points"/>
+                        <facet name="longitudinal_section.annotations" description="facet.longitudinal_section.annotations"/>
+                        <facet name="longitudinal_section.area" description="facet.longitudinal_section.area"/>
+                        <facet name="longitudinal_section.manualpoints" description="Manuelle Punkte"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_wq_curve" description="output.fix_wq_curve" mine-type="image/png" type="chart">
+                    <facets>
+                        <facet name="fix_sector_average_wq_0" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_wq_1" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_wq_2" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_sector_average_wq_3" description="Average values for Ws in Q sectors."/>
+                        <facet name="fix_analysis_events_wq" description="Raw event values used in the calculation"/>
+                        <facet name="fix_wq_curve" description="WQ curve"/>
+                        <facet name="fix_wq_ls" description="WQ LS curve"/>
+                        <facet name="fix_outlier" description="The outliers"/>
+                        <facet name="qsectors" description="qsectors."/>
+                        <facet name="fix_events_wqkms"          description="WQKMS-Type of data" />
+                        <facet name="other.wqkms.q"          description="W-Type of data" />
+                        <facet name="other.wqkms.w"          description="W-Type of data" />
+                        <facet name="other.wkms" description="facet.other.wqkms"/>
+                        <facet name="other.wqkms" description="facet.other.wqkms"/>
+                        <!--issue1383: facet name="longitudinal_section.w" description="facet.longitudinal_section.w"/-->
+                        <facet name="other.wq"    description="Point-like data like fixations"/>
+                        <facet name="heightmarks_points" description="facet.other.wkms.heightmarks_points"/>
+                        <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+                        <facet name="mainvalues.w" description="facet.fix_wq.mainvalues.w"/>
+                        <facet name="mainvalues.q" description="facet.fix_wq.mainvalues.q"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="cross_section" description="output.cross_section" mime-type="image/png" type="chart">
+                  <facets>
+                    <facet name="cross_section_water_line"   description="facet.cross_section_water_line"/>
+                    <facet name="cross_section"              description="facet.cross_section"/>
+                    <facet name="area"                       description="an area"/>
+                    <facet name="cross_section.area"         description="an area"/>
+                    <facet name="cross_section.manualpoints" description="points"/>
+                    <facet name="cross_section.manualline"   description="line"/>
+                    <facet name="hyk"                        description="hyks"/>
+                  </facets>
+                </outputmode>
+                <outputmode name="fix_wq_curve_at_export" description="output.fix_wq_curve_at_export" mime-type="text/plain" type="export">
+                    <facets>
+                        <facet name="at" description="facet.fix_wq_curve_export.at"/>
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_waterlevel_export" description="output.fix_waterlevel_export" mine-type="text/plain" type="export">
+                    <facets>
+                        <facet name="csv" description="facet.waterlevel_export.csv" />
+                        <facet name="wst" description="facet.waterlevel_export.wst" />
+                        <facet name="pdf" description="facet.waterlevel_export.pdf" />
+                    </facets>
+                </outputmode>
+                <outputmode name="fix_report" description="output.fix_report.report" mime-type="text/plain" type="report">
+                    <facets>
+                        <facet name="report" description="facet.fix.report" />
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+    </states>
+</artifact>

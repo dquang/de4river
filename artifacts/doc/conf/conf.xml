@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE artifact-database [
+    <!ENTITY artifact-db SYSTEM "artifact-db.xml">
+    <!ENTITY datacage-db SYSTEM "datacage-db.xml">
+    <!ENTITY backend-db  SYSTEM "backend-db.xml">
+    <!ENTITY seddb-db    SYSTEM "seddb-db.xml">
+    <!ENTITY rest-server SYSTEM "rest-server.xml">
+    <!ENTITY floodmap    SYSTEM "floodmap.xml">
+    <!ENTITY rivermap	 SYSTEM "rivermap.xml">
+    <!ENTITY generators  SYSTEM "generators/generators.xml">
+    <!ENTITY zoom-scales SYSTEM "zoom-scales.xml">
+    <!ENTITY modules SYSTEM "modules.xml">
+    <!ENTITY porosity-artifact  SYSTEM "artifacts/porosity.xml">
+    <!ENTITY gaugedischargecurve-artifact  SYSTEM "artifacts/gaugedischargecurve.xml">
+    <!ENTITY sqrelation-artifact SYSTEM "artifacts/sqrelation.xml">
+    <!ENTITY sqrelation-datacage-artifact SYSTEM "artifacts/sqrelation-datacage.xml">
+    <!ENTITY sedimentload-artifact  SYSTEM "artifacts/sedimentload.xml">
+    <!ENTITY sedimentload-ls-artifact  SYSTEM "artifacts/sedimentload-ls.xml">
+
+    <!ENTITY discharge-diagrams SYSTEM "generators/discharge-diagrams.xml">
+    <!ENTITY longitudinal-diagrams SYSTEM "generators/longitudinal-diagrams.xml">
+    <!ENTITY sqrelation-defaults SYSTEM "generators/sqrelation-diagram-defaults.xml">
+    <!ENTITY longitudinal-defaults SYSTEM "generators/longitudinal-diagram-defaults.xml">
+    <!ENTITY discharge-defaults SYSTEM "generators/discharge-diagram-defaults.xml">
+]>
+<artifact-database>
+    <export-secret>YOUR_SECRET</export-secret>
+    <factories>
+        <context-factory>org.dive4elements.river.artifacts.context.RiverContextFactory</context-factory>
+
+        <collection-factory
+            name="DefaultArtifactCollectionFactory"
+            description="The default artifact collection factory"
+            ttl="21600000"
+            artifact-collection="org.dive4elements.river.collections.D4EArtifactCollection">org.dive4elements.artifactdatabase.DefaultArtifactCollectionFactory</collection-factory>
+
+        <artifact-factories>
+            <!-- All Artifactfactories which are available in this Database. -->
+            <artifact-factory name="winfo" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WINFOArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="riveraxis" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.RiverAxisArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="hyk" description="Factory to create an artifact to be used for hyks"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.HYKArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="new_map" description="Factory to create an artifact to be used for new map"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.MapArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmskmfactory" description="Factory to create an artifact that generates WMS facets for KMs."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSKmArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsqpsfactory" description="Factory to create an artifact that generates WMS facets for CrossSectionTracks."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSQPSArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmshydrboundariesfactory" description="Factory to create an artifact that generates WMS facets for CrossSectionTracks."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSHydrBoundaryArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmshydrboundariespolyfactory" description="Factory to create an artifact that generates WMS facets for CrossSectionTracks."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSHydrBoundaryPolyArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsfloodplainfactory" description="Factory to create an artifact that generates WMS facets for CrossSectionTracks."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSFloodplainArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsbuildingsfactory" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSBuildingsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsfixpointsfactory" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSFixpointsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsfloodmarkfactory" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSFloodmarksArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsfloodmapsfactory" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSFloodmapsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsbackground" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSBackgroundArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="externalwmsfactory" description="Factory to create an artifact to be used in Floodmaps to display external WMS layers"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.ExternalWMSArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="annotations" description="Factory to create an artifact to access Annotations for Points at rivers"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.AnnotationArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="crosssections" description="Factory to create an artifact to access cross sections"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.CrossSectionArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="waterlevel" description="Factory to create an artifact to access waterlevel data"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WaterlevelArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="mainvalue" description="Factory to create an artifact to access Main Values for discharge curve diagrams"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.MainValuesArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="staticwkms" description="Factory to create an artifact to access 'other' WKms data"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.StaticWKmsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="area" description="Factory to create an artifact to draw (wkms) area data"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.AreaArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="staticwqkms" description="Factory to create an artifact to access 'other' WKms data"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.StaticWQKmsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wqinterpol" description="Factory to create an artifact to access 'other' WQ (at km) data"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WQKmsInterpolArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="new_chart" description="Factory to create an artifact to be used for new chart"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.ChartArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="manualpoints" description="Factory to create an artifact for storing and editing points added by the user."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.ManualPointsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="fixanalysis" description="Factory to create an artifact to be used in fixation analysis."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.FixationArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="gaugedischarge" description="Factory to create an artifact to host historical qs."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.GaugeDischargeArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="qsectors" description="Factory to create an artifact to host qsectors."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.QSectorArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmshwslinesfactory" description="Factory to create an artifact that generates WMS facets for HWS Lines"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSHWSLinesArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmshwspointsfactory" description="Factory to create an artifact that generates WMS facets for HWS Points"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSHWSPointsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="wmsjettiesfactory" description="Factory to create an artifact to be used in WINFO"
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.WMSJettiesArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+
+            <!-- MINFO specific Artifacts -->
+            <artifact-factory name="minfo" description="Factory to create an artifact to be used in module minfo."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.MINFOArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="bedheight" description="Factory to create an artifact used in minfo datacage."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.BedHeightsArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="staticsqrelation" description="Factory to create an artifact that generates sq relations from db."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.D4EArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="sqrelationdatacage" description="Factory to create an artifact that generates sq relations from db."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.SQRelationArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="morph-width" description="Factory to create an artifact used in minfo datacage."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.StaticMorphWidthArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+
+            <artifact-factory name="gaugedischargecurve" description="Factory to create an artifact to show a discharge curve for a gauge."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.D4EArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="flowvelocitymodel" description="Factory to create an artifact to show measured flow velocities."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.FlowVelocityModelArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="flowvelocity" description="Factory to create an artifact to show measured flow velocities."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.FlowVelocityMeasurementArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="sedimentdensity" description="Factory to create an artifact to show Sediment Density values."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.SedimentDensityArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="sedimentload" description="Factory to create an artifact to show Sedimentload values."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.D4EArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="sedimentload_ls" description="Factory to create an artifact to show values from the sedimentload_ls table."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.D4EArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+            <artifact-factory name="porosity" description="Factory to create an artifact to show porosity values."
+                ttl="3600000"
+                artifact="org.dive4elements.river.artifacts.D4EArtifact">org.dive4elements.artifactdatabase.DefaultArtifactFactory</artifact-factory>
+        </artifact-factories>
+
+        <user-factory name="default" description="Factory to create new users">org.dive4elements.artifactdatabase.DefaultUserFactory</user-factory>
+
+        <service-factories>
+            <service-factory
+                name="server-info"
+                service="org.dive4elements.river.artifacts.services.ServerInfoService"
+                description="This service provides generic information and configuration of the artifact server.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="rivers"
+                service="org.dive4elements.river.artifacts.services.RiverService"
+                description="This service returns a list of provided rivers by the artifact server.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="distanceinfo"
+                service="org.dive4elements.river.artifacts.services.DistanceInfoService"
+                description="Returns a list of distances supported by a specific river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="mainvalues"
+                service="org.dive4elements.river.artifacts.services.MainValuesService"
+                description="Returns the main values of a river's gauge based on a start and end point of the river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="metadata"
+                service="org.dive4elements.river.artifacts.services.MetaDataService"
+                description="The service provides some introspection into the database content.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="mapinfo"
+                service="org.dive4elements.river.artifacts.services.MapInfoService"
+                description="The service provides some basic information to create a WMS for a specific river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="cross-section-km"
+                service="org.dive4elements.river.artifacts.services.CrossSectionKMService"
+                description="The service provides the N next neighbored kms and ids of cross section lines for given cross section id, km and N.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="cache-invalidation"
+                service="org.dive4elements.river.artifacts.services.CacheInvalidationService"
+                description="The service invalidates caches.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="dischargeinfo"
+                service="org.dive4elements.river.artifacts.services.DischargeInfoService"
+                description="Returns description, start year and end year of discharges at a specific gauge.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="fixings-overview"
+                service="org.dive4elements.river.artifacts.services.FixingsOverviewService"
+                description="Returns an overview of the fixings of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="fixings-km-chart"
+                service="org.dive4elements.river.artifacts.services.FixingsKMChartService"
+                description="Returns a chart of fixings of given river and km.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="gaugeinfo"
+                service="org.dive4elements.river.artifacts.services.GaugeInfoService"
+                description="Returns an overview of the fixings of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="fileupload"
+                service="org.dive4elements.river.artifacts.services.FileUploadService"
+                description="Takes base64 coded files embedded in XML.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="themelisting"
+                service="org.dive4elements.river.artifacts.services.ThemeListingService"
+                description="Returns a list of Themes filtered by theme name.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="sq-km-chart"
+                service="org.dive4elements.river.artifacts.services.SQKMChartService"
+                description="Returns a chart of km and date of meassuring points of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="modules"
+                service="org.dive4elements.river.artifacts.services.ModuleService"
+                description="Returns a list of available modules.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="bed-km-chart"
+                service="org.dive4elements.river.artifacts.services.BedKMChartService"
+                description="Returns a chart of km and date of meassuring points of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="bedload-km-chart"
+                service="org.dive4elements.river.artifacts.services.BedloadKMChartService"
+                description="Returns a chart of km and date of meassuring points of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="gaugeoverviewinfo"
+                service="org.dive4elements.river.artifacts.services.GaugeOverviewInfoService"
+                description="Returns an overview of the fixings of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="dischargetablesoverview"
+                service="org.dive4elements.river.artifacts.services.DischargeTablesOverview"
+                description="Returns an overview of the fixings of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="measurementstationinfo"
+                service="org.dive4elements.river.artifacts.services.MeasurementStationInfoService"
+                description="Returns an overview of the measurement stations of a given river.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+            <service-factory
+                name="sedimentloadinfo"
+                service="org.dive4elements.river.artifacts.services.SedimentLoadInfoService"
+                description="Returns sedimentloads.">org.dive4elements.artifactdatabase.DefaultServiceFactory</service-factory>
+        </service-factories>
+
+    </factories>
+
+    <lifetime-listeners>
+        <listener>org.dive4elements.river.artifacts.datacage.Datacage</listener>
+        <listener>org.dive4elements.river.wsplgen.SchedulerSetup</listener>
+        <listener>org.dive4elements.river.artifacts.map.RiverMapfileGeneratorStarter</listener>
+    </lifetime-listeners>
+
+    <backend-listeners>
+        <listener>org.dive4elements.river.artifacts.datacage.DatacageBackendListener</listener>
+    </backend-listeners>
+
+    <callcontext-listener
+        name="SessionCallContextListener"
+        description="A CallContext.Listener to open and close Hibernatesessions">org.dive4elements.river.artifacts.context.SessionCallContextListener</callcontext-listener>
+
+    <artifacts>
+        <artifact name="manualpoints" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/manualpoints.xml" />
+        <artifact name="winfo" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/winfo.xml" />
+        <artifact name="minfo" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/minfo.xml" />
+        <artifact name="waterlevel" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/waterlevel.xml" />
+        <artifact name="annotation" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/annotation.xml" />
+        <artifact name="hyk" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/hyk.xml" />
+        <artifact name="wmsbackground" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/wmsbackground.xml" />
+        <artifact name="new_map" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/map.xml" />
+        <artifact name="new_chart" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/chart.xml" />
+        <artifact name="staticwqkms" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/staticwqkms.xml" />
+        <artifact name="fixanalysis" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/fixanalysis.xml" />
+        <artifact name="gaugedischarge" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/gaugedischarge.xml" />
+        <artifact name="qsector" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${artifacts.config.dir}/artifacts/qsector.xml" />
+        &sqrelation-artifact;
+        &sqrelation-datacage-artifact;
+        &porosity-artifact;
+        &gaugedischargecurve-artifact;
+        &sedimentload-artifact;
+        &sedimentload-ls-artifact;
+    </artifacts>
+
+    &modules;
+
+    <hooks>
+        <hook
+            class="org.dive4elements.river.artifacts.CollectionMonitor"
+            applies="post-feed,post-advance,post-describe"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:href="${artifacts.config.dir}/output-defaults.xml">
+        </hook>
+    </hooks>
+
+    &generators;
+
+    <!-- Path to the template file of the meta data. -->
+    <metadata>
+        <template>${artifacts.config.dir}/meta-data.xml</template>
+    </metadata>
+
+    <!-- MapServer integration -->
+    <mapserver>
+        <!-- Can be absolute URL or just path if on the same host as client -->
+        <server path="/cgi-bin/"/>
+        <!-- Directory where generated mapfiles and shapefiles will be stored -->
+        <mapfiles path="${artifacts.config.dir}/../artifacts-data/mapserver/"/>
+        <templates path="${artifacts.config.dir}/mapserver/"/>
+    </mapserver>
+    &floodmap;
+    &rivermap;
+
+    &rest-server;
+
+    <!-- Garbage collection of outdated artifacts. -->
+    <cleaner>
+        <sleep-time>60000</sleep-time>
+    </cleaner>
+
+    <cache>
+        <config-file>${artifacts.config.dir}/cache.xml</config-file>
+    </cache>
+
+    <!-- Configuration of used databases. -->
+    &artifact-db;
+    &datacage-db;
+    &backend-db;
+    &seddb-db;
+
+    <flys>
+        <themes>
+            <configuration>${artifacts.config.dir}/themes.xml</configuration>
+        </themes>
+    </flys>
+
+    <options>
+        &zoom-scales;
+
+        <dgm-path>/opt/d4e-river/dgm/</dgm-path>
+
+        <sediment-density-factor>1.9</sediment-density-factor>
+    </options>
+
+    <!-- Base URL for online help -->
+    <!-- Can be absolute URL or just path if on the same host as client -->
+    <help-url>/wiki</help-url>
+</artifact-database>

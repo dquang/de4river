@@ -1,0 +1,41 @@
+LAYER
+    NAME      "$LAYER.getName()"
+    TYPE      $LAYER.getType()
+    DATA      "$LAYER.getDirectory()/$LAYER.getData()"
+    STATUS    ON
+    TEMPLATE  map.html
+    TOLERANCE 10
+    DUMP      TRUE
+    #if( $LAYER.getGroup() )
+        GROUP "$LAYER.getGroup()"
+    #end
+
+    PROJECTION
+        "init=epsg:$LAYER.getSrid()"
+    END
+
+    METADATA
+        "wms_title" "$LAYER.getTitle()"
+        "gml_include_items" "all"
+        "ows_enable_request" "GetFeatureInfo"
+        "wms_feature_info_mime_type" "gml"
+        "wms_srs" "EPSG:4326 EPSG:31466 EPSG:31467"
+        #if ( $LAYER.getGroupTitle() )
+            "wms_group_title" "$LAYER.getGroupTitle()"
+        #end
+    END
+
+    #if ( !$LAYER.getStyle() )
+        #if ( $LAYER.getGroupTitle() )
+            #if ( $LAYER.getType() == "POLYGON" )
+                #include("barrier_polygons_class.vm")
+            #else
+                #include("barrier_lines_class.vm")
+            #end
+        #else
+            #include("wsplgen_class.vm")
+        #end
+    #else
+        $LAYER.getStyle()
+    #end
+END

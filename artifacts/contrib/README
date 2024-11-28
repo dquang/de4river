@@ -1,0 +1,43 @@
+From ChangeLog:
+
+2012-07-08	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* contrib/themes2html.xsl: New. Transformation to get a better
+	  overview of themes.xml. Usage:
+
+	  $ xsltproc --path doc/conf    \
+	        contrib/themes2html.xsl \
+	        doc/conf/themes.xml     \
+	        > themes.xhtml
+
+	  Use browser to view the resulting file.
+
+2012-06-23	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* contrib/add-i18n-numbers.py: New. Script to prefix
+	  the values of property files with a small number to
+	  make the keys identifiable even through the UI.
+
+	  Apply in the same manner as contrib/check-i18n-properties.py
+
+2012-04-11	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* contrib/check-i18n-properties.py: New. Script to check inconsistencies
+	of i18n properties files: Detects duplicates and keys not defined in other
+	properties files. Usage:
+
+	$ find -name messages\*.properties | \
+	  xargs contrib/check-i18n-properties.py
+
+2011-04-28	Sascha L. Teichmann	<sascha.teichmann@intevation.de>
+
+	* contrib/visualize-transitions.xsl: Added to create a
+	  Graphviz digraph out of the config.xml. Usage:
+
+	  $ xsltproc --stringparam base-dir ../doc/conf/ \
+	    contrib/visualize-transitions.xsl \
+	    doc/conf/conf.xml > transitions.dot
+
+	  $ dot -Tsvg -o transitions.svg transitions.dot
+
+

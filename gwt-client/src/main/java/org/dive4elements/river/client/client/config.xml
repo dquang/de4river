@@ -1,0 +1,9 @@
+<config>
+    <server>http://localhost:8181</server>
+    <!-- set hide-logout to true to hide the logout button -->
+    <hide-logout>true</hide-logout>
+    <projectlist>
+        <!-- The interval to update the user's projects (in ms) -->
+        <update-interval>300000</update-interval>
+    </projectlist>
+</config>

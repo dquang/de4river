@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="new_map">
+    <states>
+         <state id="state.map.river" description="state.winfo.river" state="org.dive4elements.river.artifacts.states.RiverSelect">
+            <data name="river" type="String" />
+         </state>
+
+         <transition transition="org.dive4elements.river.artifacts.transitions.DefaultTransition">
+             <from state="state.map.river"/>
+             <to state="state.map.new"/>
+         </transition>
+
+         <state id="state.map.new" description="state.map.new" state="org.dive4elements.river.artifacts.MapArtifact$MapState">
+            <outputmodes>
+                <outputmode name="map" description="output.uesk.map.description" type="map">
+                    <facets>
+                        <facet name="floodmap.wsplgen"/>
+                        <facet name="floodmap.barriers"/>
+                        <facet name="floodmap.riveraxis"/>
+                        <facet name="floodmap.wmsbackground"/>
+                        <facet name="floodmap.kms"/>
+                        <facet name="floodmap.qps"/>
+                        <facet name="floodmap.hws_lines"/>
+                        <facet name="floodmap.hws_points"/>
+                        <facet name="floodmap.hydr_boundaries"/>
+                        <facet name="floodmap.hydr_boundaries_poly"/>
+                        <facet name="floodmap.catchment"/>
+                        <facet name="floodmap.floodplain"/>
+                        <facet name="floodmap.floodmarks"/>
+                        <facet name="floodmap.lines"/>
+                        <facet name="floodmap.buildings"/>
+                        <facet name="floodmap.fixpoints"/>
+                        <facet name="floodmap.floodmaps"/>
+                        <facet name="floodmap.gauge_location"/>
+                        <facet name="floodmap.externalwms"/>
+                        <facet name="floodmap.jetties"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+    </states>
+</artifact>

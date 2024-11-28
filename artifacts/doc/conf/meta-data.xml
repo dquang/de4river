@@ -1,0 +1,3231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dc:template xmlns:dc="http://www.intevation.org/2011/Datacage">
+  <datacage>
+
+    <dc:call-macro name="load-user"/>
+
+    <dc:call-macro name="load-system"/>
+
+    <dc:macro name="load-system">
+      <dc:context connection="system">
+        <dc:statement>
+          SELECT id AS river_id, name AS river_name
+          FROM rivers
+          WHERE lower(name) LIKE lower(${river})
+        </dc:statement>
+        <dc:for-each>
+          <dc:call-macro name="generate-system-content"/>
+        </dc:for-each>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="load-user">
+      <old_calculations>
+        <dc:call-macro name="generate-user-content"/>
+      </old_calculations>
+    </dc:macro>
+
+    <dc:macro name="generate-system-content">
+      <dc:message>Generate system content with variables: {dc:dump-variables()}</dc:message>
+      <dc:call-macro name="artifact-range">
+        <dc:call-macro name="km-filtered-wsts">
+          <dc:choose>
+            <dc:when test="dc:contains($parameters, 'recommended')">
+              <dc:comment>
+                Recommendations (client shall load immediately).
+              </dc:comment>
+              <dc:iterate var="out" container="artifact-outs">
+                <dc:message>Rec out iteration for: {$out}</dc:message>
+                <dc:choose>
+                  <dc:comment> Longitudinal sections </dc:comment>
+                  <dc:when test="$out = 'w_differences'">
+                    <dc:call-macro name="annotations"/>
+                  </dc:when>
+                  <dc:when test="$out = 'discharge_longitudinal_section'">
+                    <dc:call-macro name="annotations"/>
+                    <dc:call-macro name="officiallines_user"/>
+                  </dc:when>
+                  <dc:when test="$out = 'longitudinal_section'">
+                    <dc:call-macro name="annotations"/>
+                    <dc:call-macro name="officiallines_user"/>
+                  </dc:when>
+                  <dc:when test="$out = 'fix_longitudinal_section_curve'">
+                    <dc:call-macro name="annotations"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bedheight_middle'">
+                    <dc:call-macro name="annotations"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bed_difference_year'">
+                    <dc:call-macro name="annotations"/>
+                    <dc:call-macro name="basedata_6_delta_w"/>
+                    <dc:call-macro name="sounding-width-recommendations"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bed_difference_height_year'">
+                    <dc:call-macro name="annotations"/>
+                    <dc:call-macro name="basedata_6_delta_w"/>
+                  </dc:when>
+                  <dc:when test="$out = 'sedimentload_ls'">
+                    <dc:call-macro name="annotations"/>
+                    <dc:call-macro name="sedimentload_off_epochs"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bed_longitudinal_section'">
+                    <dc:call-macro name="annotations"/>
+                  </dc:when>
+                  <dc:when test="$out = 'flow_velocity'">
+                    <dc:call-macro name="annotations"/>
+                  </dc:when>
+                  <dc:comment> Discharge curves </dc:comment>
+                  <dc:when test="$out = 'historical_discharge_wq'">
+                    <dc:call-macro name="hist_discharge_rec"/>
+                    <dc:call-macro name="mainvalues"/>
+                  </dc:when>
+                  <dc:when test="$out = 'discharge_curve'">
+                    <dc:call-macro name="mainvalues"/>
+                    <dc:call-macro name="basedata_3_officials_wq"/>
+                  </dc:when>
+                  <dc:when test="$out = 'computed_discharge_curve'">
+                    <dc:call-macro name="mainvalues"/>
+                    <dc:call-macro name="basedata_3_officials_wq"/>
+                    <dc:call-macro name="basedata_2_fixations_wq"/>
+                  </dc:when>
+                  <dc:when test="$out = 'fix_wq_curve'">
+                    <dc:call-macro name="mainvalues"/>
+                    <dc:call-macro name="qsectors"/>
+                  </dc:when>
+                  <dc:when test="$out = 'fix_derivate_curve'">
+                    <dc:call-macro name="qmainvalues"/>
+                  </dc:when>
+                  <dc:when test="starts-with($out, 'sq_') and
+                                 not($out = 'sq_relation_export')">
+                    <dc:call-macro name="qmainvalues"/>
+                  </dc:when>
+                  <dc:comment> Cross sections </dc:comment>
+                  <dc:when test="$out = 'cross_section'">
+                    <dc:call-macro name="cross_sections"/>
+                    <dc:call-macro name="hyks"/>
+                    <dc:call-macro name="officiallines_user"/>
+                  </dc:when>
+                  <dc:comment> Duration curve </dc:comment>
+                  <dc:when test="$out = 'duration_curve'">
+                    <dc:call-macro name="mainvalues"/>
+                  </dc:when>
+                  <dc:comment> Reference curve </dc:comment>
+                  <dc:when test="$out = 'reference_curve'">
+                    <dc:call-macro name="mainvalues"/>
+                  </dc:when>
+                  <dc:comment> Maps </dc:comment>
+                  <dc:when test="$out = 'floodmap'">
+                    <dc:call-macro name="flood-map-recommended"/>
+                  </dc:when>
+                </dc:choose>
+              </dc:iterate>
+            </dc:when>
+            <dc:otherwise>
+              <dc:comment>
+                Non - Recommendations (offered to user to choose additional data from).
+              </dc:comment>
+              <dc:iterate var="out" container="artifact-outs">
+                <dc:message>Non Rec out iteration for: {$out}</dc:message>
+                <dc:choose>
+                  <dc:comment> Inline datacage panels </dc:comment>
+                  <dc:when test="$out = 'minfo_diff_panel'">
+                    <dc:call-macro name="minfo-heights-diff"/>
+                  </dc:when>
+                  <dc:when test="$out = 'floodmap_dem_panel'">
+                    <dc:call-macro name="flood-map-dem"/>
+                  </dc:when>
+                  <dc:when test="$out = 'floodmap_hws_panel'">
+                    <hws>
+                      <dc:call-macro name="flood-map-hws-lines"/>
+                      <dc:call-macro name="flood-map-hws-points"/>
+                    </hws>
+                  </dc:when>
+                  <dc:when test="$out = 'winfo_diff_twin_panel'">
+                    <dc:if test="$current-state-id != 'state.winfo.uesk.wsp'">
+                      <dc:call-macro name="basedata_0"/>
+                      <dc:call-macro name="basedata_1_additionals"/>
+                      <dc:call-macro name="basedata_2_fixations"/>
+                      <dc:call-macro name="basedata_4_heightmarks-points"/>
+                      <dc:call-macro name="basedata_5_flood-protections"/>
+                    </dc:if>
+                  </dc:when>
+                  <dc:when test="$out = 'waterlevels_panel'">
+                    <dc:call-macro name="basedata_0"/>
+                    <dc:call-macro name="basedata_1_additionals"/>
+                    <dc:call-macro name="basedata_2_fixations"/>
+                    <dc:call-macro name="basedata_3_officials"/>
+                    <dc:call-macro name="basedata_4_heightmarks-points"/>
+                    <dc:call-macro name="basedata_5_flood-protections"/>
+                  </dc:when>
+                  <dc:comment> Longitudinal sections </dc:comment>
+                  <dc:when test="$out = 'longitudinal_section'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'w_differences'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'discharge_longitudinal_section'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'fix_longitudinal_section_curve'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'flow_velocity'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bed_longitudinal_section'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'sedimentload_ls'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bedheight_middle'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bed_difference_height_year'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'bed_difference_year'">
+                    <dc:call-macro name="longitudinal-section-prototype"/>
+                  </dc:when>
+                  <dc:comment> Discharge curves </dc:comment>
+                  <dc:when test="$out = 'historical_discharge_wq'">
+                    <dc:call-macro name="discharge-curve-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'discharge_curve'">
+                    <dc:call-macro name="discharge-curve-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'fix_wq_curve'">
+                    <dc:call-macro name="discharge-curve-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'fix_derivate_curve'">
+                    <dc:call-macro name="discharge-curve-prototype"/>
+                  </dc:when>
+                  <dc:when test="$out = 'computed_discharge_curve'">
+                    <dc:call-macro name="discharge-curve-prototype"/>
+                  </dc:when>
+                  <dc:when test="starts-with($out, 'sq_relation') or
+                                 $out = 'sq_overview'">
+                    <dc:call-macro name="discharge-curve-prototype"/>
+                  </dc:when>
+                  <dc:comment> Cross sections </dc:comment>
+                  <dc:when test="$out = 'cross_section'">
+                    <dc:call-macro name="basedata_0"/>
+                    <dc:call-macro name="basedata_1_additionals"/>
+                    <dc:call-macro name="basedata_2_fixations"/>
+                    <dc:call-macro name="basedata_3_officials"/>
+                    <dc:call-macro name="basedata_4_heightmarks-points"/>
+                    <dc:call-macro name="cross_sections"/>
+                    <dc:call-macro name="basedata_5_flood-protections"/>
+                    <dc:call-macro name="hyks"/>
+                  </dc:when>
+                  <dc:comment> Duration curve </dc:comment>
+                  <dc:when test="$out = 'duration_curve'">
+                    <dc:call-macro name="mainvalues"/>
+                    <dc:call-macro name="basedata_2_fixations_relative_point"/>
+                    <dc:call-macro name="basedata_4_heightmarks-points-relative_points"/>
+                    <dc:call-macro name="basedata_5_flood-protections_relative_points"/>
+                  </dc:when>
+                  <dc:comment> Reference curve </dc:comment>
+                  <dc:when test="$out = 'reference_curve'">
+                    <dc:call-macro name="mainvalues"/>
+                    <dc:call-macro name="annotations"/>
+                    <dc:call-macro name="basedata_1_additionals-relative_point"/>
+                    <dc:call-macro name="basedata_2_fixations_relative_point"/>
+                    <dc:call-macro name="basedata_4_heightmarks-points-relative_points"/>
+                    <dc:call-macro name="basedata_5_flood-protections_relative_points"/>
+                  </dc:when>
+                  <dc:comment> Maps </dc:comment>
+                  <dc:when test="$out = 'map'">
+                    <dc:call-macro name="flood-map-complete"/>
+                  </dc:when>
+                  <dc:when test="$out = 'floodmap'">
+                    <dc:call-macro name="flood-map-complete"/>
+                  </dc:when>
+                </dc:choose>
+              </dc:iterate>
+            </dc:otherwise>
+          </dc:choose>
+        </dc:call-macro>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="generate-user-content">
+      <dc:message>Generate user content with variables: {dc:dump-variables()}</dc:message>
+      <dc:call-macro name="artifact-range">
+        <dc:call-macro name="all-user-artifacts">
+          <dc:call-macro name="km-filtered-user-artifacts">
+            <dc:choose>
+              <dc:when test="dc:contains($parameters, 'recommended')">
+                <dc:comment>
+                  Recommendations (user)
+                </dc:comment>
+                <dc:iterate var="out" container="artifact-outs">
+                  <dc:choose>
+                    <dc:when test="$out = 'longitudinal_section'">
+                      <dc:call-macro name="officiallines_user"/>
+                    </dc:when>
+                  </dc:choose>
+                </dc:iterate>
+              </dc:when>
+              <dc:otherwise>
+                <dc:comment>
+                  Non Recommendations (user) - offer to load other projects
+                </dc:comment>
+                <dc:iterate var="out" container="artifact-outs">
+                  <dc:choose>
+                    <dc:comment> Inline datacage panels </dc:comment>
+                    <dc:when test="$out = 'winfo_diff_twin_panel'">
+                      <dc:call-macro name="differences-fix"/>
+                      <dc:call-macro name="differences"/>
+                      <dc:comment comment="Candidate for:">
+                        <dc:call-macro name="longitudinal-section-user-prototype"/>
+                      </dc:comment>
+                    </dc:when>
+                    <dc:when test="$out = 'waterlevels_panel'">
+                      <dc:call-macro name="waterlevels-user"/>
+                      <dc:comment comment="Candidate for:">
+                        <dc:call-macro name="longitudinal-section-user-prototype"/>
+                      </dc:comment>
+                    </dc:when>
+                    <dc:when test="$out = 'floodmap_hws_panel'">
+                      <dc:call-macro name="floodmap-hws-user"/>
+                    </dc:when>
+                    <dc:comment> Longitudinal sections </dc:comment>
+                    <dc:when test="$out = 'longitudinal_section'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'discharge_longitudinal_section'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'w_differences'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'fix_longitudinal_section_curve'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'bedheight_middle'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'flow_velocity'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'bed_longitudinal_section'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'sedimentload_ls'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'bed_difference_year'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'bed_difference_height_year'">
+                      <dc:call-macro name="longitudinal-section-user-prototype"/>
+                    </dc:when>
+                    <dc:comment> Discharge curves </dc:comment>
+                    <dc:when test="$out = 'computed_discharge_curve'">
+                      <dc:call-macro name="discharge-curve-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'fix_derivate_curve'">
+                      <dc:call-macro name="discharge-curve-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'fix_wq_curve'">
+                      <dc:call-macro name="discharge-curve-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="$out = 'historical_discharge_wq'">
+                      <dc:call-macro name="discharge-curve-user-prototype"/>
+                    </dc:when>
+                    <dc:when test="starts-with($out, 'sq_relation') or
+                                 $out = 'sq_overview'">
+                      <dc:call-macro name="discharge-curve-user-prototype"/>
+                    </dc:when>
+                    <dc:comment> Time series </dc:comment>
+                    <dc:when test="$out = 'fix_deltawt_curve'">
+                      <dc:call-macro name="delta-wt"/>
+                    </dc:when>
+                    <dc:when test="$out = 'historical_discharge'">
+                      <dc:call-macro name="historical-discharge-user"/>
+                    </dc:when>
+                    <dc:comment> Cross sections </dc:comment>
+                    <dc:when test="$out = 'cross_section'">
+                      <dc:call-macro name="waterlevels"/>
+                    </dc:when>
+                    <dc:comment> Duration curve </dc:comment>
+                    <dc:when test="$out = 'duration_curve'">
+                      <dc:call-macro name="duration-curve"/>
+                    </dc:when>
+                    <dc:comment> Reference curve </dc:comment>
+                    <dc:when test="$out = 'reference_curve'">
+                      <dc:call-macro name="reference-curves"/>
+                    </dc:when>
+                    <dc:comment> Maps </dc:comment>
+                    <dc:when test="$out = 'floodmap'">
+                      <dc:call-macro name="flood-map"/>
+                    </dc:when>
+                    <dc:when test="$out = 'map'">
+                      <dc:call-macro name="flood-map"/>
+                    </dc:when>
+                  </dc:choose>
+                </dc:iterate>
+              </dc:otherwise>
+            </dc:choose>
+          </dc:call-macro>
+        </dc:call-macro>
+      </dc:call-macro>
+    </dc:macro>
+
+    <!-- Macros to load user data -->
+
+    <dc:macro name="historical-discharge-user">
+      <dc:filter expr="$out = 'historical_discharge' and starts-with($facet_name, 'historical_discharge.historical')">
+        <dc:if test="dc:has-result()">
+          <historical_discharges>
+            <dc:call-macro name="collection-group">
+              <discharges description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="out" value="historical_discharge"/>
+                  </dc:element>
+                </dc:for-each>
+              </discharges>
+            </dc:call-macro>
+          </historical_discharges>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="differences">
+      <dc:filter expr="$facet_name = 'w_differences' or $facet_name = 'w_differences.filtered'">
+        <dc:if test="dc:has-result()">
+          <differences>
+            <dc:call-macro name="collection-group">
+              <differences description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="out" value="${out_name}"/>
+                  </dc:element>
+                </dc:for-each>
+              </differences>
+            </dc:call-macro>
+          </differences>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="reference-curves">
+      <dc:filter expr="$out = 'reference_curve' and $facet_name = 'reference_curve'">
+        <dc:if test="dc:has-result()">
+          <reference_curves>
+            <dc:call-macro name="collection-group">
+              <ref_curve description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="out" value="reference_curve"/>
+                  </dc:element>
+                </dc:for-each>
+              </ref_curve>
+            </dc:call-macro>
+          </reference_curves>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+
+    <dc:macro name="flood-map">
+      <dc:filter expr="$facet_name = 'floodmap.wsplgen'">
+        <dc:if test="dc:has-result()">
+          <floodmap>
+            <dc:for-each>
+              <dc:variable name="combined_desc" expr="concat($facet_description, ' ', dc:date-format('dd.MM.yyyy - H:mm:ss', $a_creation), ' ', $collection_name)"/>
+              <dc:element name="${facet_name}">
+                <dc:attribute name="description" value="${combined_desc}"/>
+                <dc:attribute name="factory" value="winfo"/>
+                <dc:attribute name="target_out" value="${out}"/>
+                <dc:attribute name="artifact-id" value="${a_id}"/>
+                <dc:attribute name="ids" value="${a_id}"/>
+                <dc:attribute name="out" value="floodmap"/>
+              </dc:element>
+            </dc:for-each>
+          </floodmap>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="waterlevels">
+      <dc:filter expr="$out_name = 'cross_section'">
+        <dc:if test="dc:has-result()">
+          <waterlevels>
+            <dc:group expr="concat($river, ' ', dc:date-format('dd.MM.yyyy - H:mm:ss', $a_creation))">
+              <dc:comment>Aheinecke: Why is this grouping different from the rest?</dc:comment>
+              <longitudinal_section_columns description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="cross_section"/>
+                  </dc:element>
+                </dc:for-each>
+              </longitudinal_section_columns>
+            </dc:group>
+          </waterlevels>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="collection-group">
+      <dc:group expr="concat($river, ' ', dc:date-format('dd.MM.yyyy - H:mm:ss', $a_creation), ' ', $collection_name)">
+        <dc:macro-body/>
+      </dc:group>
+    </dc:macro>
+
+    <dc:macro name="longitudinal">
+      <dc:filter expr="$out_name = 'longitudinal_section' and $a_state != 'state.fix.vollmer.compute'">
+        <dc:if test="dc:has-result()">
+          <waterlevels_ls>
+            <dc:call-macro name="collection-group">
+              <dc:comment>Aheinecke: Why is this grouping different from the rest?</dc:comment>
+              <longitudinal_section_columns description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="longitudinal_section"/>
+                  </dc:element>
+                </dc:for-each>
+              </longitudinal_section_columns>
+            </dc:call-macro>
+          </waterlevels_ls>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="longitudinal-section-fix-vollmer">
+      <dc:filter expr="$a_state = 'state.fix.vollmer.compute' and
+          ($facet_name = 'longitudinal_section.w' or
+           $facet_name = 'longitudinal_section.q')
+        ">
+        <dc:if test="dc:has-result()">
+          <waterlevels_fix_vollmer>
+            <dc:call-macro name="collection-group">
+              <waterlevels description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="factory" value="fixanalysis"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="longitudinal_section"/>
+                  </dc:element>
+                </dc:for-each>
+              </waterlevels>
+            </dc:call-macro>
+          </waterlevels_fix_vollmer>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="longitudinal-section-fix">
+      <dc:filter expr="$out_name = 'fix_longitudinal_section_curve' and
+        (starts-with($facet_name, 'fix_deviation_ls') or
+        starts-with($facet_name, 'fix_sector_average_ls') or
+        starts-with($facet_name, 'fix_analysis_events_ls') or
+        starts-with($facet_name, 'fix_reference_events_ls'))
+        ">
+        <dc:if test="dc:has-result()">
+          <waterlevels_fix>
+            <dc:call-macro name="collection-group">
+              <waterlevels description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="factory" value="fixanalysis"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="fix_longitudinal_section_curve"/>
+                  </dc:element>
+                </dc:for-each>
+              </waterlevels>
+            </dc:call-macro>
+          </waterlevels_fix>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="delta-wt">
+      <dc:filter expr="$out_name = 'fix_deltawt_curve' and
+        ($facet_name = 'fix_analysis_events_dwt' or
+        $facet_name = 'fix_analysis_periods_dwt' or
+        $facet_name = 'fix_reference_events_dwt' or
+        starts-with($facet_name, 'fix_deviation_dwt') or
+        starts-with($facet_name, 'fix_sector_average_dwt'))">
+        <dc:if test="dc:has-result()">
+          <waterlevels>
+            <dc:call-macro name="collection-group">
+              <waterlevels description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="factory" value="fixanalysis"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="fix_deltawt_curve"/>
+                  </dc:element>
+                </dc:for-each>
+              </waterlevels>
+            </dc:call-macro>
+          </waterlevels>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="fix-wq-curve">
+      <dc:filter expr="($out_name = 'fix_wq_curve' and
+                       (starts-with($facet_name, 'fix_analysis_events_wq') or
+                       starts-with($facet_name, 'fix_reference_events_wq') or
+                       starts-with($facet_name, 'fix_sector_average_wq') or
+                       $facet_name = 'fix_wq_curve')) or
+                       ($out_name = 'fix_derivate_curve' and
+                       $facet_name = 'fix_derivate_curve')">
+        <dc:if test="dc:has-result()">
+          <waterlevels_fix>
+            <dc:call-macro name="collection-group">
+              <projects description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:choose>
+                    <dc:when test="$out_name = 'fix_wq_curve'">
+                      <dc:element name="${facet_name}">
+                        <dc:attribute name="description" value="${facet_description}"/>
+                        <dc:attribute name="ids" value="${facet_num}"/>
+                        <dc:attribute name="factory" value="fixanalysis"/>
+                        <dc:attribute name="target_out" value="${out}"/>
+                        <dc:attribute name="artifact-id" value="${a_gid}"/>
+                        <dc:attribute name="out" value="fix_wq_curve"/>
+                      </dc:element>
+                    </dc:when>
+                    <dc:when test="$out_name = 'fix_derivate_curve'">
+                      <dc:element name="${facet_name}">
+                        <dc:attribute name="description" value="${facet_description}"/>
+                        <dc:attribute name="ids" value="${facet_num}"/>
+                        <dc:attribute name="factory" value="fixanalysis"/>
+                        <dc:attribute name="target_out" value="${out}"/>
+                        <dc:attribute name="artifact-id" value="${a_gid}"/>
+                        <dc:attribute name="out" value="fix_derivate_curve"/>
+                      </dc:element>
+                    </dc:when>
+                  </dc:choose>
+                </dc:for-each>
+              </projects>
+            </dc:call-macro>
+          </waterlevels_fix>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="extreme-wq-curve">
+      <dc:filter expr="$facet_name = 'extreme_wq_curve' or $facet_name = 'extreme_wq_curve_base'">
+        <dc:if test="dc:has-result()">
+          <computed_discharge_curves>
+            <dc:for-each>
+              <dc:element name="${facet_name}">
+                <dc:attribute name="description" value="${facet_description}"/>
+                <dc:attribute name="factory" value="fixanalysis"/>
+                <dc:attribute name="target_out" value="${out}"/>
+                <dc:attribute name="artifact-id" value="${a_gid}"/>
+                <dc:attribute name="ids" value="${a_gid}"/>
+                <dc:attribute name="out" value="computed_discharge_curve"/>
+              </dc:element>
+            </dc:for-each>
+          </computed_discharge_curves>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="computed-discharge-curve">
+      <dc:filter expr="$facet_name = 'computed_discharge_curve.q'">
+        <dc:if test="dc:has-result()">
+          <computed_discharge_curves>
+            <dc:call-macro name="collection-group">
+              <projects description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="ids" value="${a_gid}"/>
+                    <dc:attribute name="out" value="computed_discharge_curve"/>
+                  </dc:element>
+                </dc:for-each>
+              </projects>
+            </dc:call-macro>
+          </computed_discharge_curves>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="duration-curve">
+      <dc:filter expr="$facet_name = 'duration_curve.q' or $facet_name = 'duration_curve.w'">
+        <dc:if test="dc:has-result()">
+          <computed_discharge_curves>
+            <dc:for-each>
+              <dc:element name="${facet_name}">
+                <dc:attribute name="description" value="${facet_description}"/>
+                <dc:attribute name="factory" value="winfo"/>
+                <dc:attribute name="target_out" value="${out}"/>
+                <dc:attribute name="artifact-id" value="${a_id}"/>
+                <dc:attribute name="ids" value="${a_id}"/>
+                <dc:attribute name="out" value="duration_curve"/>
+              </dc:element>
+            </dc:for-each>
+          </computed_discharge_curves>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+
+    <dc:macro name="waterlevels-user">
+      <dc:filter expr="($out_name = 'longitudinal_section'
+                       and $facet_name = 'longitudinal_section.w') and
+                       (not ($current-state-id = 'state.winfo.uesk.wsp'
+                       and $ld_m = 'location'))">
+        <dc:if test="dc:has-result()">
+          <waterlevels>
+            <dc:call-macro name="collection-group">
+              <waterlevels description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:choose>
+                    <dc:when test="$ld_m = 'location'">
+                      <dc:variable name="combined_desc"
+                                   expr="concat($facet_description,
+                                         ' an KM ', $deffrom)"/>
+                    </dc:when>
+                    <dc:otherwise>
+                      <dc:variable name="combined_desc"
+                                   expr="concat($facet_description, ' von KM ',
+                                         $deffrom, ' bis KM ', $defto)"/>
+                    </dc:otherwise>
+                  </dc:choose>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${combined_desc}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="longitudinal_section"/>
+                  </dc:element>
+                </dc:for-each>
+              </waterlevels>
+            </dc:call-macro>
+          </waterlevels>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:comment comment="For building differences." />
+    <dc:macro name="differences-fix">
+      <dc:comment comment="Vollmer curves need own factory"/>
+      <dc:filter expr="$a_state = 'state.fix.vollmer.compute' and $facet_name = 'longitudinal_section.w'">
+        <dc:if test="dc:has-result()">
+          <vollmer_waterlevels>
+            <dc:call-macro name="collection-group">
+              <waterlevels description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:choose>
+                    <dc:when test="$ld_m = 'location'">
+                      <dc:variable name="combined_desc" expr="concat($facet_description, ' an KM ', $deffrom)"/>
+                    </dc:when>
+                    <dc:otherwise>
+                      <dc:variable name="combined_desc" expr="concat($facet_description, ' von KM ',
+                        $deffrom, ' bis KM ', $defto)"/>
+                    </dc:otherwise>
+                 </dc:choose>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="description" value="${combined_desc}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="factory" value="fixanalysis"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="longitudinal_section"/>
+                  </dc:element>
+                </dc:for-each>
+              </waterlevels>
+            </dc:call-macro>
+          </vollmer_waterlevels>
+        </dc:if>
+      </dc:filter>
+      <dc:filter expr="not($a_state = 'state.fix.vollmer.compute') and (($out_name = 'longitudinal_section' and $facet_name = 'longitudinal_section.w') and
+        (not ($current-state-id = 'state.winfo.uesk.wsp' and $ld_m = 'location')))">
+        <dc:if test="dc:has-result()">
+          <waterlevels>
+            <dc:call-macro name="collection-group">
+                <waterlevels description="{dc:group-key()}">
+                  <dc:for-each>
+                    <dc:choose>
+                      <dc:when test="$ld_m = 'location'">
+                        <dc:variable name="combined_desc" expr="concat($facet_description, ' an KM ', $deffrom)"/>
+                      </dc:when>
+                      <dc:otherwise>
+                        <dc:variable name="combined_desc" expr="concat($facet_description, ' von KM ',
+                          $deffrom, ' bis KM ', $defto)"/>
+                      </dc:otherwise>
+                    </dc:choose>
+                    <dc:element name="${facet_name}">
+                      <dc:attribute name="description" value="${combined_desc}"/>
+                      <dc:attribute name="ids" value="${facet_num}"/>
+                      <dc:attribute name="factory" value="winfo"/>
+                      <dc:attribute name="target_out" value="${out}"/>
+                      <dc:attribute name="artifact-id" value="${a_gid}"/>
+                      <dc:attribute name="out" value="longitudinal_section"/>
+                    </dc:element>
+                  </dc:for-each>
+                </waterlevels>
+            </dc:call-macro>
+          </waterlevels>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+
+    <dc:macro name="floodmap-hws-user">
+      <dc:comment>No grouping in this?</dc:comment>
+      <dc:filter expr="$out_name = 'floodmap' and $facet_name = 'floodmap.usershape'">
+        <own-hws>
+          <dc:for-each>
+            <dc:element name="${facet_name}">
+              <dc:attribute name="description" value="${facet_description}"/>
+              <dc:attribute name="ids" value="${facet_num}"/>
+              <dc:attribute name="factory" value="winfo"/>
+              <dc:attribute name="target_out" value="${out}"/>
+              <dc:attribute name="artifact-id" value="${a_gid}"/>
+              <dc:attribute name="out" value="floodmap"/>
+            </dc:element>
+          </dc:for-each>
+        </own-hws>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="bedquality">
+      <dc:filter expr="$out_name = 'bed_longitudinal_section' and
+        starts-with($facet_name, 'bed_longitudinal_section')">
+        <dc:if test="dc:has-result()">
+          <bed_quality>
+            <dc:call-macro name="collection-group">
+              <quality-bed description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="factory" value="minfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="bed_longitudinal_section"/>
+                  </dc:element>
+                </dc:for-each>
+              </quality-bed>
+            </dc:call-macro>
+          </bed_quality>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="flow-velocity">
+      <dc:filter expr="$out_name = 'flow_velocity' and
+              starts-with($facet_name, 'flow_velocity')">
+        <dc:if test="dc:has-result()">
+          <flow_velocity>
+            <dc:call-macro name="collection-group">
+              <flow description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="factory" value="minfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="flow_velocity"/>
+                  </dc:element>
+                </dc:for-each>
+              </flow>
+            </dc:call-macro>
+          </flow_velocity>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="sediment-load">
+      <dc:filter expr="$out_name = 'sedimentload_ls' and starts-with($facet_name, 'sedimentload')">
+        <dc:if test="dc:has-result()">
+          <sediment_load>
+            <dc:call-macro name="collection-group">
+              <load description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="factory" value="minfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="${out_name}"/>
+                  </dc:element>
+                </dc:for-each>
+              </load>
+            </dc:call-macro>
+          </sediment_load>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="middle_bedheights">
+      <dc:filter expr="($out_name = 'bedheight_middle') and
+          (starts-with($facet_name, 'bedheight_middle.single'))">
+        <dc:if test="dc:has-result()">
+          <middle_bedheights>
+            <dc:call-macro name="collection-group">
+              <middle_bedheight description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="factory" value="minfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="${out_name}"/>
+                  </dc:element>
+                </dc:for-each>
+              </middle_bedheight>
+            </dc:call-macro>
+          </middle_bedheights>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="bedheight_differences">
+      <dc:filter expr="($out_name = 'bed_difference_year' or $out_name = 'bed_difference_height_year') and
+          (starts-with($facet_name, 'bedheight_difference.year') or starts-with($facet_name, 'bedheight_difference.height'))">
+        <dc:if test="dc:has-result()">
+          <bedheight_differences>
+            <dc:call-macro name="collection-group">
+              <difference description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="factory" value="minfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="${out_name}"/>
+                  </dc:element>
+                </dc:for-each>
+              </difference>
+            </dc:call-macro>
+          </bedheight_differences>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="sqrelations_user">
+      <dc:filter expr="not(dc:contains($facet_name, 'overview')) and (
+        ($out = 'sq_relation_a' and starts-with($facet_name, 'sq_a_')) or
+        ($out = 'sq_relation_b' and starts-with($facet_name, 'sq_b_')) or
+        ($out = 'sq_relation_c' and starts-with($facet_name, 'sq_c_')) or
+        ($out = 'sq_relation_d' and starts-with($facet_name, 'sq_d_')) or
+        ($out = 'sq_relation_e' and starts-with($facet_name, 'sq_e_')) or
+        ($out = 'sq_relation_f' and starts-with($facet_name, 'sq_f_')) or
+        ($out = 'sq_relation_g' and starts-with($facet_name, 'sq_g_'))) or
+        dc:contains($facet_name, 'overview')">
+        <dc:if test="dc:has-result()">
+          <sq_relations>
+            <dc:call-macro name="collection-group">
+              <sqrel description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="factory" value="minfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="${out_name}"/>
+                  </dc:element>
+                </dc:for-each>
+              </sqrel>
+            </dc:call-macro>
+          </sq_relations>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="waterlevels-discharge">
+      <dc:filter expr="$out_name = 'discharge_longitudinal_section'">
+        <dc:if test="dc:has-result()">
+          <waterlevels_discharge>
+            <dc:call-macro name="collection-group">
+              <discharge description="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:element name="${facet_name}">
+                    <dc:attribute name="factory" value="winfo"/>
+                    <dc:attribute name="target_out" value="${out}"/>
+                    <dc:attribute name="description" value="${facet_description}"/>
+                    <dc:attribute name="ids" value="${facet_num}-${facet_name}"/>
+                    <dc:attribute name="artifact-id" value="${a_gid}"/>
+                    <dc:attribute name="out" value="discharge_longitudinal_section"/>
+                  </dc:element>
+                </dc:for-each>
+              </discharge>
+            </dc:call-macro>
+          </waterlevels_discharge>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+
+    <!-- Macros to load system data -->
+
+    <dc:macro name="qmainvalues">
+      <qmainvalue factory="mainvalue" ids="{$river_id}:q" target_out="{$out}"/>
+    </dc:macro>
+
+    <dc:macro name="mainvalues">
+      <wmainvalue factory="mainvalue" ids="{$river_id}:w" target_out="{$out}"/>
+      <dc:call-macro name="qmainvalues"/>
+    </dc:macro>
+
+    <!-- discharge curves -->
+    <dc:macro name="hist_discharge_factory">
+      <dc:for-each>
+        <dc:variable name="validity"
+                     expr="concat(
+                           dc:date-format('dd.MM.yyyy', $start_time),
+                           ' - ',
+                           dc:date-format('dd.MM.yyyy', $stop_time))"/>
+        <histdis name="{concat($bfg_id, ' ', $validity)}"
+                 description="{concat($bfg_id, ' ', $validity)}"
+                 factory="gaugedischarge" target_out="{$out}"
+                 ids="{$gauge_name};{$dt_id};{concat($bfg_id, ' ',
+                      $gauge_name, ' ', $validity)}"/>
+      </dc:for-each>
+    </dc:macro>
+
+    <dc:macro name="hist_discharge_rec">
+      <dc:variable name="start" type="number"
+                   expr="dc:date-format('yyyyMMdd',
+                           number(substring-before($year_range, ';')))"/>
+      <dc:variable name="stop" type="number"
+                   expr="dc:date-format('yyyyMMdd',
+                           number(substring-after($year_range, ';')))"/>
+      <dc:call-macro name="discharge_curve_choose_context">
+        <dc:filter expr="$kind = 1 and
+                         number(dc:date-format('yyyyMMdd', $start_time))
+                           &lt; $stop and
+                         number(dc:coalesce(
+                             dc:date-format('yyyyMMdd', $stop_time),
+                             '99999999'))
+                           &gt; $start">
+          <dc:call-macro name="hist_discharge_factory"/>
+        </dc:filter>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="discharge_table_gauge">
+      <dc:call-macro name="discharge_curve_choose_context">
+        <dc:filter expr="$kind = 0">
+          <dc:group expr="$gauge_name">
+            <gauge name="{dc:group-key()}">
+              <dc:for-each>
+                <current_gauge factory="gaugedischarge" target_out="{$out}"
+                               ids="{$gauge_name}"/>
+              </dc:for-each>
+            </gauge>
+          </dc:group>
+        </dc:filter>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="historical_discharge_curve">
+      <dc:call-macro name="discharge_curve_choose_context">
+        <dc:filter expr="$kind = 1">
+          <historical_discharge_curves>
+            <dc:group expr="$gauge_name">
+              <gauge name="{dc:group-key()}">
+                <dc:call-macro name="hist_discharge_factory"/>
+              </gauge>
+            </dc:group>
+          </historical_discharge_curves>
+        </dc:filter>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="discharge_curve_choose_context">
+      <dc:choose>
+        <dc:when test="$fromkm &gt; -99999 and $tokm &lt; 99999">
+          <dc:context>
+            <dc:call-macro name="discharge_curves_km"/>
+            <dc:macro-body/>
+          </dc:context>
+        </dc:when>
+        <dc:otherwise>
+          <dc:variable name="refgauge" type="number"
+                       expr="dc:get('reference_gauge')"/>
+          <dc:context>
+            <dc:call-macro name="discharge_curves_refgauge"/>
+            <dc:macro-body/>
+          </dc:context>
+        </dc:otherwise>
+      </dc:choose>
+    </dc:macro>
+
+    <dc:macro name="discharge_curves_km">
+      <dc:statement>
+          SELECT g.name AS gauge_name,
+                 dt.id  AS dt_id,
+                 t.start_time AS start_time,
+                 t.stop_time AS stop_time,
+                 dt.bfg_id AS bfg_id,
+                 dt.kind AS kind
+          FROM gauges g
+          JOIN discharge_tables dt ON g.id = dt.gauge_id
+          LEFT JOIN time_intervals t ON dt.time_interval_id = t.id
+          WHERE g.river_id = ${river_id}
+            AND g.station BETWEEN ${fromkm} AND ${tokm}
+          ORDER BY start_time
+      </dc:statement>
+    </dc:macro>
+
+    <dc:macro name="discharge_curves_refgauge">
+      <dc:statement>
+          SELECT g.name AS gauge_name,
+                 dt.id  AS dt_id,
+                 t.start_time AS start_time,
+                 t.stop_time AS stop_time,
+                 dt.bfg_id AS bfg_id,
+                 dt.kind AS kind
+          FROM gauges g
+          JOIN discharge_tables dt ON g.id = dt.gauge_id
+          LEFT JOIN time_intervals t ON dt.time_interval_id = t.id
+          WHERE g.river_id = ${river_id}
+            AND g.official_number = ${refgauge}
+          ORDER BY start_time
+      </dc:statement>
+    </dc:macro>
+
+    <!-- Cross sections -->
+    <dc:macro name="cross_sections">
+      <cross_sections id="flood-protections-{$river_id}">
+        <dc:context connection="system">
+          <dc:statement>
+            SELECT DISTINCT
+                   cs.id          AS prot_id,
+                   cs.description AS prot_description
+            FROM cross_sections cs
+              JOIN cross_section_lines csl ON csl.cross_section_id = cs.id
+            WHERE cs.river_id = ${river_id}
+              AND csl.km BETWEEN ${fromkm} AND ${tokm}
+          </dc:statement>
+          <dc:for-each>
+            <cross_section name="{$prot_description}"
+                           ids="{$prot_id}"
+                           factory="crosssections" target_out="{$out}" />
+          </dc:for-each>
+        </dc:context>
+      </cross_sections>
+    </dc:macro>
+
+    <dc:macro name="hyks">
+      <hyks id="hyk-{$river_id}">
+        <dc:context connection="system">
+          <dc:statement>
+            SELECT DISTINCT
+                   h.id          AS hyk_id,
+                   h.description AS hyk_description
+            FROM hyks h
+              JOIN hyk_entries he ON he.hyk_id = h.id
+            WHERE river_id = ${river_id}
+              AND he.km BETWEEN ${fromkm} AND ${tokm}
+          </dc:statement>
+          <dc:for-each>
+            <hyk name="{$hyk_description}"
+                 ids="{$hyk_id}"
+                 factory="hyk" target_out="{$out}" />
+          </dc:for-each>
+        </dc:context>
+      </hyks>
+    </dc:macro>
+
+
+    <!-- wst-data -->
+
+    <!-- model-waterlevels -->
+    <dc:macro name="basedata_0_macro">
+      <dc:filter expr="$kind = 0">
+        <dc:if test="dc:has-result()">
+          <basedata>
+            <dc:group expr="$wst_description">
+              <basedata name="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </basedata>
+            </dc:group>
+          </basedata>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="basedata_0">
+      <dc:call-macro name="basedata_0_macro">
+        <column name="{$wst_column_name}"
+                ids="base_data-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwqkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_0_wq">
+      <dc:call-macro name="basedata_0_macro">
+        <column name="{$wst_column_name}"
+                ids="base_data-wstv-{$wst_column_position}-{$wst_id}"
+                factory="wqinterpol" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <!-- additional longitudinal sections -->
+    <dc:macro name="basedata_1_additionals_macro">
+      <dc:filter expr="$kind=1">
+        <dc:if test="dc:has-result()">
+          <additionals>
+            <dc:group expr="dc:replace($wst_description, 'Zus.Längsschnitte/', '')">
+              <additional name="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </additional>
+            </dc:group>
+          </additionals>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="basedata_1_additionals">
+      <dc:call-macro name="basedata_1_additionals_macro">
+        <column name="{$wst_column_name}"
+                ids="additionals-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwqkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_1_additionals_wq">
+      <dc:call-macro name="basedata_1_additionals_macro">
+        <column name="{$wst_column_name}"
+                ids="base_data-wstv-{$wst_column_position}-{$wst_id}"
+                factory="wqinterpol" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_1_additionals-relative_point">
+      <dc:call-macro name="basedata_1_additionals_macro">
+        <column name="{$wst_column_name}"
+                ids="additionals-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <!-- fixations -->
+    <dc:macro name="fixings-macro">
+      <dc:filter expr="$kind=2">
+        <dc:if test="dc:has-result()">
+          <fixations>
+            <dc:group expr="dc:replace($wst_description, 'Fixierungen/', '')">
+              <fixation name="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </fixation>
+            </dc:group>
+          </fixations>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="basedata_2_fixations">
+      <dc:call-macro name="fixings-macro">
+        <column name="{$wst_column_name}"
+                ids="fixations-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwqkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_2_fixations_wq">
+      <dc:call-macro name="fixings-macro">
+        <column name="{$wst_column_name}"
+                ids="fixations-wstv-{$wst_column_position}-{$wst_id}"
+                factory="wqinterpol" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_2_fixations_relative_point">
+      <dc:call-macro name="fixings-macro">
+        <column name="{$wst_column_name}"
+                ids="fixations-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <!-- official lines -->
+    <dc:macro name="basedata_3_macro">
+      <dc:filter expr="$kind=3">
+        <dc:if test="dc:has-result()">
+          <officiallines>
+            <dc:group expr="$wst_description">
+              <official name="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </official>
+            </dc:group>
+          </officiallines>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="basedata_3_officials">
+      <dc:call-macro name="basedata_3_macro">
+        <column name="{$wst_column_name}"
+                ids="additionals-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwqkms"
+                target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_3_officials_wq">
+      <dc:call-macro name="basedata_3_macro">
+        <column name="{$wst_column_name}"
+                ids="officials_wq-wstv-{$wst_column_position}-{$wst_id}"
+                factory="wqinterpol"
+                target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <!-- flood marks -->
+    <dc:macro name="basedata_4_macro">
+      <dc:filter expr="$kind=4">
+        <dc:if test="dc:has-result()">
+          <heightmarks>
+            <dc:group expr="dc:replace($wst_description, 'HW-Marken/', '')">
+              <heightmark name="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </heightmark>
+            </dc:group>
+          </heightmarks>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="basedata_4_heightmarks-points">
+      <dc:call-macro name="basedata_4_macro">
+        <column name="{$wst_column_name}"
+                ids="heightmarks_points-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_4_heightmarks-points_wq">
+      <dc:call-macro name="basedata_4_macro">
+        <column name="{$wst_column_name}"
+                ids="heightmarks_points-wstv-{$wst_column_position}-{$wst_id}"
+                factory="wqinterpol" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_4_heightmarks-points-relative_points">
+      <dc:call-macro name="basedata_4_macro">
+        <column name="{$wst_column_name}"
+                ids="heightmarks_points-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <!-- flood protection structures -->
+    <dc:macro name="basedata_5_macro">
+      <dc:filter expr="$kind=5">
+        <dc:if test="dc:has-result()">
+          <flood_protections>
+            <dc:group expr="dc:replace($wst_description, 'HW-Schutzanlagen/', '')">
+              <flood_protection name="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </flood_protection>
+            </dc:group>
+          </flood_protections>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="basedata_5_flood-protections">
+      <dc:call-macro name="basedata_5_macro">
+        <column name="{$wst_column_name}"
+                ids="flood_protection-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_5_flood-protections_wq">
+      <dc:call-macro name="basedata_5_macro">
+        <column name="{$wst_column_name}"
+                ids="flood_protection-wstv-{$wst_column_position}-{$wst_id}"
+                factory="wqinterpol" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_5_flood-protections_relative_points">
+      <dc:call-macro name="basedata_5_macro">
+        <column name="{$wst_column_name}"
+                ids="flood_protection-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <!-- waterlevel differences imported from CSV-files for M-INFO -->
+    <dc:macro name="basedata_6_delta_w">
+      <dc:filter expr="$kind=6">
+        <dc:if test="dc:has-result()">
+          <delta_w>
+            <delta_w_cm>
+              <dc:filter expr="contains($wst_description, 'cm.csv')">
+                <dc:group expr="dc:replace($wst_description, 'CSV/', '')">
+                  <relativepoint name="{dc:group-key()}">
+                    <dc:for-each>
+                      <column name="{$wst_column_name}"
+                              ids="delta_w-wstv-{$wst_column_position}-{$wst_id}"
+                              factory="staticwkms"
+                              target_out="{$out}"
+                              info="{$info} [km {$deffrom} - {$defto}]"/>
+                    </dc:for-each>
+                  </relativepoint>
+                </dc:group>
+              </dc:filter>
+            </delta_w_cm>
+            <delta_w_cma>
+              <dc:filter expr="contains($wst_description, 'cm-a.csv')">
+                <dc:group expr="dc:replace($wst_description, 'CSV/', '')">
+                  <relativepoint name="{dc:group-key()}">
+                    <dc:for-each>
+                      <column name="{$wst_column_name}"
+                              ids="delta_w_cma-wstv-{$wst_column_position}-{$wst_id}"
+                              factory="staticwkms" target_out="{$out}"
+                              info="{$info} [km {$deffrom} - {$defto}]"/>
+                    </dc:for-each>
+                  </relativepoint>
+                </dc:group>
+              </dc:filter>
+            </delta_w_cma>
+          </delta_w>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <!-- waterlevels imported from CSV-files for M-INFO -->
+    <dc:macro name="basedata_7_macro">
+      <dc:filter expr="$kind=7">
+        <dc:if test="dc:has-result()">
+          <wlevel>
+            <dc:group expr="dc:replace($wst_description, 'CSV/', '')">
+              <relativepoint name="{dc:group-key()}">
+                <dc:for-each>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </relativepoint>
+            </dc:group>
+          </wlevel>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="basedata_7_waterlevels">
+      <dc:call-macro name="basedata_7_macro">
+        <column name="{$wst_column_name}"
+                ids="additionals-wstv-{$wst_column_position}-{$wst_id}"
+                factory="staticwqkms" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+    <dc:macro name="basedata_7_waterlevels_wq">
+      <dc:call-macro name="basedata_7_macro">
+        <column name="{$wst_column_name}"
+                ids="additionals-wstv-{$wst_column_position}-{$wst_id}"
+                factory="wqinterpol" target_out="{$out}"
+                info="{$info} [km {$deffrom} - {$defto}]"/>
+      </dc:call-macro>
+    </dc:macro>
+
+
+    <!-- prototypes -->
+
+    <dc:macro name="discharge-curve-prototype">
+        <computed_discharge_curve>
+          <dc:call-macro name="discharge_table_gauge"/>
+          <dc:call-macro name="mainvalues"/>
+        </computed_discharge_curve>
+        <dc:call-macro name="historical_discharge_curve"/>
+        <dc:call-macro name="basedata_0_wq"/>
+        <dc:call-macro name="basedata_1_additionals_wq"/>
+        <dc:call-macro name="basedata_2_fixations_wq"/>
+        <dc:call-macro name="basedata_3_officials_wq"/>
+        <dc:call-macro name="basedata_4_heightmarks-points_wq"/>
+        <dc:call-macro name="basedata_5_flood-protections_wq"/>
+        <minfo>
+          <dc:call-macro name="sqrelations"/>
+          <dc:call-macro name="basedata_7_waterlevels_wq"/>
+        </minfo>
+    </dc:macro>
+
+    <dc:macro name="discharge-curve-user-prototype">
+      <dc:call-macro name="waterlevels-user"/>
+      <dc:call-macro name="computed-discharge-curve"/>
+      <!-- TODO: macro for discharge longitudinal section -->
+      <dc:call-macro name="fix-wq-curve"/>
+      <!-- TODO: own macro for Vollmer-curve (extract from fix-wq-curve and waterlevels-user) -->
+      <dc:call-macro name="extreme-wq-curve"/>
+      <minfo>
+        <dc:call-macro name="sqrelations_user"/>
+      </minfo>
+    </dc:macro>
+
+    <dc:macro name="longitudinal-section-prototype">
+      <dc:call-macro name="basedata_0"/>
+      <dc:call-macro name="basedata_1_additionals"/>
+      <dc:call-macro name="basedata_2_fixations"/>
+      <dc:call-macro name="basedata_3_officials"/>
+      <dc:call-macro name="basedata_4_heightmarks-points"/>
+      <dc:call-macro name="basedata_5_flood-protections"/>
+      <dc:call-macro name="annotations_per_type"/>
+      <minfo>
+          <fixanalysis>
+            <dc:call-macro name="basedata_6_delta_w"/>
+            <dc:call-macro name="basedata_7_waterlevels"/>
+          </fixanalysis>
+          <dc:call-macro name="sedimentloads"/>
+          <dc:call-macro name="densities"/>
+          <dc:call-macro name="minfo-heights"/>
+          <dc:call-macro name="sounding-width"/>
+          <dc:call-macro name="morph_width"/>
+          <dc:call-macro name="porosities"/>
+          <flow_velocities>
+            <dc:call-macro name="flow_velocity_measurements"/>
+            <dc:call-macro name="flow_velocity_models"/>
+          </flow_velocities>
+      </minfo>
+    </dc:macro>
+
+    <dc:macro name="longitudinal-section-user-prototype">
+      <dc:comment> WINFO/DIFF/FIX </dc:comment>
+      <dc:call-macro name="longitudinal"/>
+      <dc:call-macro name="differences"/>
+      <dc:call-macro name="waterlevels-discharge"/>
+      <dc:call-macro name="longitudinal-section-fix"/>
+      <dc:call-macro name="longitudinal-section-fix-vollmer"/>
+      <dc:comment> MINFO </dc:comment>
+      <dc:call-macro name="middle_bedheights"/>
+      <dc:call-macro name="bedheight_differences"/>
+      <dc:call-macro name="bedquality"/>
+      <dc:call-macro name="flow-velocity"/>
+      <dc:call-macro name="sediment-load"/>
+    </dc:macro>
+
+
+    <!-- porosities -->
+    <dc:macro name="porosities">
+      <porosities>
+      <dc:context>
+        <dc:statement>
+            SELECT DISTINCT
+                p.id          AS pid,
+                p.description AS description,
+                d.lower        AS depth_lower,
+                d.upper        AS depth_upper,
+                p.description  || '&lt;BR&gt;' ||
+                'Tiefe: ' || d.lower || ' - ' || d.upper
+                    || ' cm &lt;BR&gt;' ||
+                'Zeitraum: ' AS info,
+                t.start_time AS syear,
+                t.stop_time AS eyear
+            FROM     porosity p
+                JOIN depths d ON p.depth_id = d.id
+                JOIN time_intervals t ON p.time_interval_id=t.id
+            WHERE   p.river_id = ${river_id}
+            ORDER BY depth_lower, depth_upper
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <dc:for-each>
+                  <porosity description="{$depth_lower}-{$depth_upper} cm"
+                   factory="porosity"
+                   target_out="{$out}"
+                   info="{concat($info, dc:date-format('yyyy', $syear),
+                             ' - ', dc:date-format('yyyy', $eyear))}"
+                   ids="{$pid};{$description}" />
+          </dc:for-each>
+        </dc:if>
+      </dc:context>
+      </porosities>
+    </dc:macro>
+
+    <dc:macro name="densities">
+      <densities>
+      <dc:context>
+        <dc:statement>
+            SELECT DISTINCT
+                sd.id          AS sdid,
+                d.lower        AS depth_lower,
+                d.upper        AS depth_upper,
+                min(sdv.year)  AS year,
+                sd.description || '&lt;BR&gt;Jahr: ' || min(sdv.year) AS info
+            FROM     sediment_density sd
+                JOIN depths d ON sd.depth_id = d.id
+                JOIN sediment_density_values sdv on sdv.sediment_density_id = sd.id
+            WHERE   sd.river_id = ${river_id}
+            GROUP BY sd.id, sd.description, d.upper, d.lower
+            ORDER BY year, depth_lower, depth_upper
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <dc:for-each>
+                  <density description="{$depth_lower}-{$depth_upper} cm"
+                   factory="sedimentdensity"
+                   target_out="{$out}"
+                   info="{$info}"
+                   ids="{$sdid}" />
+          </dc:for-each>
+        </dc:if>
+      </dc:context>
+      </densities>
+    </dc:macro>
+
+    <!-- sediment load -->
+    <dc:macro name="load">
+      <year description="{$timespan}"
+            factory="sedimentload"
+            target_out="{$out}"
+            info="{$info}"
+            ids="{$slid};{$fraction};{$timespan};{$kind}" />
+    </dc:macro>
+
+    <dc:macro name="load_ls">
+      <year description="{$timespan}"
+            factory="sedimentload_ls"
+            target_out="{$out}"
+            info="{$info}"
+            ids="{$slid};{$timespan};{$kind}" />
+    </dc:macro>
+
+    <dc:macro name="loads">
+      <dc:if test="dc:has-result()">
+        <dc:group expr="concat('SQ ', dc:date-format('yyyy', $sqstart), '-',
+                        dc:date-format('yyyy', $sqstop))">
+          <sq_time description="{dc:group-key()}">
+            <dc:group expr="$fraction">
+              <dc:variable name="fraction_name"
+                           expr="concat('${', dc:group-key(), '}')"/>
+              <fraction description="{$fraction_name}">
+                <dc:for-each>
+                  <dc:choose>
+                    <dc:when test="string-length(dc:get('endyear')) = 0">
+                      <dc:variable name="timespan" type="string"
+                                   expr="dc:date-format('yyyy', $startyear)"/>
+                    </dc:when>
+                    <dc:otherwise>
+                      <dc:variable name="timespan" type="string"
+                                   expr="concat(dc:date-format('yyyy',
+                                         $startyear), '-',
+                                         dc:date-format('yyyy', $endyear))"/>
+                    </dc:otherwise>
+                  </dc:choose>
+                  <dc:if test="$kind = 'official'">
+                    <dc:variable name="info" type="string"
+                                 expr="concat('Amtliche Epoche&lt;BR&gt;',
+                                       dc:get('info'))"/>
+                  </dc:if>
+                  <dc:macro-body/>
+                </dc:for-each>
+              </fraction>
+            </dc:group>
+          </sq_time>
+        </dc:group>
+      </dc:if>
+    </dc:macro>
+
+    <dc:macro name="sedimentloads-filter">
+      <years>
+        <dc:filter expr="string-length(dc:get('endyear')) = 0 and
+                         $kind != 'official'" >
+          <dc:macro-body/>
+        </dc:filter>
+      </years>
+      <epochs>
+        <dc:filter expr="string-length(dc:get('endyear')) &gt; 0 and
+                         $kind != 'official'" >
+          <dc:macro-body/>
+        </dc:filter>
+      </epochs>
+      <off_epochs>
+        <dc:filter expr="$kind = 'official'" >
+          <dc:macro-body/>
+        </dc:filter>
+      </off_epochs>
+    </dc:macro>
+
+    <dc:macro name="sedimentloads">
+      <sedimentloads>
+        <dc:call-macro name="annotations_sediment_load_ls"/>
+        <measurement_stations>
+          <dc:context>
+            <dc:call-macro name="sedimentload_stations_statement"/>
+            <dc:call-macro name="sedimentloads-filter">
+              <dc:call-macro name="loads">
+                <dc:call-macro name="load"/>
+              </dc:call-macro>
+            </dc:call-macro>
+          </dc:context>
+        </measurement_stations>
+        <sediment_load_ls>
+          <dc:context>
+            <dc:call-macro name="sedimentload_ls_statement"/>
+            <dc:call-macro name="sedimentloads-filter">
+              <dc:call-macro name="loads">
+                <dc:call-macro name="load_ls"/>
+              </dc:call-macro>
+            </dc:call-macro>
+          </dc:context>
+        </sediment_load_ls>
+      </sedimentloads>
+    </dc:macro>
+
+    <dc:macro name="sedimentload_stations_statement">
+      <dc:statement>
+        SELECT DISTINCT
+            sl.id          AS slid,
+            slk.kind       AS kind,
+            ti.start_time  AS startyear,
+            ti.stop_time   AS endyear,
+            sq.start_time  AS sqstart,
+            sq.stop_time   AS sqstop,
+            sq.id          AS sqid,
+            gf.name        AS fraction,
+            sl.description  || '&lt;BR&gt;' ||
+                'Fraktion: ' || gf.lower || ' bis ' || gf.upper ||
+                ' mm&lt;BR&gt;Einheit: t/a' AS info
+        FROM     sediment_load sl
+            JOIN sediment_load_kinds slk ON slk.id = sl.kind
+            JOIN sediment_load_values slv
+                ON sl.id = slv.sediment_load_id
+            JOIN measurement_station ms
+                ON ms.id = slv.measurement_station_id
+            JOIN ranges ra ON ms.range_id = ra.id
+            JOIN rivers r ON ra.river_id = r.id
+            JOIN time_intervals ti ON sl.time_interval_id = ti.id
+            LEFT JOIN time_intervals sq ON sl.sq_time_interval_id = sq.id
+            JOIN grain_fraction gf ON gf.id = sl.grain_fraction_id
+        WHERE r.id = ${river_id}
+            AND CASE WHEN r.km_up = 1 AND ra.b IS NOT NULL
+            THEN ra.b ELSE ra.a END BETWEEN ${fromkm} AND ${tokm}
+            ORDER BY sqstart DESC, sqstop DESC,
+                fraction, startyear DESC, endyear DESC
+      </dc:statement>
+    </dc:macro>
+
+    <dc:macro name="sedimentload_ls_statement">
+      <dc:statement>
+        SELECT DISTINCT
+            sl.id          AS slid,
+            slk.kind       AS kind,
+            ti.start_time  AS startyear,
+            ti.stop_time   AS endyear,
+            sq.start_time  AS sqstart,
+            sq.stop_time   AS sqstop,
+            sq.id          AS sqid,
+            gf.name        AS fraction,
+            sl.description  || '&lt;BR&gt;' ||
+                'Fraktion: ' || gf.lower || ' bis ' || gf.upper ||
+                ' mm&lt;BR&gt;Einheit: ' || u.name AS info
+        FROM     sediment_load_ls sl
+            JOIN sediment_load_kinds slk ON slk.id = sl.kind
+            JOIN rivers r ON sl.river_id = r.id
+            JOIN sediment_load_ls_values slv
+                ON sl.id = slv.sediment_load_ls_id
+            JOIN time_intervals ti ON sl.time_interval_id = ti.id
+            LEFT JOIN time_intervals sq ON sl.sq_time_interval_id = sq.id
+            JOIN grain_fraction gf ON gf.id = sl.grain_fraction_id
+            JOIN units u ON sl.unit_id = u.id
+        WHERE   r.id = ${river_id}
+            AND slv.station BETWEEN ${fromkm} AND ${tokm}
+        ORDER BY sqstart DESC, sqstop DESC,
+            fraction, startyear DESC, endyear DESC
+      </dc:statement>
+    </dc:macro>
+
+    <!-- annotations -->
+    <dc:macro name="annotations">
+      <annotation factory="annotations" ids="{$river_id}" target_out="{$out}"/>
+    </dc:macro>
+
+    <dc:macro name="annotations_per_type">
+      <annotations>
+        <dc:context>
+          <all_annotations factory="annotations" ids="{$river_id}" target_out="{$out}" />
+          <dc:statement>
+            SELECT id   AS anno_id,
+                   name AS anno_description
+            FROM annotation_types
+          </dc:statement>
+          <dc:for-each>
+            <annotation name="{$anno_description}"
+                        factory="annotations" target_out="{$out}"
+                        ids="{$river_id}:{$anno_description}"/>
+          </dc:for-each>
+        </dc:context>
+      </annotations>
+    </dc:macro>
+
+    <dc:macro name="annotations_sediment_load_ls">
+      <sources_sinks>
+        <dc:context>
+          <dc:statement>
+            SELECT id   AS anno_id,
+                   name AS anno_description
+            FROM annotation_types
+	    WHERE name LIKE 'Quelle %' OR name LIKE 'Senke %'
+          </dc:statement>
+          <dc:for-each>
+            <annotation name="{$anno_description}"
+                        factory="annotations" target_out="{$out}"
+                        ids="{$river_id}:{$anno_description}"/>
+          </dc:for-each>
+        </dc:context>
+      </sources_sinks>
+    </dc:macro>
+
+    <dc:macro name="qsectors">
+      <qsector factory="qsectors" ids="{$river_id}" target_out="{$out}" />
+    </dc:macro>
+
+    <dc:macro name="flood-map-recommended">
+      <kilometrage>
+        <riveraxis factory="riveraxis" ids="{$river_id}" target_out="{$out}" />
+      </kilometrage>
+      <rastermap>
+        <background factory="wmsbackground" ids="{$river_id}" target_out="{$out}" />
+      </rastermap>
+    </dc:macro>
+
+    <!-- bed heights -->
+    <dc:macro name="minfo-heights-diff">
+      <dc:context>
+        <dc:statement>
+            WITH sta
+                 AS (SELECT bhs.id,
+                            bhs.description,
+                            bhsv.station,
+                            bhs.year
+                     FROM   bed_height bhs
+                            JOIN bed_height_values bhsv
+                                ON bhsv.bed_height_id = bhs.id
+                     WHERE  bhs.river_id = ${river_id}
+                     AND bhsv.station BETWEEN ${fromkm} AND ${tokm}),
+                 csta
+                 AS (SELECT b1.id          AS b1id,
+                            b1.description AS b1desc,
+                            b1.year        AS b1year,
+                            b2.id          AS b2id,
+                            b2.description AS b2desc,
+                            b2.year        AS b2year
+                     FROM   sta b1
+                            JOIN sta b2
+                              ON b1.station = b2.station
+                              AND b1.id &lt;&gt; b2.id
+                              AND (b1.year &gt; b2.year OR b1.year IS NULL))
+            SELECT DISTINCT b1id, b1desc, b1year,
+                   b2id, b2desc, b2year
+            FROM   csta
+            ORDER BY b1desc, b2desc
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <bedheights>
+            <dc:call-macro name="bed-heights-single-diff"/>
+            <dc:call-macro name="bed-heights-epoch-diff"/>
+          </bedheights>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="bed-heights-single-diff">
+      <dc:filter expr="not(contains(dc:lowercase($b1desc), 'epoche'))">
+        <years>
+          <dc:call-macro name="minfo-heights-diff-tree"/>
+        </years>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="bed-heights-epoch-diff">
+      <dc:filter expr="contains(dc:lowercase($b1desc), 'epoche')">
+        <epochs>
+          <dc:call-macro name="minfo-heights-diff-tree"/>
+        </epochs>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="minfo-heights-diff-tree">
+      <dc:group expr="dc:coalesce($b1year, 'sonstige')">
+        <minfo-diff name="{dc:group-key()}">
+          <dc:for-each>
+            <dc:choose>
+              <dc:when test="dc:group-key() = $b1year">
+                <height factory="bedheight"
+                        target_out="{$out}"
+                        ids="bedheight-single-{$b1id}#bedheight-single-{$b2id}"
+                        info="{$b1desc}#{$b2desc}"
+                        description="{$b1desc} - {$b2desc}"/>
+              </dc:when>
+              <dc:when test="dc:group-key() = 'sonstige'">
+                <height factory="bedheight"
+                        target_out="{$out}"
+                        ids="bedheight-single-{$b1id}#bedheight-single-{$b2id}"
+                        info="{$b1desc}#{$b2desc}"
+                        description="{$b1desc} - {$b2desc}"/>
+                <height factory="bedheight"
+                        target_out="{$out}"
+                        ids="bedheight-single-{$b2id}#bedheight-single-{$b1id}"
+                        info="{$b2desc}#{$b1desc}"
+                        description="{$b2desc} - {$b1desc}"/>
+              </dc:when>
+            </dc:choose>
+          </dc:for-each>
+        </minfo-diff>
+      </dc:group>
+    </dc:macro>
+
+    <dc:macro name="minfo-heights">
+      <bedheights>
+        <dc:call-macro name="bed-heights-single"/>
+        <dc:call-macro name="bed-heights-epoch"/>
+      </bedheights>
+    </dc:macro>
+
+    <dc:macro name="bed-heights-factory">
+      <dc:for-each>
+        <height factory="bedheight"
+                target_out="{$out}"
+                ids="bedheight-single-{$bedh_id}-{$bedh_year}"
+                info="{$info}"
+                description="{$bedh_descr}"/>
+      </dc:for-each>
+    </dc:macro>
+
+    <dc:macro name="bed-heights-single">
+      <single>
+        <dc:context>
+          <dc:call-macro name="bed-heights-statement"/>
+          <dc:filter expr="not(contains($bedh_descr, 'Epoche'))">
+            <dc:if test="dc:has-result()">
+              <dc:group expr="dc:coalesce($bedh_year, 'sonstige')">
+                <heights name="{dc:group-key()}">
+                  <dc:call-macro name="bed-heights-factory"/>
+                </heights>
+              </dc:group>
+            </dc:if>
+          </dc:filter>
+        </dc:context>
+      </single>
+    </dc:macro>
+
+    <dc:macro name="bed-heights-epoch">
+      <epoch>
+        <dc:context>
+          <dc:call-macro name="bed-heights-statement"/>
+          <dc:filter expr="contains($bedh_descr, 'Epoche')">
+            <dc:call-macro name="bed-heights-factory"/>
+          </dc:filter>
+        </dc:context>
+      </epoch>
+    </dc:macro>
+
+    <dc:macro name="sounding-width-factory">
+      <dc:for-each>
+        <height factory="bedheight"
+                target_out="{$out}"
+                ids="bedheight-soundings-{$bedh_id}-{$bedh_year}"
+                info="{$info}"
+                description="{$bedh_descr}"/>
+      </dc:for-each>
+    </dc:macro>
+
+    <dc:macro name="sounding-width">
+      <dc:context>
+        <dc:call-macro name="bed-heights-statement"/>
+        <dc:if test="dc:has-result()">
+          <soundings_width>
+            <dc:call-macro name="sounding-width-factory"/>
+          </soundings_width>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="sounding-width-recommendations">
+      <dc:context>
+        <dc:call-macro name="bed-heights-statement"/>
+        <dc:filter expr="dc:contains($diffids, concat(';', $bedh_descr, ']'))">
+          <dc:call-macro name="sounding-width-factory"/>
+        </dc:filter>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="bed-heights-statement">
+      <dc:statement>
+        SELECT bhs.id       AS bedh_id,
+            bhs.year        AS bedh_year,
+            bhs.description AS bedh_descr,
+            bhs.description || '&lt;BR&gt;Jahr: ' || bhs.year ||
+            '&lt;BR&gt;Aufnahmeart: ' || bht.name ||
+            '&lt;BR&gt;Lagesystem: ' || ls.name ||
+            '&lt;BR&gt;Höhensystem: ' || cur_em.name ||
+            '&lt;BR&gt;ursprüngliches Höhensystem: ' || old_em.name ||
+            '&lt;BR&gt;Strecke: ' || round(r.a, 1) || '-' || round(r.b, 1) ||
+            '&lt;BR&gt;Auswerter: ' || bhs.evaluation_by AS info
+        FROM bed_height bhs
+            JOIN bed_height_type bht ON bht.id = bhs.type_id
+            JOIN location_system ls ON ls.id = location_system_id
+            JOIN elevation_model cur_em ON cur_em.id = cur_elevation_model_id
+            LEFT JOIN elevation_model old_em
+                ON old_em.id = old_elevation_model_id
+            LEFT JOIN ranges r ON r.id = range_id
+        WHERE bhs.river_id = ${river_id}
+      </dc:statement>
+    </dc:macro>
+
+    <!-- flow velocity -->
+    <dc:macro name="flow_velocity_models">
+      <dc:context>
+        <dc:statement>
+          SELECT fvm.id             AS fvmid,
+                 fvm.description    AS fvmd,
+                 dz.gauge_name      AS gauge,
+                 dz.value           AS q,
+                 dz.upper_discharge AS upperQ,
+                 dz.lower_discharge AS lowerQ
+          FROM flow_velocity_model fvm
+          JOIN discharge_zone dz ON dz.id = fvm.discharge_zone_id
+          WHERE dz.river_id = ${river_id}
+          ORDER BY dz.value
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <flowvelocitymodel>
+            <dc:for-each>
+              <measurement_value name="{$fvmd}"
+                                 ids="{$fvmid}"
+                                 factory="flowvelocitymodel"
+                                 info="{$lowerQ} - {$upperQ}&lt;BR&gt;
+                                       Pegel {$gauge}&lt;BR&gt;
+                                       Q = {$q} m3/s"
+                                 target_out="{$out}" />
+            </dc:for-each>
+          </flowvelocitymodel>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+
+    <dc:macro name="flow_velocity_measurements">
+      <dc:context>
+        <dc:statement>
+          SELECT id          AS fvmid,
+                 description AS fvmd
+          FROM flow_velocity_measurements WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <flowvelocitymeasurement>
+            <dc:for-each>
+              <flow_velocity_measurement name="{$fvmd}">
+                <dc:context>
+                  <dc:statement>
+                    SELECT id, description, station, datetime, v, w, q
+                    FROM flow_velocity_measure_values
+                    WHERE measurements_id = ${fvmid}
+                      AND station BETWEEN ${fromkm} AND ${tokm}
+                  </dc:statement>
+                  <dc:for-each>
+                    <measurement_value name="{$description} - {$station} - {$datetime}"
+                                       ids="{$id}"
+                                       factory="flowvelocity" target_out="{$out}" />
+                  </dc:for-each>
+                </dc:context>
+              </flow_velocity_measurement>
+            </dc:for-each>
+          </flowvelocitymeasurement>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="morph_width">
+      <dc:context>
+        <dc:statement>
+          SELECT id   AS width_id
+          FROM morphologic_width
+          WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <morph_width>
+            <dc:for-each>
+              <dc:context>
+                <dc:statement>
+                  SELECT min(station) AS from_station,
+                         max(station) AS to_station
+                  FROM morphologic_width_values
+                  WHERE morphologic_width_id = ${width_id}
+                </dc:statement>
+                <dc:for-each>
+                  <morphologic-width name="{$from_station} - {$to_station}"
+                                     ids="{$width_id}"
+                                     factory="morph-width" target_out="{$out}" />
+                </dc:for-each>
+              </dc:context>
+            </dc:for-each>
+          </morph_width>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="sqrelations">
+      <dc:context>
+        <dc:statement>
+          SELECT
+            ti.start_time        AS start_time,
+            ti.stop_time         AS stop_time,
+            ms.name              AS station_name,
+            lower(sqv.parameter) AS parameter,
+            sqv.id               AS sqvid,
+            ra.a                 AS station_km
+          FROM sq_relation sq
+          JOIN time_intervals ti ON ti.id = sq.time_interval_id
+          JOIN sq_relation_value sqv ON sqv.sq_relation_id = sq.id
+          JOIN measurement_station ms ON sqv.measurement_station_id = ms.id
+          JOIN ranges ra ON ms.range_id = ra.id
+          JOIN rivers r ON r.id = ra.river_id
+          WHERE r.id = ${river_id}
+          ORDER BY start_time, stop_time
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <sq_relations>
+            <dc:group expr="concat('Parameter ', dc:uppercase($parameter))">
+              <parameter description="{dc:group-key()}">
+                <dc:group expr="$station_km" type="number">
+                  <dc:group expr="concat('km ', $station_km, ': ',
+                                  $station_name)">
+                    <station description="{dc:group-key()}">
+                      <dc:for-each>
+                        <dc:variable name="combined_desc"
+                                     expr="concat(dc:date-format('yyyy',
+                                           $start_time), ' bis ',
+                                           dc:date-format('yyyy',
+                                           $stop_time))"/>
+                        <sqvalue factory="sqrelationdatacage"
+                                 target_out="{$out}"
+                                 ids="{$sqvid};{dc:uppercase($parameter)} - {$station_name}: {$combined_desc}"
+                                 description="{$combined_desc}"/>
+                      </dc:for-each>
+                    </station>
+                  </dc:group>
+                </dc:group>
+              </parameter>
+            </dc:group>
+          </sq_relations>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <!-- Floodmap part -->
+    <dc:macro name="flood-map-complete">
+      <dc:call-macro name="flood-map-buildings"/>
+      <dc:call-macro name="flood-map-gaugelocations"/>
+      <dc:call-macro name="floodmarks"/>
+      <hws>
+        <dc:call-macro name="hwslines"/>
+        <dc:call-macro name="hwspoints"/>
+      </hws>
+      <dc:call-macro name="flood-map-routing"/>
+      <hydrboundaries>
+        <dc:call-macro name="flood-map-floodplain"/>
+        <dc:call-macro name="flood-map-hydr-boundaries"/>
+      </hydrboundaries>
+      <dc:call-macro name="flood-map-uesk"/>
+    </dc:macro>
+
+    <dc:macro name="flood-map-routing">
+      <route_data>
+        <dc:call-macro name="flood-map-qps"/>
+        <dc:call-macro name="flood-map-fixpoints"/>
+        <dc:call-macro name="flood-map-km"/>
+        <dc:call-macro name="flood-map-riveraxis"/>
+      </route_data>
+    </dc:macro>
+
+    <dc:macro name="flood-map-hydr-boundaries">
+      <bfg_model>
+        <dc:call-macro name="flood-map-hydr-boundaries-poly"/>
+        <dc:call-macro name="flood-map-hydr-boundaries-lines"/>
+      </bfg_model>
+      <dc:call-macro name="flood-map-hydr-boundaries-state"/>
+    </dc:macro>
+
+    <dc:macro name="flood-map-dem">
+      <dems>
+        <dc:context>
+          <dc:statement>
+            SELECT d.id    AS dem_id,
+                   r.a     AS dem_lower,
+                   r.b     AS dem_upper,
+                   d.name  AS name,
+                   t.start_time AS start_time,
+                   t.stop_time AS stop_time,
+                   'Projektion: ' || d.projection || '&lt;BR&gt;' ||
+                   'Rasterweite: '   || d.resolution || 'm&lt;BR&gt;' ||
+                   'Format: '  || d.format || '&lt;BR&gt;' ||
+                   'Zeitraum: '
+                   AS info
+            FROM dem d
+              JOIN ranges r ON d.range_id = r.id
+              LEFT JOIN time_intervals t ON d.time_interval_id = t.id
+              WHERE d.river_id = ${river_id}
+              AND NOT((${tokm} &lt; r.a) or (${fromkm} &gt; r.b))
+            </dc:statement>
+            <dc:for-each>
+            <dem factory="demfactory" target_out="{$out}"
+              ids="{$dem_id}"
+              name="{$name}"
+              info="{$info}{dc:date-format('yyyy', $start_time)} - {dc:date-format('yyyy', $stop_time)}"/>
+          </dc:for-each>
+        </dc:context>
+      </dems>
+    </dc:macro>
+
+    <dc:macro name="filter_hws_ddg">
+      <dc:macro name="durchlass_damm_graben">
+        <dc:macro name="ddg_factory">
+          <dc:for-each>
+            <hws factory="hwsfactory" name="{$hws_name}" target_out="{$out}" />
+          </dc:for-each>
+        </dc:macro>
+
+        <dc:filter expr="$hws_kind=1">
+          <dc:if test="dc:has-result()">
+            <Durchlass><dc:call-macro name="ddg_factory"/></Durchlass>
+          </dc:if>
+        </dc:filter>
+
+        <dc:filter expr="$hws_kind=2">
+          <dc:if test="dc:has-result()">
+            <Damm><dc:call-macro name="ddg_factory"/></Damm>
+          </dc:if>
+        </dc:filter>
+
+        <dc:filter expr="$hws_kind=3">
+          <dc:if test="dc:has-result()">
+            <Graben><dc:call-macro name="ddg_factory"/></Graben>
+          </dc:if>
+        </dc:filter>
+      </dc:macro>
+
+      <dc:filter expr="$hws_official=1">
+        <dc:if test="dc:has-result()">
+          <official>
+            <dc:call-macro name="durchlass_damm_graben"/>
+          </official>
+        </dc:if>
+      </dc:filter>
+
+      <dc:filter expr="$hws_official=0">
+        <dc:if test="dc:has-result()">
+          <inofficial>
+            <dc:call-macro name="durchlass_damm_graben"/>
+          </inofficial>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="flood-map-hws-lines">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT
+          name     AS hws_name,
+          official AS hws_official,
+          kind_id  AS hws_kind
+          FROM hws_lines
+          WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <lines>
+            <dc:call-macro name="filter_hws_ddg"/>
+          </lines>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-hws-points">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT
+          name     AS hws_name,
+          official AS hws_official,
+          kind_id  AS hws_kind
+          FROM hws_points
+          WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <points>
+            <dc:call-macro name="filter_hws_ddg"/>
+          </points>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-hydr-boundaries-state">
+      <federal>
+        <dc:context>
+          <dc:statement>
+            SELECT DISTINCT
+              name
+            FROM hydr_boundaries
+            WHERE river_id = ${river_id}
+              AND kind = 2
+          </dc:statement>
+          <dc:for-each>
+            <line factory="wmshydrboundariesfactory" target_out="{$out}"
+                  ids="{$river_id};{$name};2"
+                  name="{$name}"/>
+          </dc:for-each>
+        </dc:context>
+        <dc:context>
+          <dc:statement>
+            SELECT DISTINCT
+              name
+            FROM hydr_boundaries_poly
+            WHERE river_id = ${river_id}
+              AND kind = 2
+          </dc:statement>
+          <dc:for-each>
+            <line factory="wmshydrboundariespolyfactory" target_out="{$out}"
+                  ids="{$river_id};{$name};2"
+                  name="{$name}"/>
+          </dc:for-each>
+        </dc:context>
+      </federal>
+    </dc:macro>
+
+    <dc:macro name="flood-map-hydr-boundaries-lines">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT
+            name
+          FROM hydr_boundaries
+          WHERE river_id = ${river_id}
+            AND kind = 1
+        </dc:statement>
+        <dc:comment> What about all other line kinds?</dc:comment>
+        <dc:if test="dc:has-result()">
+          <lines>
+            <dc:for-each>
+              <line factory="wmshydrboundariesfactory" target_out="{$out}"
+                    ids="{$river_id};{$name};1"
+                    name="{$name}"/>
+            </dc:for-each>
+          </lines>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-hydr-boundaries-poly">
+      <areas>
+        <dc:context>
+          <dc:statement>
+            SELECT DISTINCT
+              b.sectie AS sectie_id,
+              sk.name AS sectie
+            FROM hydr_boundaries_poly b
+              JOIN sectie_kinds sk ON b.sectie = sk.id
+            WHERE b.river_id = ${river_id}
+              AND b.kind = 1
+          </dc:statement>
+          <dc:if test="dc:has-result()">
+            <sobek_areas>
+              <dc:for-each>
+                <boundary name="{$sectie}"
+                          factory="wmshydrboundariespolyfactory" target_out="{$out}"
+                          ids="{$river_id};{$sectie};1;{$sectie_id};-1"/>
+              </dc:for-each>
+            </sobek_areas>
+          </dc:if>
+        </dc:context>
+        <dc:context>
+          <dc:statement>
+            SELECT DISTINCT
+              b.sobek AS sobek_id,
+              sk.name AS sobek
+            FROM hydr_boundaries_poly b
+              JOIN sobek_kinds sk ON b.sobek = sk.id
+            WHERE b.river_id = ${river_id}
+              AND b.kind = 1
+          </dc:statement>
+          <dc:if test="dc:has-result()">
+            <sobek_flooded>
+              <dc:for-each>
+                <boundary name="{$sobek}"
+                          factory="wmshydrboundariespolyfactory" target_out="{$out}"
+                          ids="{$river_id};{$sobek};1;-1;{$sobek_id}"/>
+              </dc:for-each>
+            </sobek_flooded>
+          </dc:if>
+        </dc:context>
+        <dc:context>
+          <dc:statement>
+            SELECT DISTINCT
+              b.name AS name
+            FROM hydr_boundaries_poly b
+            WHERE b.river_id = ${river_id}
+              AND b.kind = 1
+              AND b.sobek IS NULL
+              AND b.sectie is NULL
+          </dc:statement>
+          <dc:for-each>
+            <boundary name="{$name}"
+                      factory="wmshydrboundariespolyfactory" target_out="{$out}"
+                      ids="{$river_id};{$name}"/>
+          </dc:for-each>
+        </dc:context>
+      </areas>
+    </dc:macro>
+
+    <dc:macro name="flood-map-uesk">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT 1 FROM floodmaps WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+        <uesk>
+          <calculations>
+            <dc:context>
+              <dc:statement>
+                SELECT DISTINCT 1 FROM floodmaps WHERE river_id = ${river_id}
+                AND (kind = 112 OR kind = 111)
+              </dc:statement>
+              <dc:if test="dc:has-result()">
+                <current>
+                  <dc:context>
+                    <dc:statement>
+                      SELECT DISTINCT name AS name
+                      FROM floodmaps
+                      WHERE river_id = ${river_id} AND kind = 111
+                    </dc:statement>
+                    <dc:if test="dc:has-result()">
+                      <bfg>
+                        <dc:for-each>
+                          <floodmaps factory="wmsfloodmapsfactory" target_out="{$out}"
+                            ids="{$river_id};{$name}"
+                            name="{$name}"/>
+                        </dc:for-each>
+                      </bfg>
+                    </dc:if>
+                  </dc:context>
+                  <dc:context>
+                    <dc:statement>
+                      SELECT DISTINCT name AS name
+                      FROM floodmaps
+                      WHERE river_id = ${river_id} AND kind = 112
+                    </dc:statement>
+                    <dc:if test="dc:has-result()">
+                      <federal>
+                        <dc:for-each>
+                          <floodmaps factory="wmsfloodmapsfactory" target_out="{$out}"
+                            ids="{$river_id};{$name}"
+                            name="{$name}"/>
+                        </dc:for-each>
+                      </federal>
+                    </dc:if>
+                  </dc:context>
+                </current>
+              </dc:if>
+            </dc:context>
+            <dc:context>
+              <dc:statement>
+                SELECT DISTINCT 1 from floodmaps where river_id = ${river_id}
+                AND (kind = 122 OR kind = 121)
+              </dc:statement>
+              <dc:if test="dc:has-result()">
+                <potential>
+                  <dc:context>
+                    <dc:statement>
+                      SELECT DISTINCT name AS name
+                      FROM floodmaps
+                      WHERE river_id = ${river_id} AND kind = 121
+                    </dc:statement>
+                    <dc:if test="dc:has-result()">
+                      <bfg>
+                        <dc:for-each>
+                          <floodmaps factory="wmsfloodmapsfactory" target_out="{$out}"
+                            ids="{$river_id};{$name}"
+                            name="{$name}"/>
+                        </dc:for-each>
+                      </bfg>
+                    </dc:if>
+                  </dc:context>
+                  <dc:context>
+                    <dc:statement>
+                      SELECT DISTINCT
+                        name AS name
+                      FROM floodmaps
+                      WHERE river_id = ${river_id} AND kind = 122
+                    </dc:statement>
+                    <dc:if test="dc:has-result()">
+                      <federal>
+                        <dc:for-each>
+                          <floodmaps factory="wmsfloodmapsfactory" target_out="{$out}"
+                            ids="{$river_id};{$name}"
+                            name="{$name}"/>
+                        </dc:for-each>
+                      </federal>
+                    </dc:if>
+                  </dc:context>
+                </potential>
+              </dc:if>
+            </dc:context>
+          </calculations>
+          <dc:context>
+            <dc:statement>
+              SELECT DISTINCT
+                source AS source
+              FROM floodmaps
+              WHERE river_id = ${river_id} AND kind = 200
+            </dc:statement>
+            <dc:if test="dc:has-result()">
+              <measurements>
+                <dc:for-each>
+                  <year name="{$source}">
+                    <dc:context>
+                      <dc:statement>
+                        SELECT DISTINCT
+                          name AS name
+                        FROM floodmaps
+                        WHERE river_id = ${river_id} AND kind = 200 AND source =
+                        ${source}
+                      </dc:statement>
+                      <dc:for-each>
+                        <floodmaps factory="wmsfloodmapsfactory" target_out="{$out}"
+                          ids="{$river_id};{$name}"
+                          name="{$name}"/>
+                      </dc:for-each>
+                    </dc:context>
+                  </year>
+                </dc:for-each>
+              </measurements>
+            </dc:if>
+          </dc:context>
+        </uesk>
+      </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-floodplain">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT
+            fp.kind_id AS kind_id,
+            flk.name AS kind_name
+          FROM floodplain fp
+            JOIN floodplain_kinds flk on fp.kind_id = flk.id
+          WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <floodplain>
+            <dc:filter expr="$kind_id=1">
+              <dc:for-each>
+                <floody factory="wmsfloodplainfactory" target_out="{$out}"
+                        description="{$kind_name}"
+                        ids="{$river_id};{$kind_name};{$kind_id}"/>
+              </dc:for-each>
+            </dc:filter>
+            <dc:filter expr="$kind_id != 1">
+              <dc:if test="dc:has-result()">
+                <other>
+                  <dc:for-each>
+                    <floody factory="wmsfloodplainfactory" target_out="{$out}"
+                            description="{$layer_name}"
+                            ids="{$river_id};{$layer_name};{$kind_id}"/>
+                  </dc:for-each>
+                </other>
+              </dc:if>
+            </dc:filter>
+          </floodplain>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="hwspoints_by_kind">
+      <dc:comment>
+        Call from a context where fed_name hws_kind hws_name and river_id is
+        availble
+      </dc:comment>
+
+      <dc:macro name="hwspoints_by_kind_factory">
+        <dc:for-each>
+          <hws factory="wmshwspointsfactory" target_out="{$out}"
+               ids="{$river_id};{$hws_name}"
+               name="{$hws_name}"/>
+        </dc:for-each>
+      </dc:macro>
+
+      <dc:filter expr="$hws_kind=1">
+        <dc:if test="dc:has-result()">
+          <Durchlass>
+            <dc:call-macro name="hwspoints_by_kind_factory"/>
+          </Durchlass>
+        </dc:if>
+      </dc:filter>
+
+      <dc:filter expr="$hws_kind=2">
+        <dc:if test="dc:has-result()">
+          <Damm>
+            <dc:call-macro name="hwspoints_by_kind_factory"/>
+          </Damm>
+        </dc:if>
+      </dc:filter>
+
+      <dc:filter expr="$hws_kind=3">
+        <dc:if test="dc:has-result()">
+          <Graben>
+            <dc:call-macro name="hwspoints_by_kind_factory"/>
+          </Graben>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="hwspoints">
+      <hws_points>
+        <official>
+          <dc:context>
+            <dc:statement>
+              SELECT DISTINCT
+                fs.name AS fed_name,
+                fs.id AS fed_id
+              FROM hws_points hws
+                JOIN fed_states fs ON hws.fed_state_id = fs.id
+              WHERE river_id = ${river_id}
+                AND hws.official=1
+            </dc:statement>
+            <dc:for-each>
+              <dc:context>
+                <dc:statement>
+                  SELECT DISTINCT
+                    name AS hws_name,
+                    kind_id AS hws_kind
+                  FROM hws_points
+                  WHERE river_id = ${river_id}
+                    AND official=1
+                    AND fed_state_id = ${fed_id} ORDER BY name
+                </dc:statement>
+                <fedstate description="{$fed_name}">
+                  <dc:call-macro name="hwspoints_by_kind"/>
+                </fedstate>
+              </dc:context>
+            </dc:for-each>
+          </dc:context>
+          <dc:context>
+            <dc:statement>
+              SELECT distinct
+                name AS hws_name,
+                kind_id AS hws_kind
+              FROM hws_points
+              WHERE river_id = ${river_id}
+                AND official=1
+                AND fed_state_id IS NULL
+                ORDER BY name
+            </dc:statement>
+            <hws_fed_unknown>
+              <dc:call-macro name="hwspoints_by_kind"/>
+            </hws_fed_unknown>
+          </dc:context>
+        </official>
+        <inofficial>
+          <dc:context>
+            <dc:statement>
+              SELECT DISTINCT
+                fs.name AS fed_name,
+                fs.id AS fed_id
+              FROM hws_points hws
+                JOIN fed_states fs ON hws.fed_state_id = fs.id
+              WHERE river_id = ${river_id}
+                AND hws.official=0
+            </dc:statement>
+            <dc:for-each>
+              <dc:context>
+                <dc:statement>
+                  SELECT DISTINCT
+                    name AS hws_name,
+                    kind_id AS hws_kind
+                  FROM hws_points
+                  WHERE river_id = ${river_id}
+                    AND official=0
+                    AND fed_state_id = ${fed_id} ORDER BY name
+                </dc:statement>
+                <fedstate description="{$fed_name}">
+                  <dc:call-macro name="hwspoints_by_kind"/>
+                </fedstate>
+              </dc:context>
+            </dc:for-each>
+          </dc:context>
+          <dc:context>
+            <dc:statement>
+              SELECT distinct
+                name AS hws_name,
+                kind_id AS hws_kind
+              FROM hws_points
+              WHERE river_id = ${river_id}
+                AND official=0
+                AND fed_state_id IS NULL ORDER BY name
+            </dc:statement>
+            <hws_fed_unknown>
+              <dc:call-macro name="hwspoints_by_kind"/>
+            </hws_fed_unknown>
+          </dc:context>
+        </inofficial>
+      </hws_points>
+    </dc:macro>
+
+    <dc:macro name="hwslines_by_kind">
+      <dc:comment>
+        Call from a context where fed_name hws_kind hws_name and river_id is
+        availble
+      </dc:comment>
+
+      <dc:macro name="hwslines_by_kind_factory">
+        <dc:for-each>
+          <hws factory="wmshwslinesfactory" target_out="{$out}"
+               ids="{$river_id};{$hws_name}"
+               name="{$hws_name}"/>
+        </dc:for-each>
+      </dc:macro>
+
+      <dc:filter expr="$hws_kind=1">
+        <dc:if test="dc:has-result()">
+          <Durchlass>
+            <dc:call-macro name="hwslines_by_kind_factory"/>
+          </Durchlass>
+        </dc:if>
+      </dc:filter>
+
+      <dc:filter expr="$hws_kind=2">
+        <dc:if test="dc:has-result()">
+          <Damm>
+            <dc:call-macro name="hwslines_by_kind_factory"/>
+          </Damm>
+        </dc:if>
+      </dc:filter>
+
+      <dc:filter expr="$hws_kind=3">
+        <dc:if test="dc:has-result()">
+          <Graben>
+            <dc:call-macro name="hwslines_by_kind_factory"/>
+          </Graben>
+        </dc:if>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="hwslines">
+      <hws_lines>
+        <official>
+          <dc:context>
+            <dc:statement>
+              SELECT DISTINCT
+                fs.name AS fed_name,
+                fs.id AS fed_id
+              FROM hws_lines hws
+                JOIN fed_states fs ON hws.fed_state_id = fs.id
+              WHERE river_id = ${river_id}
+                AND hws.official=1
+            </dc:statement>
+            <dc:for-each>
+              <dc:context>
+                <dc:statement>
+                  SELECT DISTINCT
+                    name AS hws_name,
+                    kind_id AS hws_kind
+                  FROM hws_lines
+                  WHERE river_id = ${river_id}
+                    AND official=1
+                    AND fed_state_id = ${fed_id} ORDER BY name
+                </dc:statement>
+                <fedstate description="{$fed_name}">
+                  <dc:call-macro name="hwslines_by_kind"/>
+                </fedstate>
+              </dc:context>
+            </dc:for-each>
+          </dc:context>
+          <dc:context>
+            <dc:statement>
+              SELECT distinct
+                name AS hws_name,
+                kind_id AS hws_kind
+              FROM hws_lines
+              WHERE river_id = ${river_id}
+                AND official=1
+                AND fed_state_id IS NULL
+                ORDER BY name
+            </dc:statement>
+            <hws_fed_unknown>
+              <dc:call-macro name="hwslines_by_kind"/>
+            </hws_fed_unknown>
+          </dc:context>
+        </official>
+        <inofficial>
+          <dc:context>
+            <dc:statement>
+              SELECT DISTINCT
+                fs.name AS fed_name,
+                fs.id AS fed_id
+              FROM hws_lines hws
+                JOIN fed_states fs ON hws.fed_state_id = fs.id
+              WHERE river_id = ${river_id}
+                AND hws.official=0
+            </dc:statement>
+            <dc:for-each>
+              <dc:context>
+                <dc:statement>
+                  SELECT DISTINCT
+                    name AS hws_name,
+                    kind_id AS hws_kind
+                  FROM hws_lines
+                  WHERE river_id = ${river_id}
+                    AND official=0
+                    AND fed_state_id = ${fed_id} ORDER BY name
+                </dc:statement>
+                <fedstate description="{$fed_name}">
+                  <dc:call-macro name="hwslines_by_kind"/>
+                </fedstate>
+              </dc:context>
+            </dc:for-each>
+          </dc:context>
+          <dc:context>
+            <dc:statement>
+              SELECT distinct
+                name AS hws_name,
+                kind_id AS hws_kind
+              FROM hws_lines
+              WHERE river_id = ${river_id}
+                AND official=0
+                AND fed_state_id IS NULL ORDER BY name
+            </dc:statement>
+            <hws_fed_unknown>
+              <dc:call-macro name="hwslines_by_kind"/>
+            </hws_fed_unknown>
+          </dc:context>
+        </inofficial>
+      </hws_lines>
+    </dc:macro>
+
+    <dc:macro name="floodmarks">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT
+            COALESCE(CAST (year AS VARCHAR(64)), 'Unbekanntes Jahr') AS year
+          FROM flood_marks
+          WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <floodmarks>
+            <dc:for-each>
+              <floodmark name="{$year}"
+                factory="wmsfloodmarkfactory" target_out="{$out}"
+                ids="{$river_id};{$year};{$year}"/>
+            </dc:for-each>
+          </floodmarks>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-gaugelocations">
+      <gaugelocations>
+        <gauge_points factory="externalwmsfactory" ids="http://www.pegelonline.wsv.de/webservices/gis/wms;Pegelpunkte;Pegelpunkte (WSV)" target_out="{$out}" />
+        <gauge_names factory="externalwmsfactory" ids="http://www.pegelonline.wsv.de/webservices/gis/wms;Pegelnamen;Pegelnamen (WSV)" target_out="{$out}" />
+        <gauge_level factory="externalwmsfactory" ids="http://www.pegelonline.wsv.de/webservices/gis/wms;Pegelwasserstand;Aktueller Wasserstand (WSV)" target_out="{$out}" />
+        <gauge_tendency factory="externalwmsfactory" ids="http://www.pegelonline.wsv.de/webservices/gis/wms;TendenzWasserstand;Tendenz des Wasserstands (WSV)" target_out="{$out}" />
+      </gaugelocations>
+    </dc:macro>
+
+    <dc:macro name="flood-map-riveraxis">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT
+            ak.name    AS kind_name,
+            ax.kind_id AS kind_id,
+            ax.name    AS layer_name
+          FROM river_axes ax
+            JOIN axis_kinds ak on ax.kind_id = ak.id
+          WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <axis>
+            <dc:filter expr="$kind_id=1">
+              <dc:for-each>
+                <actual description="{$kind_name}"
+                        ids="{$river_id};{$kind_name};{$kind_id}"
+                        factory="riveraxis" target_out="{$out}" />
+              </dc:for-each>
+            </dc:filter>
+            <dc:filter expr="$kind_id!=1">
+              <other>
+                <dc:for-each>
+                  <misc-axis description="{$layer_name}"
+                             ids="{$river_id};{$layer_name};{$kind_id}"
+                             factory="riveraxis" target_out="{$out}" />
+                </dc:for-each>
+              </other>
+            </dc:filter>
+          </axis>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-km">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT 1 FROM river_axes_km WHERE river_id = ${river_id}
+        </dc:statement>
+         <dc:for-each>
+            <kilometrage factory="wmskmfactory" ids="{$river_id}" target_out="{$out}" />
+        </dc:for-each>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-fixpoints">
+      <dc:context>
+        <dc:statement>
+          SELECT name AS name
+          FROM fixpoints
+          WHERE river_id = ${river_id}
+            GROUP BY name
+        </dc:statement>
+        <dc:for-each>
+          <fixpoints factory="wmsfixpointsfactory" target_out="{$out}"
+            ids="{$river_id};{$name}"/>
+        </dc:for-each>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-qps">
+      <dc:context>
+        <dc:statement>
+          SELECT DISTINCT
+            cs.kind_id AS kind_id,
+            cs.name    AS layer_name,
+            ck.name    AS kind_name
+          FROM cross_section_tracks cs
+            JOIN cross_section_track_kinds ck ON cs.kind_id = ck.id
+          WHERE river_id = ${river_id}
+        </dc:statement>
+        <dc:if test="dc:has-result()">
+          <qps>
+            <dc:filter expr="$kind_id=1">
+              <dc:for-each>
+                <actual description="{$kind_name}"
+                        factory="wmsqpsfactory" target_out="{$out}"
+                        ids="{$river_id};{$kind_name};{$kind_id}"/>
+              </dc:for-each>
+            </dc:filter>
+            <dc:filter expr="$kind_id = 0">
+              <dc:if test="dc:has-result()">
+                <other>
+                  <dc:for-each>
+                    <misc-qps description="{$layer_name}"
+                              factory="wmsqpsfactory" target_out="{$out}"
+                              ids="{$river_id};{$layer_name};{$kind_id}"/>
+                  </dc:for-each>
+                </other>
+              </dc:if>
+            </dc:filter>
+          </qps>
+        </dc:if>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="flood-map-buildings">
+      <buildings>
+        <dc:context>
+          <dc:statement>
+            SELECT DISTINCT
+              b.name AS building_name,
+              bk.name AS building_kind,
+              b.kind_id AS building_kind_id
+            FROM buildings b
+              JOIN building_kinds bk ON b.kind_id = bk.id
+            WHERE river_id = ${river_id}
+          </dc:statement>
+          <dc:if test="dc:has-result()">
+            <dc:filter expr="$building_kind_id!=0">
+              <dc:for-each>
+                <buildings description="{$building_kind}"
+                           factory="wmsbuildingsfactory" target_out="{$out}"
+                           ids="{$river_id};{$building_kind};{$building_kind_id}"/>
+              </dc:for-each>
+            </dc:filter>
+            <dc:filter expr="$building_kind_id=0">
+              <other>
+                <dc:for-each>
+                  <buildings description="{$building_name}"
+                             factory="wmsbuildingsfactory" target_out="{$out}"
+                             ids="{$river_id};{$building_name}"/>
+                </dc:for-each>
+              </other>
+            </dc:filter>
+          </dc:if>
+        </dc:context>
+        <dc:context>
+          <dc:statement>
+            SELECT DISTINCT
+              j.kind_id AS jetty_kind_id,
+              jk.name AS jetty_kind
+            FROM jetties j
+              JOIN jetty_kinds jk ON j.kind_id = jk.id
+            WHERE river_id = ${river_id}
+          </dc:statement>
+          <dc:if test="dc:has-result()">
+            <jetties>
+              <dc:for-each>
+                <jetty description="{$jetty_kind}"
+                       factory="wmsjettiesfactory" target_out="{$out}"
+                       ids="{$river_id};{$jetty_kind};{$jetty_kind_id}"/>
+              </dc:for-each>
+            </jetties>
+          </dc:if>
+        </dc:context>
+      </buildings>
+    </dc:macro>
+
+    <dc:macro name="officiallines_user">
+      <dc:if test="dc:contains($parameters, 'official-lines')">
+        <dc:container-context container="official-lines">
+          <dc:properties>
+            <dc:property name="name" alias="olname"/>
+            <dc:property name="wstId" alias="wstid"/>
+            <dc:property name="columnPos" alias="wstcolpos"/>
+          </dc:properties>
+          <dc:if test="dc:has-result()">
+            <officiallines>
+              <dc:for-each>
+                <column name="{$olname}"
+                  ids="official-wstv-{$wstcolpos}-{$wstid}"
+                  factory="staticwqkms" target_out="{$out}"/>
+              </dc:for-each>
+            </officiallines>
+          </dc:if>
+        </dc:container-context>
+      </dc:if>
+    </dc:macro>
+
+    <!-- sediment loads -->
+    <dc:macro name="sedimentload_off_epoch_filter">
+      <dc:if test="dc:has-result()">
+        <dc:variable name="sq_time_id" type="number"
+                     expr="number($sq_ti_id)"/>
+        <dc:if test="string-length(dc:get('epochs')) &gt; 0">
+          <dc:variable name="start" type="number"
+                       expr="dc:min-number(dc:find-all('\d{4}', $epochs))"/>
+          <dc:variable name="end" type="number"
+                       expr="dc:max-number(dc:find-all('\d{4}', $epochs))"/>
+        </dc:if>
+        <dc:if test="string-length(dc:get('years')) &gt; 0">
+          <dc:variable name="start" type="number"
+                       expr="dc:min-number(dc:find-all('\d{4}', $years))"/>
+          <dc:variable name="end" type="number"
+                       expr="dc:max-number(dc:find-all('\d{4}', $years))"/>
+        </dc:if>
+        <dc:filter expr="$kind = 'official' and
+                         $sqid = $sq_time_id and
+                         not(number($end) &lt;
+                             number(dc:date-format('yyyy', $startyear))
+                           or number($start) &gt;
+                             number(dc:date-format('yyyy', $endyear)))">
+          <dc:macro-body/>
+        </dc:filter>
+      </dc:if>
+    </dc:macro>
+
+    <dc:macro name="sedimentload_off_epochs">
+      <dc:context>
+        <dc:call-macro name="sedimentload_stations_statement"/>
+        <dc:call-macro name="sedimentload_off_epoch_filter">
+          <dc:call-macro name="loads">
+            <dc:call-macro name="load"/>
+          </dc:call-macro>
+        </dc:call-macro>
+      </dc:context>
+      <dc:context>
+        <dc:call-macro name="sedimentload_ls_statement"/>
+        <dc:call-macro name="sedimentload_off_epoch_filter">
+          <dc:call-macro name="loads">
+            <dc:call-macro name="load_ls"/>
+          </dc:call-macro>
+        </dc:call-macro>
+      </dc:context>
+    </dc:macro>
+
+
+    <!-- Common stuff -->
+
+    <dc:macro name="km-filtered-wsts">
+      <dc:context connection="system">
+        <dc:statement>
+          SELECT w.kind         AS kind,
+                 w.id           AS wst_id,
+                 wc.id          AS wst_column_id,
+                 wc.position    AS wst_column_position,
+                 wc.description AS info,
+                 w.description  AS wst_description,
+                 COALESCE(wc.name, '')        AS wst_column_name,
+                 wr.a           AS deffrom,
+                 wr.b           AS defto
+          FROM wst_columns wc
+            JOIN wsts w        ON wc.wst_id = w.id
+            JOIN wst_ranges wr ON wc.id = wr.wst_column_id
+          WHERE w.river_id = ${river_id} AND
+            NOT((${tokm} &lt; wr.a) or (${fromkm} &gt; wr.b))
+            ORDER BY wst_column_position
+        </dc:statement>
+        <dc:macro-body/>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="all-user-artifacts">
+        <dc:context connection="user">
+          <dc:comment>Select collections and masterartifacts.
+            XXX: The cast is a quick hack because the ld_* values are
+            now TEXT fields. To properly fix / asses the problems here
+            an SLT evaluation is needed.
+          </dc:comment>
+        <dc:statement>
+          SELECT c.name                     AS collection_name,
+                 ma.id                      AS a_id,
+                 ma.state                   AS a_state,
+                 ma.gid                     AS a_gid,
+                 ma.creation                AS a_creation,
+                 CAST(COALESCE(ma.ld_mode, '') AS VARCHAR(255)) AS ld_m,
+                 CAST(COALESCE(ma.ld_locations, '') AS VARCHAR(255)) AS ld_l,
+                 CAST(COALESCE(ma.ld_from, '') AS VARCHAR(255)) AS ld_f,
+                 CAST(COALESCE(ma.ld_to, '') AS VARCHAR(255)) AS ld_t,
+                 o.name                        AS out_name,
+                 o.id                          AS out_id,
+                 f.name                        AS facet_name,
+                 f.num                         AS facet_num,
+                 f.description                 AS facet_description,
+                 f.id                          AS fid
+          FROM users u
+            JOIN collections c             ON c.user_id = u.id
+            JOIN master_artifacts_range ma ON ma.collection_id = c.id
+            JOIN outs o                    ON o.artifact_id = ma.id
+            JOIN facets f                  ON f.out_id = o.id
+          WHERE  u.gid = CAST(${user-id} AS UUID)
+            AND ma.gid &lt;&gt; CAST(${artifact-id} AS uuid)
+            AND f.name NOT LIKE '%empty.facet%'
+            AND EXISTS (
+              SELECT id
+              FROM artifact_data ad
+              WHERE ad.artifact_id = ma.id
+                AND k = 'river'
+                AND v = ${river})
+        </dc:statement>
+        <dc:virtual-column name="deffrom" type="number" expr="dc:fromValue($ld_m, $ld_l, $ld_f)">
+          <dc:virtual-column name="defto" type="number" expr="dc:toValue($ld_m, $ld_l, $ld_t)">
+            <dc:macro-body/>
+          </dc:virtual-column>
+        </dc:virtual-column>
+      </dc:context>
+    </dc:macro>
+
+    <dc:macro name="km-filtered-user-artifacts">
+      <dc:comment>
+        Apply KM Filtering but pass
+        sq_ facets with no regard about their location.
+      </dc:comment>
+      <dc:filter expr="not($deffrom &gt; $tokm or $defto &lt; $fromkm) or
+        starts-with($facet_name, 'sq_')">
+        <dc:macro-body/>
+      </dc:filter>
+    </dc:macro>
+
+    <dc:macro name="artifact-range">
+      <dc:choose>
+        <dc:when test="dc:coalesce(dc:get('ld_locations'), ' ') != ' '">
+          <dc:variable name="fromkm" type="number"
+                       expr="dc:min-number(dc:find-all('\d*\.?\d*',
+                             dc:get('ld_locations')))"/>
+          <dc:variable name="tokm" type="number"
+                       expr="dc:max-number(dc:find-all('\d*\.?\d*',
+                             dc:get('ld_locations')))"/>
+        </dc:when>
+        <dc:otherwise>
+          <dc:variable name="fromkm" type="number"
+                       expr="dc:fromValue(dc:get('ld_mode'),
+                             dc:get('ld_locations'), dc:get('ld_from'))"/>
+          <dc:variable name="tokm" type="number"
+                       expr="dc:toValue(dc:get('ld_mode'),
+                             dc:get('ld_locations'), dc:get('ld_to'))"/>
+          <dc:if test="$fromkm > $tokm">
+            <dc:message>Inverting KM filter.</dc:message>
+            <dc:variable name="fromkm" type="number"
+                         expr="dc:toValue(dc:get('ld_mode'),
+                               dc:get('ld_locations'), dc:get('ld_to'))"/>
+            <dc:variable name="tokm" type="number"
+                         expr="dc:fromValue(dc:get('ld_mode'),
+                               dc:get('ld_locations'), dc:get('ld_from'))"/>
+          </dc:if>
+        </dc:otherwise>
+      </dc:choose>
+      <dc:macro-body/>
+    </dc:macro>
+
+  </datacage>
+</dc:template>

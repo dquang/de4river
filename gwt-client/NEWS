@@ -1,0 +1,552 @@
+NEWS
+
+2011-09-19  Release V 2.5.0
+
+== Version 2.5.0 (19.09.2011, rev. 2786) ==
+
+Diese Seite stellt primär Neuerungen in dieser Version aus Sicht des Nutzers zusammen bzw. verweist auf Vorarbeiten, die für jeweilige Funktionen benötigt werden.
+
+=== Zusammenfassung und Hintergedanken zur Version ===
+Die Version 2.5 verfolgt die folgenden Ziele auf den unterschiedlichen Ebenen:
+ * Bestehende textbasierte Daten von FLYS für die Gewässer Saar, Mosel und Elbe über Importmechanismen vollständig in die Datenbankhaltung samt dazugehörigen Datenmodell übernehmen
+ * Strukturierung von Geodaten und Import dieser in die Datenhaltung
+ * den Datenkorb als zentralen Datenmanager für statische und dynamische Daten bereitzustellen und in den unterschiedlichen Anwendungskontexten -- inline: Parameterisierung Überschwemmungsfläche, Parameterisierung Differenzen und als externes Fenster: Zuladen manueller Daten -- zugreifbar zu machen
+ * die Karte als Auswahlunterstützung und zur Anzeige von gerechneten Überschwemmungsflächen bereitzustellen
+ * die Integrationsfähigkeit der Karte in die Projektverwaltung zu ermöglichen
+ * Integration und Ansteuerung von WSPLGEN als asynchronen Prozeß in einer Mehrbenutzerumgebung zu integrieren
+ * Infrastruktur zur Ansteuerung und Generierung von Karten bereitzustellen
+ * die Projektverwaltung abzuschließen, um die Gesamtarbeitsweise im System greifbar zu machen.
+ * die Anwendung auf seine Zieldatendank Oracle 11 zu bringen
+ * das Gesamtsystem in seiner Zielumgebung SLES 11 bereitzustellen
+ * Erste Erfahrungsmöglichkeit mit FLYS togo bereitzustellen
+ 
+=== Framework ===
+
+ * Allgemeine Steuerung
+
+ * Projektverwaltung
+  * Projekte umbenennen
+  * Projekte dublizieren
+  * Titel der Projekte nach Umbenennung in jeweiligem Projektfenster anzeigen
+  * Filterung der Projekteliste auf Basis der Titel
+
+
+=== Fachdatenbestand ===
+
+ * Datenmodell
+  * Erweiterung um hyk-Datenbestand
+  * Erweiterung im Querprofildatenbestand
+  * Erweiterung im räumliche Tabellen für Kartenthemen 
+
+ * Importer hydrologischer und geodätischer Daten
+  * Querprofiledateien (*.prf)
+  * hyk-Dateien
+
+ * Importer von Geodaten
+  * semiautomatischer Mechanismus zum Import von Shapedateien in Oracle 11
+
+
+
+=== WINFO ===
+
+ * Gewässer- und Pegelinfos
+  * Einführung einer sog. Ziehharmonika, um Pegelinfos fortwährend integrieren zu können.
+ * Wahl von Strecke und Ort
+  * Filterung auf Streckenfavoriten und Orten durch Eingabe eines Begriffes - [[https://roundup-intern.intevation.de/flys/issue141|Details]]
+ * Wahl von Abflüssen, Wasserständen und Dauerzahlen
+  * Bei Wasserspiegellagenberechnungen können Qs nur noch angezeigt werden, wenn eine Berechnung auf freier Strecke gestartet wird.
+
+ * Berechnungsausgabe
+  * Wasserspiegellagen
+   * Querprofile
+    * Darstellung der Querprofildatensätze aus der Datenbank
+    * Manuelle Eingabe von Kilometern
+     * Zur Zeit sind noch folgende Aspekte limitiert:
+      * Anzeige einer Wasserspiegellage und eines Querprofildatensatzes
+      * Durchlaufen des Kilometerzählers in 5 km Schritten
+      * kein synchrones bzw. asynchrones Navigieren möglich
+   
+   * Längsschnitt
+    * Anzeige von Streckenfavoriten
+    * Manuelles Hinzuladen früherer Berechnungen
+
+  * Abflusskurven
+   * Automatisches Anzeigen von Hauptwerten aufgrund einer Vorbelegung
+   * Datenkorb: Exemplarische Darstellung des Gesamtbestandes von früheren und datenbankbasierten Inhalten
+
+  * Überschwemmungsfläche (aufgrund zu wenig strukturierter Geodaten kann dies erstmalig an der Saar getestet werden!)
+   * Parameterisierung:
+    * Zugriff auf beliebige Wasserspiegellagen
+    * Auswahl eines beliebigen digitalen Geländemodells am Gewässer
+    * Digitalisierung von Rohren, Gräben und Dämmen
+    * Löschen bestehender Rohren, Gräben und Dämmen
+    * TODO: Berücksichtigen einer eigenen Shapedatei bei Berechnungstyp "Szenario"
+   * Durchführung der Berechnung:
+    * Informieren des Nutzers zum Fortgang der Berechnung
+     * TODO: Abbrechen der Berechnung
+    * Während der Berechnung kann das Projekt geschlossen werden und zu einem beliebigen Zeitpunkt wieder geöffnet werden. Der jeweilige Status wird dem Nutzer angezeigt.
+   * Technik/Hintergrund
+    * Ansteuerung von WSPLGEN mit seiner Parameterisierung und Bereitstellen der dazugehörigen Daten
+    * Management mehrerer gleichzeitiger WSPLGEN-Berechnungen
+    * Automatische Generierung einer WMS-Ebene zur Visualisierung des berechneten Überschwemmungsgebietes auf Basis einer Shapedatei unter Berücksichtigung der Eingabe von Differenzen zwischen Wasserspiegellage und Gelände
+   * Anzeige der Überschwemmungsfläche in der Karte
+    * siehe Abschnitt "Karte"
+
+  * Differenzen
+   * Auswahl beliebiger Datenreihen aus dem Datenkorb
+    * TODO: Erweiterung der Konfiguration zur Filterung kompatibler Datensätze
+    * TODO: Erweiterung zu einer Mehrfachauswahl von Datenreihen
+    * TODO: Löschen von ausgewählten Differenzen aus der Tabelle
+   * Darstellung in einem Längsschnitt-Diagramm
+    * Hervorhebung der Null-Linie
+    * TODO: Anzeige der dazugehörigen Datenreihen mit absoluten Werten
+   * Export der Differenzen in einer CSV-Datei
+
+
+=== Karte ===
+    * Öffnen der Karte mit generiertem Überschwemmungsgebiet
+    * Themensteuerung Rohren, Gräben und Dämmenuerung (analog zum Diagramm)
+     * TODO: Anzeige einer Legende
+    * Kartennavigation
+     * Gesamtübersicht
+     * Hineinzoomen/Herauszoomen
+     * TODO: Layer-Zoom
+     * Karte verschieben
+     * Messen von Strecken
+     * Messen von Flächen
+     * Anzeige der Cursorkoordinaten im aktuellen Referenzsystem
+      * TODO: Auswahl alternativer Referenzsysteme
+     * TODO: Informationswerkzeug
+     * TODO: Integration des Datenkorbs
+     * TODO: Export der Karte als JPEG, PNG, GeoTiff
+
+
+=== Diagramme ===
+
+  * Interna:
+
+  * Themensteuerung
+   * Automatische Vorbelegung von Themen (technisch sog. recommendations)
+    * Beispiele
+     * Längsschnitte: Automatisches Einladen von Streckenfavoriten
+     * Abflusskurve: Automatisches Vorbelegung von Haupt- und Extremwerten
+
+ * Werkzeugleiste
+
+
+=== Datenkorb ===
+ * Interna:
+  * "Mitlesen" früherer Berechnungen und Speicherung in einer speziellen Datenhaltung zur Bereitstellung in der Nutzeroberfläche
+  * Integration datenbankbasierter Inhalte (statisch) und nutzerspezifischer Berechnungen (dynamisch) zur Anzeige in einer Struktur
+  * Erstellen eines übergreifenden Konfigurationsmechanismus zur Umsetzung diagrammspezifischer Filterungen
+   * TODO: Erweiterung der Filterung auf bestehenden Diagrammtypen; bisher noch beispielhaft
+  * Mechanismus zum Einfügen statischer und dynamischer Daten aus der GUI in die Anwendung, die entsprechende Datensätze aus beiden Quellen heranzieht und automatisch in die Diagrammgenerierung übernimmt.
+  * Bereitstellen sogenannter "Recommendations" zur Umsetzung von Vorbelegungen
+  
+ * Manuelles Nachladen von Themen in Diagramme
+  * Beispiel: Längsschnitt: Einladen Früherer Berechnungen
+
+=== Themenstil-Editor ===
+ * Intern: 
+  * Weitere Diagrammtypen mit Vorbereitungen zur Implementierung der GUI versehen
+
+
+=== Technische Umgebung ===
+ * Integration der Testsysteme in SUSE Linux Enterprise Server 11, SP1 durchgängig auf Softwarepaketen, die von SUSE gepflegt werden (verringerte Wartung), ausgenommen
+ * WMS-Kartendienst: UMN MapServer 6.0.1 mit Anbindung an Oracle 11, bereitgestellt als RPM-Paket (Installer)
+ * Geodaten-Importer: GDAL 1.8.0 mit Anbindung an Oracle 11, bereitgestellt als RPM-Paket (Installer)
+ * Bestehendes WSPLGEN (unter Linux lauffähig gemacht)
+
+=== FLYS togo ===
+
+ * Umgebung
+  * Integration des Systems in SUSE Linux Enterprise Server 11, SP 1
+
+ * Software
+  * Installation von UMN MapServer 6.0.1
+  * Installation von GDAL 1.8.0
+  * Installation von WSPLGEN
+  * Installation des Geodatenimporters auf Basis von ogr2ogr
+  * Installation des Importers für hydrologische und geodätische Daten
+  * Installation von FLYS 2.5
+  * Installation von QuantumGIS als Testclient für WMS und Shapedateien (nur zu internen Testzwecken; jenseits des Projektes)
+
+ * Datenbestand und Import
+  * Import der hydrologischen, geodätischen für Saar, Mosel und Elbe (außer prfs) in Oracle 11
+  * Import der Geodaten der Saar in Oracle 11 auf Basis des semi-automatischen Mechanismuses
+  * Konfiguration datenbankspezifischer Geodaten über einen WMS-Dienst aus Oracle 11
+
+ * Anwendung
+  * Ablauffähigkeit der Anwendung (ausgenommen Karte) auf Oracle 11
+
+
+=== Offene Punkte ===
+ * Zur vereinfachten Übersicht sind die TODOs in die jeweilige Unterkapitel dieser Seite integriert.
+
+
+=== Liste aller bearbeiteten Issues ===
+
+{{{#!CSV ,
+"ID","Titel"
+"id","title"
+268,"WSPLGEN findet Feldname STATION und WSP nicht"
+264,"Geodaten: Import - technisch-fachliche Evaluierung"
+266,"Projektverwaltung: Duplizieren von Projekten"
+256,"Datenkorb: XXX Issue festhalten"
+280,"BoundingBoxen von Streckenfavoriten und Haupt- und Extremwerten unsichtbar machen"
+258,"Datenkorb: Outs statt States führen"
+254,"Datenkorb: Klonen von Artefakten in anderen Collections + Facettenfilter zum Ausblenden"
+313,"""AssertionError"" beim Wechsel von Deutsch zu Englisch in der Projektliste"
+286,"Karte: Tooltips für die Werkzeugleiste"
+181,"Erstes Thema in der Themenliste wählt sich automatisch wieder an"
+234,"W-INFO: Projektverwaltung"
+262,"Datenkorb: Vereinigung der beiden Konfigurations-Templates"
+259,"Daten aus Datenkorb in Diagramm einladen"
+281,"Karte: Auswahl der berechnten Wasserspiegellage über Inline-Datenkorb"
+314,"Datenkorb: Neue Berechnungen in laufender Sitzung werden nicht im Datenkorb angezeigt"
+283,"Anzeige des Datenkorbs auf früheren Stand bringen"
+159,"WINFO: Radiobutton - Ortsauswahl bei ""W für ungleichwertigen Abflusslängsschnitt"" entfernen"
+260,"Datenkorb: Masterartefakt in View aufführen"
+279,"WINFO: Elbe Wasserspiegellage - Index Out of Bounds"
+20,"Versions-Clash bei slf4j verhindert Start des Artefakt-Servers."
+290,"Karte: Eingabe von Differenzen zw. WSP und Gelände findet keine Ausprägung in der Karte"
+310,"Querprofil: Farben der Themen"
+309,"Querprofil: Manuelle Eingabe funktioniert nicht nach Return (nur nach Tab)"
+311,"Querprofil: i18n"
+291,"Karte: Farbdarstellung und Kartenkonfiguration von Desktop-FLYSübernehmen"
+135,"Diagramm: Trotz abgeschalteter Themen bleiben Beschriftungen bestehen"
+191,"AT-Export: Längsten monoton steigenden Bereich exportieren."
+219,"W-INFO: Abflusskurvenberechnung / keine Themen im Diagramm"
+176,"Diagramm: Benennung eines Abflusses bei gewählter Höhe am Pegel"
+160,"WINFO: Auswahltabelle Orte bei Modus Strecke nach Step-Back"
+180,"WINFO: Zeilen der Tabelle können nach der Markierung in die Zwischenablage kopiert werden."
+282,"Karte: Abstand interpolierte Profile - Default wert"
+}}}
+
+
+
+== Version 2.4.0 (27.06.2011, rev. 2257) ==
+
+Diese Seite stellt primär Neuerungen in dieser Version aus Sicht des Nutzers zusammen bzw. verweist auf Vorarbeiten, die für jeweilige Funktionen benötigt werden.
+
+=== Zusammenfassung und Hintergedanken zur Version ===
+Die Version 2.4 verfolgt für WINFO das Ziel die fachliche Nachprüfbarkeit der bestehenden Berechnungsarten bereitzustellen. Hierbei sind folgende Aspekte wichtig:
+ * fachliche Richtigkeit und Genauigkeit der bestehenden Berechnungsarten
+ * Bereitstellung und Unterstützung eines Berichtswesens in den Berechnungsvorgängen
+ * Vorbereitung der Berechnungsarten für den Mehrbenutzerbetrieb
+ * Vollständigkeit der benötigten Fachdaten aus dem FLYS-Datei-Server für bestehende Funktionen (Kantenbilder, Typisierung Streckenfavoriten)
+ * Export aller benötigten Berechnungsdaten in entsprechenden Formaten (WST, WST korrigiert, CSV, AT)
+
+Um diese Ergebnisse visualisieren und im konsolidierten Diagrammbereich testen zu können, stellt das Diagramm die zentralen interaktiven Funktionen zur Navigation und Themensteuerung bereit und prüft die Kopplung von Client und Server Zusammenspiel. Um dem Nutzer die Verbindung seines Gesamtworkflows zu ermöglichen, ist die Projektverwaltung mit interaktiven Funktionen ausgestattet worden. Diese setzt unterschiedliche Parameterisierungen und Darstellungen in Projekten in Zusammenhang.
+
+=== Framework ===
+
+ * Allgemeine Steuerung
+  * Ehemalige Schriftzüge als Schaltflächen darstellen
+
+ * Projektverwaltung
+  * Projektliste automatisch aktualisieren
+  * Projekt per Klick dauerhaft speichern
+  * Projekte mit eigenem Titel versehen
+  * Projekte manuell löschen
+
+
+=== Fachdatenbestand ===
+ * Importer
+  * Oberkanten und Unterkanten aus KM-Dateien extrahieren.
+  * Typisierung einzelner Objekte als Pegel, Brücke, Hafen, Zufluß, etc.
+
+ * Analyse Datenmodellierung bestehender Geodaten in Shape-Dateien
+  * Bereitstellung eines WMS-Dienstes für die Saar
+
+
+=== WINFO ===
+ * Wahl von Strecke und Ort
+  * Anzeige von Oberkante und Unterkante zu einem jeweiligen Ort
+  * Suche in der Tabelle - Details https://roundup-intern.intevation.de/flys/issue141
+
+ * Wahl von Abflüssen, Wasserständen und Dauerzahlen
+  * Verteilen von Q/D und W auf zwei Reiter
+
+ * Berechnungsausgabe
+  * Integration von Berechnungsberichten als Meldungen/Warnungen
+   * TODO: Beschreibungen verbessern und übersetzen.
+  * Wasserspiegellagen
+   * Interne Berechnung korrigiert und Genauigkeit geprüft. - https://roundup-intern.intevation.de/flys/issue96
+  * Abflusskurven
+   * Ausgabe der berechneten Werte
+   * bzgl. Export siehe dort
+  * W bei ungleichwertigem Abflusslängsschnitt
+   * Interne Berechnung korrigiert und Genauigkeit geprüft.
+
+
+=== Diagramme ===
+
+  * Interna:
+   * Infrastruktur geschaffen, um jeweilig Berechnungsergebnisse als einzelnes Thema auswählbar zu machen (technisch: Fazetten)
+
+  * Themensteuerung
+   * Bereitstellung einer Themenliste
+   * Aktivieren und Deaktivieren der Themenliste mit automatischem Nachlademechanismus
+   * Verschieben von Themen schrittweise
+   * Verschieben von Themen nach ganz oben oder unten
+   * TODO: Alle markierten Themen an-/abwählen
+   * TODO: Alle markierten Themen löschen
+
+ * Werkzeugleiste
+  * Navigationswerkzeuge
+   * Hereinzoomen über eine aufspannbaren Bereich
+   * Herauszoomen über einen statischen Faktor
+   * Auf Gesamtansicht zoomen
+   * Wertebereich in X- und Y-Richtung verschieben
+   * Anzeige der Cursorposition in der Einheit des Diagramms
+
+
+=== Datenkorb ===
+ * Intern
+  * Bereitstellung des Datentyps auf unterster Ebene zum Bereitstellung von "Früheren Berechnungen"
+
+
+=== Themenstil-Editor ===
+ * Intern: 
+  * Vorbereitungen getroffen, um Stile auf Diagramme graphisch anwenden zu können.
+
+
+=== Technische Aspekte ===
+ * Beschleunigung der jeweiligen Berechnungen
+ * Stabilität der Kommunikation von Client und Server verbessern.
+
+
+=== Offene Punkte ===
+ *  [[Flys-3.0/Version2.4Todo]].
+
+
+=== Liste aller bearbeiteten Issues ===
+
+{{{#!CSV ,
+"ID","Titel"
+10,"Fehler in FLYS-2.1 -> Anzeige Wertebereiche für Q am Pegel in FLYS-3 verschieden"
+17,"Verhalten der Strecken-/Ortauswahl im FLYS-WebClient"
+21,"Gleiches Projekt kann mehr als einmal gleichzeitig geöffnet werden"
+40,"WINFO: Vorbelegung nach Rücksprung in der Historie stellt ursprgl. gewählten Wert nicht mehr her"
+42,"Übergeordnete Navigation: Funktionen als Schaltflächen ausweisen"
+43,"i18n: Einige Verbesserungen"
+49,"Massenhafte Auswahl von Dauerzahlen als Berechnungsgrundlage von Wasserspiegellagen führt zu falschen Berechnungsergebnisse"
+55,"WINFO: Gewichtungsfaktor für Abflusstabellen in der Berechnung 'W für angepaßten Abfluss-Längsschnitt'"
+65,"Restlet akzeptiert keine weiteren Verbindungen"
+69,"Berechnungsart 1 'Wasserstand/Wasserspiegellage' fehlerhaft"
+76,"Importer: Lücken in den Q-Bereichen"
+77,"Diagramm: Beschriftung der Kurven bei Dauerlinien"
+81,"Rechenungenauigkeit Web-FLYS"
+82,"ArrayIndexOutOfBoundsException wenn Berechnungen fehlschlagen"
+84,"Kann nicht auf die erste Q-Spalte der Saar zugreifen."
+85,"WINFO: Statt an einzelnen Orten wird eine Strecke gerechnet"
+87,"WINFO-W/Wspl-Ort-gleichwertiger-Q"
+89,"WINFO, Dauerlinie, erst ab D=1 rechnen"
+90,"Diagramm: Trennung derDiagrammfläche und Achsenaufheben"
+91,"WINFO: Vorbelegung Q statt W"
+92,"WINFO: Saar-km 0.1-93 NQ HQ200 liefert keine Antwort"
+93,"WINFO: Benennung der Berechnungsart korrigieren"
+98,"W-INFO: Wasserspiegellagenberechnung und Auswahl über Q/W/D-Auswahl"
+99,"WINFO: Wasserspiegellagenberechnung ohne Auswahlunterstützung"
+100,"W-INFO: Wasserspiegellagenberechnung und veränderte Berechnungsrichtung"
+101,"W-INFO: Wasserspiegellagenberechnung / Strecke"
+102,"W-INFO: Wasserspiegellagenberechnung / Strecke - Probleme beim oberen und unteren Rand"
+103,"WINFO: Wasserspiegellagenberechnung / Layout-Inkonsistenz"
+105,"W-INFO: Wasserspiegellagenberechnung / Strecke und Bandbreite Q (Stabilitätsproblem)"
+106,"W-INFO: Wasserspiegellagenberechnung / Strecke + W am Pegel (Vertauschen von Werten)"
+108,"W-INFO: Wasserspiegellagenberechnung / W am Pegel (untere und obere Grenze)"
+109,"W-INFO: Wasserspiegellagenberechnung / Strecke + W am Pegel (fehlerhafte Berechnung)"
+111,"W-INFO: Wasserspiegellagenberechnung / Strecke"
+112,"Berechnungsergebnis und Export verschieden"
+116,"W-INFO: Wasserspiegellagenberechnung / Ort + Q-Auswahlunterstützung (Berechnungsergebnis bei punkthafter Berechnung fehlerhaft)"
+117,"W-INFO: Wasserspiegellagenberechnung / Q-Eingabe"
+118,"W-INFO: Eingabe Q aus Auswahlunterstützung und Manuell"
+119,"W-INFO: Wasserspiegellagenberechnung / Dateneingabe ausserhalb des Wertebereichs"
+122,"W-INFO: Wasserspiegellagenberechnung / Auswahlunterstützung Abfluss (W-Werte sind nicht auswählbar)"
+128,"WINFO: Anzeige von gewählten Orten und Strecken"
+129,"WINFO: Dauerlinie bei D=0"
+131,"Anzeige der Position bei großen Zahlen ungenau"
+132,"WINFO: Streckenauswahl per default setzen"
+134,"WINFO: Tabellarische Ausgabe ('Berechnungsausgabe') bei Abflusskurven"
+139,"WINFO: NPE bei Step-Back bei ungleichwertiger Berechnungsart"
+140,"WINFO: WQ-Tabelle in Tabs aufsplitten"
+142,"WINFO: Streckenauswahl: Oberkante/Unterkante hinzufügen"
+147,"WINFO: Ort der Änderung des gleichwertigen Abflusses falsch"
+149,"WINFO: Abflusskurve Mosel 242 wird an 1.904 km berechnet/gezeigt"
+153,"Abflusskurven am Pegel über Facetten"
+154,"Berechnete Abflusskurve/Abflusstafel zeigt keine Berechnungsergebnisse"
+156,"WINFO: Platzierung des Berechnungsberichtes"
+157,"Diagramm: Ursprung berechnete Abflusskurve"
+161,"Diagramm: Q-Achse in W-Längsschnitten immer bei Q=0"
+162,"WINFO: Kurzfassung von W/Q-Daten nicht vollständig"
+164,"Berechnung 4: Umgekehrtes Berechnungsintervall führt zur"
+165,"Projektliste: Einige Auffälligkeiten nach Neuimplementierung"
+169,"WINFO: WSP kann nicht durchgeführt werden"
+170,"Diagramm: Initiales Zoomen zeigt verschobenen Bereich"
+172,"Diagramm: Ursprung der Diagramme bei Dauerzahlen"
+173,"WINFO: W für ungleichwertigen Q-Längsschnitt: Abflussverteilung überschreitet obere Grenze"
+174,"Diagramm: Q-Linie wird bei initialem Laden des Diagramms anders dargestellt als bei Ansicht auf gesamten Wertebereich"
+175,"WINFO: Q um 7 qm/s zu hoch"
+182,"WINFO: Vorbelegung Q bei 'ungleichwertigem Abflusslängsschnitt'"
+}}}
+
+
+2011-05-19  Release V 2.3.1
+
+=== Framework ===
+
+  * Projektverwaltung
+   * Projektfenster maximieren (vgl. https://roundup-intern.intevation.de/flys/issue35)
+
+  * Internationalisierung/Mehrsprachigkeit
+   * i18n: Untertitel bei Längsschnitten - Bereich der Strecke enthält "double" (https://roundup-intern.intevation.de/flys/issue66)
+
+
+=== Fachdatenbestand ===
+ * Import der hydrologischen Daten der Elbe
+  * Importer: Lücken in den Q-Bereichen (https://roundup-intern.intevation.de/flys/issue76)
+   * Seiteneffekt: Durch diese Lücken werden z.T. Berechungsausgaben verändert. Durch eine Fehlerbehebung und einen Reimport werden diese Lücken geschlossen.
+ 
+
+=== WINFO ===
+
+  * Wahl von Abflüssen, Wasserständen und Dauerzahlen (Pflichtenheft: Bestehende Funktionen aus Desktop-FLYS; keine Entsprechung in Leistungsbeschreibung)
+   * WINFO: Q/W/D-Info liefert selten eine Antwort (https://roundup-intern.intevation.de/flys/issue72)
+
+ * Berechnungsausgabe (Pflichtenheft: Teile in Kap. 3.4.1.1; bestehende Funktionen aus Desktop-FLYS + Verbesserungen)
+  * Ergebnisse werden jeweils im WST-Format ausgegeben (https://roundup-intern.intevation.de/flys/issue56)
+   * Auf Berechnungsergebnisse zu korrigierten Wasserstands-Abflussbeziehungen können über CSV-Dateien zugegriffen werden
+
+ * Zu berücksichtigende Punkte bei der Durchführung der Berechnungsarten
+  * Allgemein:
+   * Besondere Beachtung der Berücksichtigung des Rücksprungverhaltens
+  * Wasserspiegellage/Wasserstand
+   * Berechnungsart 1 "Wasserstand/Wasserspiegellage" fehlerhaft (https://roundup-intern.intevation.de/flys/issue69)
+  * Abflusskurve/-tafel
+   * Weitere Infos zu Fällen für Rücksprünge werden benötigt.
+  * Dauerlinie
+   * WINFO: CSV-Export für Dauerlinien fehlt (https://roundup-intern.intevation.de/flys/issue79)
+    * Wird zur fachlichen Abnahme noch nachgereicht.
+  * W bei ungleichmäßigem Abflusslängsschnitt
+   * WINFO: Reihenfolge der Kilometer Eingabe liefert unterschiedliche Ergebnisse (https://roundup-intern.intevation.de/flys/issue71)
+   * WINFO: Gewichtungsfaktor für Abflusstabellen in der Berechnung "W für angepaßten Abfluss-Längsschnitt" (https://roundup-intern.intevation.de/flys/issue55); hier ist das Vorgehen zur Intervallbildung noch zu klären.
+
+
+
+=== Diagramme ===
+  * Allgemein:
+   * Beschriftung der Legendeneinträge zu Kurven zu Eingangswerten in die Berechnung (https://roundup-intern.intevation.de/flys/issue77)
+    
+ 
+=== Offene Punkte ===
+ * Version 2.3.1 behebt Fehler und ergänzt eine Funktion. Punkte mit noch nicht bereitgestellten Funktionen finden sich unter [[Flys-3.0/Version2.3Todo]].
+ 
+
+2011-05-16  Release V 2.3.0
+
+=== Framework ===
+
+ * Projektverwaltung (Pflichtenheft Kap. 3.3, Lokale Daten > Arbeitssitzungen)
+  * Mit dem Anlegen eines neuen Projektes wird die Projektliste automatisch gefüllt.
+   * Zu beachten: Zur Zeit operiert das System noch mit '''einem''' Benutzer, so dass jeder alle auf dem Server liegenden Projekte sieht. Mit der Einführung einer Nutzeranmeldung sieht dann jeder Nutzer nur noch seine eigenen Projekte.
+  * Mit einem Doppelklick oder das Kontextmenü können die jeweiligen Projekte wieder geöffnet werden. Sie stellen den Arbeitszustand des letzten "Übernehmen" wieder her. Die Einstellung ist sprachunabhängig, d.h. auch wenn zuvor Diagramme in deutsch erstellt worden sind, können diese in englischer Sprache geöffnet und dargestellt werden.
+   * Projekte können Projekte noch in mehreren Fenster geöffnet werden. Um Konsistenz herzustellen, kann man ein Projekt nur einmal öffnen. (vgl. https://roundup-intern.intevation.de/flys/issue21)
+  * Neue Fenster überlappen sich nicht mit der Position des vorherigen Fensters, um beim Anlegen eines neuen Projektes eine vollständige Überdeckung zu vermeiden
+   * Projektfenster maximieren (vgl. https://roundup-intern.intevation.de/flys/issue35)
+
+ * Projekteinstieg
+  * Klick-Optimierung der Gewässerauswahl über eine Liste: von 3 Klicks zu 1 Klick.
+
+ * Internationalisierung (Pflichtenheft, Kap.4.3.4)
+  * Beim Start wird die Spracheinstellung des Browser automatisch ausgewertet und die dazugehörige Oberfläche in deutsch oder englisch geladen. Wenn eine andere Sprache als deutsch oder englisch angefragt wird, fällt die Anwendung auf englisch (TOCHECK) zurück.
+  * Die Sprache kann jeweils manuell gewechselt werden. Dies hat Auswirkungen auf die Bedienoberfläche, Diagramme und Nutzung von Dezimaltrenner und Punkt
+
+=== Fachdatenbestand ===
+ * Import der hydrologischen Daten der Elbe
+##  * Was wird nicht berücksichtigt?
+##   * Spalten in wst-Dateien mit einer - Notation; andere, nicht einheitliche werde jeweils mit einer Ziffer erweitert
+ * Einige Zahlen zum Bestand:
+  * 3 Gewässern mit Saar, Mosel und Elbe
+  * 15 Pegel
+  * 108 wst/zus-Dateien
+   * 711 Spalten aus diesen
+   * rund 500.000 Einzelwerte
+  * rund 2.500 Stationierungen aus km-Dateien
+ 
+
+=== WINFO ===
+
+ * Wahl des Gewässers (Pflichtenheft, Teile aus 3.4.1, 3.4.1.1)
+  * Automatische Vorbelegung des ersten Eintrags
+
+ * Wahl der Berechnungsart (Pflichtenheft 3.4.1.1 - bestehende Funktionen)
+  * Automatische Vorbelegung des ersten Eintrags
+  * Umsetzung der folgenden Berechnungsarten
+   * Wasserstand/Wasserspiegellage
+   * Abflusskurve/Abflusstafel
+   * Dauerlinie
+   * W bei ungleichmäßigem Abflusslängsschnitt
+
+ * Wahl von Strecke oder Ort (Pflichtenheft: Bestehende Funktionen aus Desktop-FLYS; keine Entsprechung in Leistungsbeschreibung)
+
+   * Automatisches Umschalten der Reiter bei Wahl von Orten oder Strecken
+
+  * Eingabe eines Ortes (Dauerlinie, Abflusstafel/-kurve)
+   * Freie Texteingabe
+   * Unterstützung der Eingabe durch Liste an Ortsfavoriten. Per Klick wird jeweils der Wert in das Textfeld eingetragen.
+
+  * Eingabe mehrere Orte (Wasserstand/Wasserspiegellage)
+   * Freie Texteingabe
+   * Unterstützung der Eingabe durch Auswahltabellen an Ortsfavoriten. Per Klick wird jeweils der Wert in das Textfeld eingetragen.
+   * Übernehmen von Beginn einer Strecke und Ende einer Strecke (abweichend von Desktop-FLYS, um die Bedienführung gradliniger zu gestalten)
+   
+  * Eingabe von Strecken (Wasserstand/Wasserspiegellage)
+   * Freie Texteingabe
+   * Unterstützung der Eingabe durch Auswahltabellen an Streckenfavoriten. Per Klick wird jeweils der Wert in das Textfeld eingetragen.
+   * Übernehmen von Beginn einer Strecke und Ende einer Strecke aus den Ortsfavoriten mit explizitem Setzen von Beginn (grüne Fahne) und Ende (Rote Fahne) (Erweiterung zu Desktop-FLYS)
+   * Bemerkungen:
+    * Es gibt Streckendaten, die außerhalb der Berechnungsstrecke des Modells liegen. Können die Ortsfavoritenbestände hierauf reduziert werden, da hier keine Ermittlung von Wasserständen erfolgen kann bzw. Favoriten außerhalb der Bezugspegelstrecken erlauben keine Ermittlung eines Bezugspegels.
+
+ * Automatische Ermittlung des Bezugspegels (Keine Entsprechung in Leistungsbeschreibung. Neue Anforderung als Ergebnis des Bedienkonzeptes.)
+  * Gewässer und Streckenwahl ermitteln den Bezugspegel automatisch
+  * Anzeige der Abflusskurven aller Pegel auf der vorgegebenen Strecke
+
+  * Wahl von Abflüssen, Wasserständen und Dauerzahlen (Pflichtenheft: Bestehende Funktionen aus Desktop-FLYS; keine Entsprechung in Leistungsbeschreibung)
+   * Berechnungsart: Wasserspiegellagen/Wasserstand
+    * Eingabefelder wie in Desktop-FLYS für W oder Q; Einzelwerte oder Wertebereich
+    * Eingaben werden über eine tabellarische Auswahl unterstützt
+     * Bei der Eingabe von W: Wasserstände sind auswählbar
+     * Bei der Eingabe von Q: Hauptwerte und Dauerzahlen sind auswählbar
+   * Berechnungsart: W bei ungleichmäßigem Abflusslängsschnitt
+    * Eingabefelder für W und Q analog zu bisherigen genutzten Mechanismen
+
+ * Berechnungsausgabe (Pflichtenheft: Teile in Kap. 3.4.1.1; bestehende Funktionen aus Desktop-FLYS + Verbesserungen)
+  * Ausgabe jeweils in einer strukturierten Tabelle.
+  * Die Werte können in Abhängigkeit von der Spalte auf- und absteigend sortiert werden.
+  * Ergebnisse werden jeweils im CSV-Format ausgegeben
+  * Es werden weitere Ausgaben in zusätzlichen Reitern angezeigt, die auch abgefragt werden können.
+
+=== Diagramme ===
+  * Allgemein:
+   * Integrierte Ausgabe der Diagramme in WINFO (Pflichtenheft Kap. 3.1)
+   * Zugriff auf die Projektdefinition/Parameterisierung (WINFO-Reiter)
+   * Freie Größenskalierung der Diagramme in Abhängigkeit vom Projektfenster
+   * Internationalisierung der Diagramme in deutsch und englisch (Beschriftung, Dezimaltrennzeichen und Tausendertrennzeichen)
+   * Beschriftung der Diagrammtitel gemäß Anhang (Leistungsbeschreibung, Anhang 1)
+    
+  * Anpassungen in Abhängigkeit von Berechnungsart/Diagrammtyp (Bestehendes Verhalten aus Desktop-FLYS):
+   * Abflusskurve am Pegel
+   * Längsschnitt
+    * Wasser fließt immer von links nach rechts (unabhängig von der Orientierung der Stationierung; die Orientierung kann pro Gewässer explizit gesetzt werden.)
+   * Abflusskurve/-tafel
+   * Dauerlinie
+    * Kombiniertes Diagramm von W- und Q-Dauerlinie (Pflichtenheft 3.4.1.8.6)
+   * W bei ungleichmäßigem Abflusslängsschnitt
+    * Kombiniertes Diagramm von W-Diagramm und Q-Vorschau (Pflichtenheft 3.4.1.8.6)
+
+
+=== Datenkorb (Pflichtenheft 3.4.1, ausgehend von Desktop-FLYS) ===
+ * Anzeige aller in der Datenbank vorhandenen Datensätze für das gewählte Gewässer (FLYS-Daten aus der Datenbank)
+ * Mehrfachauswahl durch Bereiche mit der Taste "Shift"; kombinierte Einzelauswahl mit der Taste "Strg"
+ * XML-basierte Konfiguration des Datenkorbs

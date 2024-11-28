@@ -1,0 +1,74 @@
+# Docker file for D4E River GWT client
+
+FROM centos:7 AS base
+MAINTAINER tom@intevation.de
+
+# Necessary to run further yum-installs inside Docker container,
+# if not already part of the base image:
+RUN yum -q -y install yum-plugin-ovl && rpm --rebuilddb
+
+FROM base AS build
+# Install prerequisites
+RUN yum -q -y install maven mercurial curl
+
+WORKDIR /opt/d4e
+ENV REPO_URL https://hg.wald.intevation.org/dive4elements/
+ENV BRANCH 3.2.x
+RUN hg clone -b $BRANCH $REPO_URL/framework
+RUN hg clone -b $BRANCH $REPO_URL/http-client
+
+RUN mvn -q -f framework/pom.xml install
+RUN mvn -q -f http-client/pom.xml install
+
+RUN curl -sLO "https://github.com/openlayers/ol2/releases/download/release-2.11/OpenLayers-2.11.tar.gz"
+
+# Use latest patch release and fake version=4.1-p20141119 to work around
+# the actual version (which is known to work properly)
+# is not publicly available
+RUN curl -sLO https://www.smartclient.com/builds/SmartGWT/4.1p/LGPL/latest/smartgwt.jar
+RUN mvn -q install:install-file -Dfile=smartgwt.jar -Dversion=4.1-p20141119 \
+    -DartifactId=smartgwt-lgpl -DgroupId=com.isomorphic.smartgwt.lgpl \
+    -Dpackaging=jar
+
+# Download dependencies before adding sources to leverage build cache
+ADD gwt-client/pom.xml river/gwt-client/
+RUN mvn -q -f river/gwt-client/pom.xml dependency:go-offline
+
+ADD checkstyle.xml river/
+ADD gwt-client river/gwt-client/
+
+RUN tar -C river/gwt-client/src/main/webapp \
+        --exclude=OpenLayers-2.11/doc --exclude=OpenLayers-2.11/tests \
+        --exclude=OpenLayers-2.11/examples -xf OpenLayers-2.11.tar.gz
+RUN rm OpenLayers-2.11.tar.gz
+
+RUN mvn -q -f river/gwt-client/pom.xml package
+
+FROM base
+RUN yum -q -y install tomcat gnu-free-sans-fonts
+
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8
+RUN echo "LANG=en_US.utf8" > /etc/locale.conf
+ENV LANG en_US.utf8
+
+# Prevent Tomcat from logging to files
+# (JRE default is logging to System.err)
+RUN rm /etc/tomcat/logging.properties
+
+# Configure tomcat
+RUN sed -i '/Connector port="8080"/a \URIEncoding="UTF-8"' /etc/tomcat/server.xml
+RUN sed -i 's/\(Connector port="8009"\)/\1 URIEncoding="UTF-8"/' \
+        /etc/tomcat/server.xml
+ENV CONFIG_DIR /opt/d4e/river/gwt-client/config
+ADD gwt-client/config $CONFIG_DIR
+RUN ln -sf $CONFIG_DIR/context.xml /etc/tomcat
+VOLUME $CONFIG_DIR
+
+# Deploy
+COPY --from=build /opt/d4e/river/gwt-client/target/gwt-client-*.war \
+        /usr/share/tomcat/webapps/d4e-river.war
+
+USER tomcat
+ADD docker/flys_user_file /usr/share/tomcat/
+
+CMD ["/usr/libexec/tomcat/server", "start"]

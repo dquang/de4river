@@ -1,0 +1,58 @@
+LAYER
+    NAME "$LAYER.getName()"
+    TYPE $LAYER.getType()
+
+    CONNECTIONTYPE $LAYER.getConnectionType()
+    CONNECTION "$LAYER.getConnection()"
+
+    DATA    "$LAYER.getData()"
+    FILTER  "$LAYER.getFilter()"
+    EXTENT  $LAYER.getExtent()
+
+    STATUS    ON
+    TEMPLATE  map.html
+    TOLERANCE 10
+    DUMP      TRUE
+    #if( $LAYER.getGroup() )
+        GROUP "$LAYER.getGroup()"
+    #end
+
+    #if ( $LAYER.getLabelItem() )
+        LABELITEM $LAYER.getLabelItem()
+    #end
+
+    PROJECTION
+        "init=epsg:31467"
+    END
+
+    METADATA
+        "wms_title" "$LAYER.getTitle()"
+        "gml_include_items" "all"
+        #if ( $LAYER.getGroupTitle() )
+            "wms_group_title" "$LAYER.getGroupTitle()"
+        #end
+    END
+
+    #if ( $LAYER.getStyle() )
+        $LAYER.getStyle()
+    #else
+        CLASS
+            NAME ""
+            STYLE
+                SIZE 5
+                OUTLINECOLOR "#000000"
+            END
+            #if ( $LAYER.getLabelItem() )
+                LABEL
+                    ANGLE auto
+                    SIZE 10
+                    COLOR "#000000"
+                    TYPE truetype
+                    FONT LiberationSans-Italic
+                    POSITION ur
+                    OFFSET 2 2
+                END
+            #end
+        END
+    #end
+END

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="qsector">
+  <states>
+    <state id="state.qsector.static"
+               description="state.qsector.static"
+               state="org.dive4elements.river.artifacts.states.QSectorSingleState">
+      <outputmodes>
+        <outputmode name="fix_wq_curve" description="output.fix_wq_curve" mime-type="image/png" type="chart">
+          <facets>
+            <facet name="qsectors" description="qsectors."/>
+          </facets>
+        </outputmode>
+      </outputmodes>
+    </state>
+  </states>
+</artifact>

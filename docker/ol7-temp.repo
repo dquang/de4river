@@ -1,0 +1,6 @@
+[ol7_latest]
+name=Oracle Linux 7 Latest (x86_64)
+baseurl=https://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1

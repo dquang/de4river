@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="gaugedischarge">
+  <states>
+    <state id="state.gaugedischarge.init"
+               description="state.gaugedischarge.init"
+               state="org.dive4elements.river.artifacts.states.GaugeDischargeState">
+      <outputmodes>
+        <outputmode name="computed_discharge_curve" description="computed_discharge_curve" mime-type="image/png" type="chart">
+          <facets>
+            <facet name="discharge_curve.curve" description="facet.discharge_curve.curve" />
+            <facet name="mainvalues.q"/>
+            <facet name="mainvalues.w"/>
+            <facet name="discharge_curve.curve" description="facet.discharge_curve.curve"/>
+            <facet name="heightmarks_points" description="facet.other.wqkms"/>
+            <facet name="other.wqkms" description="facet.other.wqkms"/>
+            <facet name="other.wq"    description="Point-like data like fixations"/>
+            <facet name="other.wkms"  description="Point-like data like fixations"/>
+            <facet name="other.wkms.interpol" description="Height over km, like flood protections."/>
+            <facet name="computed_discharge_curve.manualpoints" description="Manuelle Punkte"/>
+          </facets>
+        </outputmode>
+      </outputmodes>
+    </state>
+  </states>
+</artifact>

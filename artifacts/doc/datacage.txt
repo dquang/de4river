@@ -1,0 +1,157 @@
+This document describes how the datacage configuration works, from a user
+perspective.  Some rather technical details are omitted and mechanisms
+simplified.
+
+The datacages behaviour is defined in the file conf/meta-data.xml .
+
+The datacage serves two purposes.
+It handles automatic 'recommendations', which are instructions
+sent by the client to add newly created artifacts to the collection.
+From a user perspective, these artifacts mainly represent curves or data
+points in the resulting diagrams.
+The second task is to let the user add already existing artifacts (i.e.
+previous calculations) or new artifacts with access to related data.
+
+Irrelevant of the type of elements (recommendations or user picked data) the
+datacage can iterate over possible artifacts by accessing its own database.
+Thus, to create a list of matching entries, database queries are used.
+
+In meta-data.xml, database queries are defined as <dc:statement> elements,
+for example
+                <dc:statement>
+                  SELECT id          AS prot_id,
+                         description AS prot_description
+                  FROM wsts WHERE kind = 1 AND river_id = ${river_id}
+                </dc:statement>
+
+As can be seen from the example, the datacage configuration file can maintain
+its own stack of variables (${river_id} in above example).
+
+The database query will usually deliver one or many results, over which is
+iterated using the <dc:elements> elements.
+
+Information from this results can be used for two goals.
+It can be taken as output, in which
+case the client will either request the creation of these artifacts (considering
+recommendations), or shown by the client in a the 'datacage widget',
+the graphical representation of data which can be added in the current
+context.  The later is seen when the user clicks on the Datacage button in
+a diagram.
+Or information can be used to feed a second (or third...) database query.
+Following above example:
+
+                <dc:statement>
+                  SELECT id          AS prot_id,
+                         description AS prot_description
+                  FROM wsts WHERE kind = 1 AND river_id = ${river_id}
+                </dc:statement>
+                <dc:elements>
+                  <additional>
+                    <dc:attribute name="name" value="${prot_description}"/>
+                    <dc:context>
+                      <dc:statement>
+                        SELECT id       AS prot_column_id,
+                               name     AS prot_column_name,
+                               position AS prot_rel_pos
+                        FROM wst_columns WHERE wst_id = ${prot_id}
+                        ORDER by position
+                      </dc:statement>
+                      <!-- ... -->
+
+In both cases, an <dc:elements> element makes database queries available.
+Also
+note how the variables are defined in the first query and reused in the second
+query (${prot_it}).
+
+Any alement not prefixed with "dc" represents a (sub-) node in the resulting
+tree.  The client will display these nodes and maybe subnodes in the datacage
+widget - <additional> in above example.  The elements name is translated by
+the client.
+
+While iterating the final results, <dc:attributes> have to be specified
+to define how the artifact is to be created.
+
+                      <dc:elements>
+                        <column>
+                          <dc:attribute name="name" value="${prot_column_name}"/>
+                          <dc:attribute name="ids" value="additionals-wstv-${prot_rel_pos}-${prot_id}"/>
+                          <dc:attribute name="factory" value="staticwkms"/>
+                        </column>
+                      </dc:elements>
+
+The "name" attribute is what is to be displayed in the client, the "ids" are given
+to the server and pass important information about the chosen data.
+The "factory" is chosen according to the type of data displayed.
+
+So far, three other elements have not yet been mentioned: <dc:comment>,
+<dc:if> and the <dc:when><dc:otherwise> structure.
+<dc:comment> is an element to allow comments.  Choose these over standard
+<!-- --> xml comments, because they are not transferred to the client.
+<dc:if> and <dc:when> allow control (rather: definition) flow within
+the configuration and work in analogy to the XSL-elements <xsl:if>
+and <xsl:when>.
+
+When dealing with the behaviour specification of the datacage, multiple
+interpretations for the term "context" are possible.
+A <dc:context> element essentially means a database binding.  Thus each
+query (<dc:statement>) needs to be nested in its own context.
+Furthermore, two types of databases with own bindings exist:
+The "system" (default for <dc:context>, <dc:context connection="system">)
+context allows queries related to the backend database with existing
+data (e.g. measurements).
+The "user" context (<dc:context connection="user">) allows queries against
+the database which stores information about already existing artifacts and
+calculations.
+
+Another connotation for the term "context" is the situation from which
+the datacage is queried.  The standard case is a from the datacage widget.
+When the user opens the datacage from the graphical client, this is done
+from one of possible multiple diagrams.
+When the datacage is queried, it gets as an argument the "out" of
+the current artifact.  The out corresponds to the diagram type.
+
+For example the inner block of
+
+          <dc:if test="dc:contains($artifact-outs, 'longitudinal_section')">
+              <longitudinal_section>
+                <dc:call-macro name="annotations"/>
+              </longitudinal_section>
+          </dc:if>
+
+will only be executed if called from the datacage within a
+longitudinal_section diagram.
+
+In the given example another concept of the datacage configuration is
+encountered: Macros.
+
+Macros help to avoid duplication of parts of the document.  As the datacage
+of some diagrams should include the same type of data, the same query should
+be executed in multiple situations.
+
+Therefore a macro can be defined, like in
+
+        <dc:macro name="basedata_4_heightmarks-wq">
+          <heightmarks>
+            <dc:context>
+              <dc:statement>
+                SELECT id          AS prot_id,
+                       description AS prot_description
+                FROM wsts WHERE kind = 4 AND river_id = ${river_id}
+              </dc:statement>
+              <dc:elements>
+              <!-- ... -->
+        </dc:macro>
+
+and invoked from another location within the document, e.g. with
+
+                <dc:call-macro name="basedata_4_heightmarks"/>
+
+Debugging Tips:
+  - You can send a message to the Log (log level info) during the evaluation
+  of the datacage by using the <dc:message> element.
+  For example to activate a basic macro tracing you could do something like:
+      %s@\(<dc:macro name="\)\(.*\)\(".*>\)@\1\2\3\r<dc:message>\2</dc:message>
+  - To dump the variables that are currently on the stack you can use the
+  dc:dump-variables() fuction.
+  For example:
+    <dc:message>{dc:dump-variables()}</dc:message>

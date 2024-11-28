@@ -1,0 +1,78 @@
+# Dockerfile providing a PostgreSQL database with example data for D4E River
+FROM debian:bullseye
+LABEL maintainer tom.gottfried@intevation.de
+
+ENV PG_VERSION 13
+
+#
+# Use utf-8
+#
+RUN echo \
+    "locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8" | \
+    debconf-set-selections && \
+    echo "locales locales/default_environment_locale select en_US.UTF-8" | \
+    debconf-set-selections
+
+RUN apt-get update -y && apt-get install -y locales
+
+ENV LC_ALL en_US.UTF-8
+
+#
+# Install packages
+#
+RUN apt-get install -y postgresql-$PG_VERSION-postgis-3 curl
+RUN apt-get -y clean
+
+ENV PGCONF /etc/postgresql/$PG_VERSION/main/postgresql.conf
+ENV PGBIN /usr/lib/postgresql/$PG_VERSION/bin/
+ENV PGDATA /var/lib/postgresql/$PG_VERSION/main
+
+#
+# Use user postgres to run the next commands
+#
+USER postgres
+
+#
+# Adjust PostgreSQL configuration so that remote connections to the
+# database are possible.
+#
+RUN echo "host all  all    0.0.0.0/0  md5" >> \
+    /etc/postgresql/$PG_VERSION/main/pg_hba.conf
+
+RUN echo "listen_addresses='*'" >> $PGCONF
+
+#
+# Create database
+#
+# Don't mind scary messages like
+# 'FATAL: the database system is starting up'.
+# It's because of the -w
+#
+ADD ./backend/doc/schema /opt/d4eriver_db
+
+# Go to postgres home for write permissions
+ENV DATA_ARCH demodaten_3.1.10-bis-3.2.x.tar.gz
+RUN curl -sf "https://wald.intevation.org/frs/download.php/2282/$DATA_ARCH" | \
+    tar -C $HOME --wildcards -xz 'demodaten/*.dump.sql'
+
+# Initialize database
+# Note that PostGIS legacy.sql is needed to support the outdated MapServer 6
+RUN $PGBIN/pg_ctl start -wo "--config_file=$PGCONF" && \
+    sh /opt/d4eriver_db/postgresql-setup.sh && \
+    psql -f ~/demodaten/d4e_demodata.dump.sql d4e && \
+    psql -d d4e -f /usr/share/postgresql/$PG_VERSION/contrib/postgis-3.1/legacy.sql && \
+    createuser -S -D -R seddb && \
+    psql -c "ALTER USER seddb WITH PASSWORD 'seddb'" && \
+    createdb seddb && \
+    psql -f ~/demodaten/seddb_demodata.dump.sql seddb && \
+    psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO seddb" seddb && \
+    $PGBIN/pg_ctl stop -m smart
+
+RUN rm -r ~/demodaten
+
+#
+# Set the default command to run when starting the container
+#
+CMD ["/usr/lib/postgresql/13/bin/postgres", "-D", \
+     "/var/lib/postgresql/13/main", "-c", \
+     "config_file=/etc/postgresql/13/main/postgresql.conf"]

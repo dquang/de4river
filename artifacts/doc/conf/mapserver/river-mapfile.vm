@@ -1,0 +1,49 @@
+MAP
+    NAME "Rivers"
+    STATUS ON
+    SIZE 600 400
+    MAXSIZE 4000
+    #EXTENT 3233232.55407617 5303455.37850183 3421524.44644752 5585825.50888523
+    UNITS DD
+    SHAPEPATH "$SHAPEFILEPATH"
+    FONTSET "$CONFIGDIR/mapserver/fontset.txt"
+    SYMBOLSET "$CONFIGDIR/mapserver/symbols.sym"
+    IMAGECOLOR 255 255 255
+    PROJECTION
+        "init=epsg:31467"
+    END
+
+    DEBUG 3
+    CONFIG "MS_ERRORFILE" "stderr"
+
+    WEB
+      METADATA
+        "wms_title"             "D4E River Web Map Service"
+        "wms_encoding"          "UTF-8"
+        "wms_accessconstraints" "none"
+        "wms_fees"              "none"
+        "wms_srs" "EPSG:4326 EPSG:31466 EPSG:31467"
+        "ows_enable_request"   "*"
+      END
+    END
+
+    LEGEND
+        KEYSIZE 20 20
+        STATUS ON
+        TRANSPARENT ON
+
+        LABEL
+            COLOR 150 150 150
+            OUTLINECOLOR 255 255 255
+            TYPE truetype
+            FONT "FreeSans"
+            SIZE 12
+            POSITION AUTO
+        END
+    END
+
+    ## Don't change the following lines.
+    #foreach ($LAYER in $LAYERS)
+        include "$LAYER"
+    #end
+END

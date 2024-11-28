@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sync>
+  <!-- If modified send messages -->
+  <notifications>
+    <notifaction url="http://example.com">
+      <caches>
+        <cache name="my-cache"/>
+      </caches>
+    </notifaction>
+  </notifications>
+  <!-- The path to the DiPs file -->
+  <dips>
+    <file>/the/path/to/the/dips/file</file>
+    <repair>/the/path/to/the/xslt/to/repair/dips</repair>
+  </dips>
+  <!-- The FLYS side -->
+  <side name="flys">
+    <db>
+      <driver>org.postgresql.Driver</driver>
+      <user>flys</user>
+      <password>flys</password>
+      <url>jdbc:postgresql://localhost:5432/flys</url>
+    </db>
+  </side>
+  <!-- The AFT side -->
+  <side name="aft">
+    <db>
+      <driver>org.sqlite.JDBC</driver>
+      <user/>
+      <password/>
+      <url>jdbc:sqlite:/path/to/aft.db</url>
+      <!--
+      <execute-login>
+        <statement>ALTER SESSION SET CURRENT_SCHEMA=AFT</statement>
+      </execute-login>
+      -->
+    </db>
+  </side>
+</sync>

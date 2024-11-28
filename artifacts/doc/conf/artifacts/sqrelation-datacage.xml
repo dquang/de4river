@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="sqrelationdatacage">
+    <states>
+        <state id="state.sqrelation.static" description="state.sqrelation.static" state="org.dive4elements.river.artifacts.states.sq.SQStaticState">
+           <outputmodes>
+               <outputmode name="sq_relation_a" description="output.sq_relation" type="chart">
+                   <facets>
+                       <facet name="sq_a_curve" description="A facet for sq curve"/>
+                       <facet name="sq_relation_a.manualpoints" />
+                   </facets>
+               </outputmode>
+               <outputmode name="sq_relation_b" description="output.sq_relation" type="chart">
+                   <facets>
+                       <facet name="sq_b_curve" description="A facet for sq curve"/>
+                       <facet name="sq_relation_b.manualpoints" />
+                   </facets>
+               </outputmode>
+               <outputmode name="sq_relation_c" description="output.sq_relation" type="chart">
+                   <facets>
+                       <facet name="sq_c_curve" description="A facet for sq curve"/>
+                       <facet name="sq_relation_c.manualpoints" />
+                   </facets>
+               </outputmode>
+               <outputmode name="sq_relation_d" description="output.sq_relation" type="chart">
+                   <facets>
+                       <facet name="sq_d_curve" description="A facet for sq curve"/>
+                       <facet name="sq_relation_d.manualpoints" />
+                   </facets>
+               </outputmode>
+               <outputmode name="sq_relation_e" description="output.sq_relation" type="chart">
+                   <facets>
+                       <facet name="sq_e_curve" description="A facet for sq curve"/>
+                       <facet name="sq_relation_e.manualpoints" />
+                   </facets>
+               </outputmode>
+               <outputmode name="sq_relation_f" description="output.sq_relation" type="chart">
+                   <facets>
+                       <facet name="sq_relation_f.manualpoints" />
+                       <facet name="sq_f_curve" description="A facet for sq curve"/>
+                   </facets>
+               </outputmode>
+               <outputmode name="sq_relation_g" description="output.sq_relation" type="chart">
+                   <facets>
+                       <facet name="sq_relation_g.manualpoints" />
+                       <facet name="sq_g_curve" description="A facet for sq curve"/>
+                   </facets>
+               </outputmode>
+           </outputmodes>
+        </state>
+    </states>
+</artifact>

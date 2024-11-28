@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="flysreport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="60" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="river" class="java.lang.String"/>
+	<field name="W" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="calculation" class="java.lang.String"/>
+	<field name="differences" class="java.lang.String"/>
+	<field name="km" class="java.lang.String"/>
+	<field name="range" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="161" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="165" height="30"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Ergebnisausgabe]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="165" y="0" width="350" height="31"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{river}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="31" width="515" height="26"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{calculation}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="70" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Gewässer:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="70" width="392" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{river}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="90" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Datum der Erstellung:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="90" width="392" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="110" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Differenzen:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="123" y="110" width="392" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{differences}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="130" width="392" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{range}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="130" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Bereich:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="19" width="515" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="155" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fluss-Km]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="0" width="150" height="20"/>
+				<textElement/>
+				<text><![CDATA[m]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="155" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{km}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="155" y="0" width="150" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{W}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="457" y="9" width="57" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="402" y="9" width="55" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

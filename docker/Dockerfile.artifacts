@@ -1,0 +1,66 @@
+# Docker file for D4E River artifact server
+
+FROM centos:7
+MAINTAINER tom@intevation.de
+
+# Necessary to run further yum-installs inside Docker container,
+# if not already part of the base image:
+RUN yum -q -y install yum-plugin-ovl && rpm --rebuilddb
+
+# Re-install to gain locale support
+RUN yum -q -y reinstall glibc-common
+
+# Install prerequisites
+RUN yum -q -y install maven mercurial curl
+
+# Add DEMs from demo dataset
+ENV DEM_DIR /opt/d4e-river/dgm
+ENV DATA_ARCH demodaten_3.1.10-bis-3.2.x.tar.gz
+RUN mkdir -p $DEM_DIR
+RUN curl -s "https://wald.intevation.org/frs/download.php/2282/$DATA_ARCH" | \
+    tar -C $DEM_DIR --strip-components=1 --wildcards -xz 'demodaten/dem*.grd'
+
+# Volume for DEM data
+VOLUME $DEM_DIR
+
+
+WORKDIR /opt/d4e/src
+ENV REPO_URL https://hg.wald.intevation.org/dive4elements/
+ENV BRANCH 3.2.x
+RUN hg clone -b $BRANCH $REPO_URL/framework
+RUN hg clone -b $BRANCH $REPO_URL/http-client
+
+RUN mvn -q -DskipTests -f framework/pom.xml install
+RUN mvn -q -DskipTests -f http-client/pom.xml install
+
+# If ORACLE=true, the oracle profile in the POM is activated
+ARG ORACLE
+ADD ./backend river/backend
+ADD checkstyle.xml river/
+RUN mvn -q -DskipTests -f river/backend/pom.xml install
+
+# Download dependencies before adding sources to leverage build cache
+ADD artifacts/pom.xml river/artifacts/
+RUN mvn -q -f river/artifacts/pom.xml dependency:go-offline
+ADD ./artifacts river/artifacts
+
+WORKDIR river/artifacts
+
+# Install WSPLGEN
+ENV WSPLGEN_URL https://wald.intevation.org/frs/download.php/1496/wsplgen-linux-64bit-static.gz
+RUN curl -s $WSPLGEN_URL | gunzip > bin/wsplgen && chmod +x bin/wsplgen
+
+# Create h2 databases
+RUN sh ../../framework/artifact-database/bin/createArtifacts.sh
+RUN sh ./bin/createDatacage.sh
+
+RUN mvn -q -DskipTests package assembly:single
+
+WORKDIR /opt/d4e/bin
+RUN useradd d4e
+RUN chown d4e:d4e .
+USER d4e
+
+RUN tar -xf ../src/river/artifacts/target/river-artifacts-1.0-SNAPSHOT-bin.tar
+
+CMD sh bin/run.sh

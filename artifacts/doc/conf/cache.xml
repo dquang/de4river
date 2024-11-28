@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <defaultCache
+            maxElementsInMemory="1000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="3600"
+            overflowToDisk="true"
+            maxElementsOnDisk="100000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            />
+
+    <!-- This one is used for the WST value tables -->
+
+    <cache name="wst-value-table"
+           maxElementsInMemory="20"
+           maxElementsOnDisk="100"
+           eternal="false"
+           timeToIdleSeconds="360"
+           overflowToDisk="true"
+           timeToLiveSeconds="14400"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LRU"
+           />
+
+    <cache name="location-provider"
+           maxElementsInMemory="20"
+           eternal="false"
+           diskPersistent="true"
+           overflowToDisk="true"
+           timeToIdleSeconds="360"
+           timeToLiveSeconds="86400"
+           memoryStoreEvictionPolicy="LFU"
+           />
+
+    <!-- This one is used to cache the computed values.-->
+    <cache name="computed.values"
+           maxElementsInMemory="200"
+           eternal="false"
+           timeToLiveSeconds="172800"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LRU"
+           />
+
+    <!-- This one is used to cache the non-computed wst-values.-->
+    <cache name="wst-value-table-static"
+           maxElementsInMemory="200"
+           eternal="false"
+           timeToLiveSeconds="172800"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LRU"
+           />
+
+    <!-- This one is used to cache the non-computed bedheight-values.-->
+    <cache name="bedheight-value-table-static"
+           maxElementsInMemory="200"
+           eternal="false"
+           timeToLiveSeconds="172800"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LRU"
+           />
+
+    <!-- This one is used to cache the non-computed wst-values.-->
+    <cache name="wst-wq-value-table-static"
+           maxElementsInMemory="200"
+           eternal="false"
+           timeToLiveSeconds="172800"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LRU"
+           />
+
+    <!-- This one is used for the SQL statements used by the static datacage -->
+    <cache name="datacage.db"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LFU"
+           />
+
+    <!-- This one is used to cache the recommendation nodes generated from datacage -->
+    <cache name="recommendations"
+           maxElementsInMemory="150"
+           eternal="false"
+           timeToLiveSeconds="1800"
+           memoryStoreEvictionPolicy="LFU"
+           overflowToDisk="false"
+           diskPersistent="false"
+       />
+
+    <!-- This one is used for the cross section next neighbor lookup -->
+    <cache name="cross-section-kms"
+           maxElementsInMemory="50"
+           eternal="false"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LRU"
+           />
+
+    <!-- This one is used to load chunks of the cross section lines  -->
+    <cache name="fast-cross-section-lines"
+           maxElementsInMemory="500"
+           eternal="false"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LRU"
+           overflowToDisk="true"
+           diskPersistent="true"
+           />
+
+    <!-- This one is used to hold the S/Q overviews. -->
+    <cache name="sq-overviews"
+           maxElementsInMemory="15"
+           eternal="false"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LFU"
+           overflowToDisk="true"
+           diskPersistent="true"
+           />
+
+    <!-- This one is used to hold the fixings overviews. -->
+    <cache name="fixings-overviews"
+           maxElementsInMemory="15"
+           eternal="false"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LFU"
+           overflowToDisk="true"
+           diskPersistent="true"
+           />
+
+    <!-- This one is used to hold the data columns of fixings. -->
+    <cache name="fixings-columns"
+           maxElementsInMemory="70"
+           eternal="false"
+           timeToLiveSeconds="7200"
+           memoryStoreEvictionPolicy="LFU"
+           overflowToDisk="true"
+           diskPersistent="true"
+           />
+
+    <!-- This one is used to load single HYK Zones  -->
+    <cache name="hykache"
+           maxElementsInMemory="500"
+           eternal="false"
+           timeToLiveSeconds="14400"
+           memoryStoreEvictionPolicy="LRU"
+           overflowToDisk="true"
+           diskPersistent="true"
+           />
+
+    <!-- This one is used to load gauge finders -->
+    <cache name="gauge-finders"
+           maxElementsInMemory="15"
+           eternal="false"
+           timeToLiveSeconds="14400"
+           memoryStoreEvictionPolicy="LRU"
+           overflowToDisk="true"
+           diskPersistent="true"
+       />
+
+    <!-- This one is used to associate the offical lines to the respective
+         main values. -->
+    <cache name="official-lines"
+           maxElementsInMemory="2"
+           timeToLiveSeconds="14400"
+       />
+
+   <!-- This on is used to cache sediment loads of rivers. -->
+    <cache name="sediment-load-data"
+           maxElementsInMemory="3"
+           timeToLiveSeconds="86400"
+       />
+
+
+    <!-- This one is used for the cross section lookup
+         Because of lazy fetching and relatively big amount of data, disabled
+         cache for now.
+    <cache name="cross_sections"
+           maxElementsInMemory="50"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           memoryStoreEvictionPolicy="LRU"
+           />
+    -->
+</ehcache>

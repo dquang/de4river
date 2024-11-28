@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wms-services>
+  <wms name="OSM Hintergrundkarte" url="https://kartenwerkstatt.intevation.de/bfg/service?"/>
+  <wms name="Pegelonline" url="https://www.pegelonline.wsv.de/webservices/gis/wms/aktuell?"/>
+</wms-services>

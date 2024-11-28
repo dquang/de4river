@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artifact name="wmsbackground">
+    <states>
+        <state id="state.wmsbackground.layer"
+               description="state.wmsbackground.layer.description"
+               state="org.dive4elements.river.artifacts.states.WMSBackgroundState">
+            <outputmodes>
+                <outputmode name="floodmap" description="output.uesk.map.description" type="map">
+                    <facets>
+                        <facet name="floodmap.wmsbackground"/>
+                    </facets>
+                </outputmode>
+            </outputmodes>
+        </state>
+    </states>
+</artifact>

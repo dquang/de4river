@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<modules>
+  <module name="winfo" selected="true">
+    <river name="Beispielfluss"/>
+  </module>
+  <module name="minfo">
+    <river name="Beispielfluss"/>
+  </module>
+  <module name="new_map">
+    <river name="Beispielfluss"/>
+  </module>
+  <module name="new_chart">
+    <river name="Beispielfluss"/>
+  </module>
+  <module name="fixanalysis">
+    <river name="Beispielfluss"/>
+  </module>
+</modules>
+

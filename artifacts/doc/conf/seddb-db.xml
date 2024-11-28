@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<seddb-database>
+    <!-- This is the default SedDB db configuration. -->
+    <user>seddb</user>
+    <password>seddb</password>
+    <dialect>org.hibernate.dialect.PostgreSQLDialect</dialect>
+    <driver>org.postgresql.Driver</driver>
+    <url>jdbc:postgresql://db:5432/seddb</url>
+    <validation-query>select 1 from gewaesser</validation-query>
+    <max-wait>30000</max-wait>
+    <!--
+    <connection-init-sqls>ALTER SESSION SET CURRENT_SCHEMA=SEDDB</connection-init-sqls>
+    -->
+</seddb-database>

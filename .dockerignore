@@ -1,0 +1,16 @@
+*/target
+**/*.h2.db
+**/*.lock.db
+**/*.trace.db
+**/*.map
+**/*.log
+**/*.shp
+**/*.dbf
+**/*.prj
+**/*.fix
+**/*.qix
+**/*.shx
+**/*.aux
+**/*.out
+**/*.toc
+**/*.pdf
